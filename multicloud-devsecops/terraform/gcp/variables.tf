@@ -1,0 +1,53 @@
+# terraform/gcp/variables.tf
+
+variable "gcp_project_id" {
+  type        = string
+  description = "The GCP project ID."
+}
+
+variable "gcp_project_number" {
+  type        = string
+  description = "The GCP project number (used for namespaces in Cloud Run API)."
+  default     = "1082524335295"
+}
+
+variable "gcp_region" {
+  type        = string
+  description = "The GCP region for resources."
+  default     = "us-central1"
+}
+
+# service_name -> job_name 으로 변경
+variable "job_name" {
+  type        = string
+  description = "The name of the Cloud Run Job."
+  default     = "log-generator-job"
+}
+
+# container_image -> image_url 로 변경 (GitHub Actions 워크플로우와 일치)
+variable "image_url" {
+  type        = string
+  description = "The container image URL for the Cloud Run Job."
+  # 기본값은 비워두거나 테스트용 이미지를 넣습니다. 이 값은 CI/CD 파이프라인에서 덮어쓰게 됩니다.
+  default     = "us-docker.pkg.dev/cloudrun/container/hello" 
+}
+
+# 새로 추가된 변수
+variable "job_schedule" {
+  type        = string
+  description = "The cron schedule for the Cloud Scheduler job (e.g., '0 0 */2 * *' for every 2 days at midnight UTC)."
+  default     = "0 0 */2 * *"
+}
+
+variable "environment" {
+  description = "Deployment environment (e.g., dev, stg, prod)"
+  type        = string
+  default     = "dev"
+}
+
+variable "datadog_api_key" {
+  description = "Datadog API Key for sending logs"
+  type        = string
+  sensitive   = true  # Terraform plan/apply 로그에 값이 노출되지 않도록 함
+  default     = ""    # 선택적으로 제공 가능하도록 기본값 설정
+}

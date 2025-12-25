@@ -1,0 +1,18 @@
+.category {
+    flex: 0 0 200px;
+    background-color: #f6f6e9;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+
+}
+
+.category-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    color: #333;
+}
+
+.category-item a {
+    text-decoration: none;
+    color: #333;
+}

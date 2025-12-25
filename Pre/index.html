@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pre 유기농 유제품 - 유기농, 특별함이 아닌 일상이 되다. 최고 품질의 우유, 치즈, 버터를 만나보세요.">
+  <meta name="keywords" content="유기농 우유, 저지방 우유, 락토프리, 프리미엄 유제품, Pre">
+  <title>Pre - 유기농, 특별함이 아닌 일상이 되다</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="img/logo/pre_logo.png" alt="Pre 로고">
+      </a>
+      
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="about.html" class="nav-link">회사정보</a></li>
+          <li><a href="products.html" class="nav-link">제품</a></li>
+          <li><a href="contact.html" class="nav-link">견적 문의</a></li>
+          <li><a href="support.html" class="nav-link">고객 센터</a></li>
+        </ul>
+        <a href="#" class="btn-login">Log in</a>
+      </nav>
+      
+      <button class="menu-toggle" aria-label="메뉴 열기">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="img/info/main_img/pre_info1.png" alt="Pre 유기농 목장">
+    </div>
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-content">
+      <p class="hero-slogan">유기농, 특별함이 아닌 일상이 되다.</p>
+      <h1 class="hero-title">자연 그대로의<br>신선함을 담다</h1>
+      <p class="hero-description">
+        Pre는 최고 품질의 유기농 유제품을 생산합니다.<br>
+        건강한 젖소에서 얻은 신선한 우유로 만든 프리미엄 제품을 경험해보세요.
+      </p>
+      <div class="hero-buttons">
+        <a href="products.html" class="btn btn-primary">제품 둘러보기</a>
+        <a href="contact.html" class="btn btn-outline">견적 문의</a>
+      </div>
+    </div>
+    
+    <div class="scroll-indicator">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- Products Preview Section -->
+  <section class="section products" id="products">
+    <div class="container">
+      <div class="section-title">
+        <h2>인기 제품</h2>
+        <p>Pre가 자신있게 추천하는 베스트셀러 유제품을 만나보세요</p>
+      </div>
+      
+      <div class="product-grid">
+        <!-- Product Card 1 -->
+        <div class="product-card" data-category="organic">
+          <div class="product-image">
+            <span class="product-badge">BEST</span>
+            <img src="img/product/ML-001_유기농 우유 200ML.png" alt="유기농 우유">
+          </div>
+          <div class="product-info">
+            <span class="product-category">유기농</span>
+            <h3 class="product-name">유기농 우유 200ML</h3>
+            <p class="product-description">100% 유기농 원유로 만든 순수한 맛</p>
+          </div>
+        </div>
+        
+        <!-- Product Card 2 -->
+        <div class="product-card" data-category="organic">
+          <div class="product-image">
+            <span class="product-badge">NEW</span>
+            <img src="img/product/ML-002_유기농 우유 초코맛 200ML.png" alt="유기농 초코 우유">
+          </div>
+          <div class="product-info">
+            <span class="product-category">유기농</span>
+            <h3 class="product-name">유기농 초코 우유 200ML</h3>
+            <p class="product-description">진한 초콜릿과 유기농 우유의 만남</p>
+          </div>
+        </div>
+        
+        <!-- Product Card 3 -->
+        <div class="product-card" data-category="lactofree">
+          <div class="product-image">
+            <img src="img/product/ML-025_락토프리_200ml.png" alt="락토프리 우유">
+          </div>
+          <div class="product-info">
+            <span class="product-category">락토프리</span>
+            <h3 class="product-name">락토프리 우유 200ML</h3>
+            <p class="product-description">유당 불내증도 안심하고 즐기세요</p>
+          </div>
+        </div>
+        
+        <!-- Product Card 4 -->
+        <div class="product-card" data-category="premium">
+          <div class="product-image">
+            <img src="img/product/ML-040_프리미엄 우유_200ml.png" alt="프리미엄 우유">
+          </div>
+          <div class="product-info">
+            <span class="product-category">프리미엄</span>
+            <h3 class="product-name">프리미엄 우유 200ML</h3>
+            <p class="product-description">엄선된 젖소에서 얻은 최고급 우유</p>
+          </div>
+        </div>
+        
+        <!-- Product Card 5 -->
+        <div class="product-card" data-category="cheese">
+          <div class="product-image">
+            <img src="img/product/CZ-001_모짜렐라 치즈.png" alt="모짜렐라 치즈">
+          </div>
+          <div class="product-info">
+            <span class="product-category">치즈</span>
+            <h3 class="product-name">모짜렐라 치즈</h3>
+            <p class="product-description">쫄깃한 식감의 프리미엄 치즈</p>
+          </div>
+        </div>
+        
+        <!-- Product Card 6 -->
+        <div class="product-card" data-category="butter">
+          <div class="product-image">
+            <img src="img/product/BT-001_무염 버터.png" alt="무염 버터">
+          </div>
+          <div class="product-info">
+            <span class="product-category">버터</span>
+            <h3 class="product-name">무염 버터</h3>
+            <p class="product-description">신선한 원유로 만든 고소한 버터</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-lg">
+        <a href="products.html" class="btn btn-primary">전체 제품 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Preview Section -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-content">
+          <h2>Pre를 소개합니다</h2>
+          <p>
+            Pre는 '이전의', '미리'라는 뜻을 담고 있습니다. 
+            우리는 유기농이 특별함이 아닌 일상이 되는 그날을 앞서 준비합니다.
+          </p>
+          <p>
+            건강한 환경에서 자란 젖소, 엄격한 품질 관리, 
+            그리고 고객을 향한 진심 - 이것이 Pre의 약속입니다.
+          </p>
+          
+          <div class="about-features">
+            <div class="feature-item">
+              <div class="feature-icon">🌱</div>
+              <div class="feature-text">
+                <h4>유기농 인증</h4>
+                <p>국제 유기농 인증 획득</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🐄</div>
+              <div class="feature-text">
+                <h4>동물 복지</h4>
+                <p>스트레스 없는 사육 환경</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✨</div>
+              <div class="feature-text">
+                <h4>품질 관리</h4>
+                <p>HACCP 인증 생산 시설</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🚚</div>
+              <div class="feature-text">
+                <h4>신선 배송</h4>
+                <p>콜드체인 시스템 운영</p>
+              </div>
+            </div>
+          </div>
+          
+          <a href="about.html" class="btn btn-primary mt-lg">더 알아보기</a>
+        </div>
+        
+        <div class="about-image">
+          <img src="img/info/info_img/cafe.png" alt="Pre 파트너 카페">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners Section -->
+  <section class="section bg-cream">
+    <div class="container">
+      <div class="section-title">
+        <h2>함께하는 파트너</h2>
+        <p>Pre와 함께 건강한 가치를 전하는 파트너들입니다</p>
+      </div>
+      
+      <div class="partners-grid">
+        <div class="partner-card">
+          <div class="partner-image">
+            <img src="img/info/info_img/School.png" alt="학교 급식">
+          </div>
+          <div class="partner-info">
+            <h4>학교 급식</h4>
+            <p>전국 500개 이상의 초중고</p>
+          </div>
+        </div>
+        
+        <div class="partner-card">
+          <div class="partner-image">
+            <img src="img/info/info_img/big_company_retail.png" alt="대형 유통">
+          </div>
+          <div class="partner-info">
+            <h4>대형 유통</h4>
+            <p>전국 주요 마트 및 백화점</p>
+          </div>
+        </div>
+        
+        <div class="partner-card">
+          <div class="partner-image">
+            <img src="img/info/info_img/cafe.png" alt="카페 & 베이커리">
+          </div>
+          <div class="partner-info">
+            <h4>카페 & 베이커리</h4>
+            <p>프리미엄 F&B 브랜드</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta">
+    <div class="container">
+      <h2>Pre와 함께 시작하세요</h2>
+      <p>도매 거래, 납품 문의, 제휴 제안 등 무엇이든 편하게 문의해주세요</p>
+      <div class="cta-buttons">
+        <a href="contact.html" class="btn btn-primary">견적 문의</a>
+        <a href="support.html" class="btn btn-outline">고객 센터</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="img/logo/pre_logo.png" alt="Pre 로고">
+          </a>
+          <p>
+            유기농, 특별함이 아닌 일상이 되다.<br>
+            Pre는 건강한 유제품으로 더 나은 일상을 만듭니다.
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4>바로가기</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">회사 소개</a></li>
+            <li><a href="products.html">제품 안내</a></li>
+            <li><a href="contact.html">견적 문의</a></li>
+            <li><a href="support.html">고객 센터</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h4>제품</h4>
+          <ul class="footer-links">
+            <li><a href="products.html#organic">유기농 우유</a></li>
+            <li><a href="products.html#lowfat">저지방 우유</a></li>
+            <li><a href="products.html#lactofree">락토프리</a></li>
+            <li><a href="products.html#premium">프리미엄</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h4>고객 지원</h4>
+          <ul class="footer-links">
+            <li><a href="tel:1588-0000">1588-0000</a></li>
+            <li><a href="mailto:info@pre-dairy.com">info@pre-dairy.com</a></li>
+            <li>평일 09:00 - 18:00</li>
+            <li>주말 및 공휴일 휴무</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 Pre Dairy Company. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="main.js"></script>
+</body>
+</html>

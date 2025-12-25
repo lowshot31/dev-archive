@@ -1,0 +1,161 @@
+/* FILE START */
+/* FILE PATH: src\main\resources\static\style\board.css */
+/* 게시판 전체 컨테이너 스타일 */
+.board-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+}
+
+/* 게시글 목록 테이블 스타일 */
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.board-table th, .board-table td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: left;
+}
+
+.board-table th {
+    background-color: #555;
+    color: #fff;
+}
+.board-table tbody tr:nth-child(even) {
+    background-color: #333;
+}
+/* 게시글 상세 스타일 */
+.board-detail {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+}
+.board-detail h2 {
+    margin-bottom: 10px;
+}
+
+.board-detail .detail-item {
+    margin-bottom: 10px;
+}
+
+/* 게시글 폼 스타일 */
+.board-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    color: white;
+}
+.board-form label {
+    margin-bottom: 5px;
+}
+
+.board-form input[type="text"],
+.board-form textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Jeju Hallasan', sans-serif;
+}
+
+.board-form textarea {
+    height: 150px;
+}
+.board-form button {
+    background-color: #d79672;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-family: 'Jeju Hallasan', sans-serif;
+}
+
+.board-form button:hover {
+    background-color: #b07053;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.pagination a {
+    color: #fff;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #444;
+    margin: 0 5px;
+}
+.pagination a.active {
+    background-color: #d79672;
+}
+.pagination a:hover:not(.active) {
+    background-color: #b07053;
+}
+/* 검색 폼 스타일 */
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.search-form select,
+.search-form input[type="text"] {
+    padding: 8px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+}
+
+.search-form button {
+    background-color: #d79672;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.search-form button:hover {
+    background-color: #b07053;
+}
+/* 버튼 스타일 */
+.btn {
+    background-color: #d79672;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-family: 'Jeju Hallasan', sans-serif;
+}
+
+.btn:hover {
+    background-color: #b07053;
+}
+/* FILE END */

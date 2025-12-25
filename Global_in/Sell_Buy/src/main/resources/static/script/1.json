@@ -1,0 +1,434 @@
+[
+  {
+    "catId": 14,
+    "name": "기저귀/물티슈/화장지",
+    "path": "/14/",
+    "superId": null
+  },
+  {
+    "catId": 15,
+    "name": "김치/반찬",
+    "path": "/15/",
+    "superId": null
+  },
+  {
+    "catId": 16,
+    "name": "남성의류",
+    "path": "/16/",
+    "superId": null
+  },
+  {
+    "catId": 60,
+    "name": "청소/욕실/세탁/살충",
+    "path": "/60/",
+    "superId": null
+  },
+  {
+    "catId": 61,
+    "name": "출산/육아용품",
+    "path": "/61/",
+    "superId": null
+  },
+  {
+    "catId": 34,
+    "name": "브랜드잡화/넥타이",
+    "path": "/34/",
+    "superId": null
+  },
+  {
+    "catId": 35,
+    "name": "브랜드진/캐주얼",
+    "path": "/35/",
+    "superId": null
+  },
+  {
+    "catId": 31,
+    "name": "브랜드신발",
+    "path": "/31/",
+    "superId": null
+  },
+  {
+    "catId": 32,
+    "name": "브랜드언더웨어",
+    "path": "/32/",
+    "superId": null
+  },
+  {
+    "catId": 33,
+    "name": "브랜드여성의류",
+    "path": "/33/",
+    "superId": null
+  },
+  {
+    "catId": 5,
+    "name": "건강/다이어트식품",
+    "path": "/5/",
+    "superId": null
+  },
+  {
+    "catId": 6,
+    "name": "건강용품",
+    "path": "/6/",
+    "superId": null
+  },
+  {
+    "catId": 7,
+    "name": "게임기",
+    "path": "/7/",
+    "superId": null
+  },
+  {
+    "catId": 8,
+    "name": "계절가전",
+    "path": "/8/",
+    "superId": null
+  },
+  {
+    "catId": 9,
+    "name": "골프",
+    "path": "/9/",
+    "superId": null
+  },
+  {
+    "catId": 10,
+    "name": "공구/안전용품",
+    "path": "/10/",
+    "superId": null
+  },
+  {
+    "catId": 12,
+    "name": "과자/간식",
+    "path": "/12/",
+    "superId": null
+  },
+  {
+    "catId": 13,
+    "name": "구기/라켓",
+    "path": "/13/",
+    "superId": null
+  },
+  {
+    "catId": 44,
+    "name": "언더웨어",
+    "path": "/44/",
+    "superId": null
+  },
+  {
+    "catId": 45,
+    "name": "여성의류",
+    "path": "/45/",
+    "superId": null
+  },
+  {
+    "catId": 46,
+    "name": "여행/숙박/항공/렌터카",
+    "path": "/46/",
+    "superId": null
+  },
+  {
+    "catId": 71,
+    "name": "화장품/향수",
+    "path": "/71/",
+    "superId": null
+  },
+  {
+    "catId": 72,
+    "name": "휴대폰/악세서리",
+    "path": "/72/",
+    "superId": null
+  },
+  {
+    "catId": 36,
+    "name": "생활/정리용품",
+    "path": "/36/",
+    "superId": null
+  },
+  {
+    "catId": 37,
+    "name": "생활가전",
+    "path": "/37/",
+    "superId": null
+  },
+  {
+    "catId": 38,
+    "name": "수산/건어물",
+    "path": "/38/",
+    "superId": null
+  },
+  {
+    "catId": 64,
+    "name": "카메라/광학기기",
+    "path": "/64/",
+    "superId": null
+  },
+  {
+    "catId": 65,
+    "name": "캠핑/낚시",
+    "path": "/65/",
+    "superId": null
+  },
+  {
+    "catId": 43,
+    "name": "악기/취미/원예",
+    "path": "/43/",
+    "superId": null
+  },
+  {
+    "catId": 69,
+    "name": "헤어/바디",
+    "path": "/69/",
+    "superId": null
+  },
+  {
+    "catId": 70,
+    "name": "헬스/요가/수영",
+    "path": "/70/",
+    "superId": null
+  },
+  {
+    "catId": 55,
+    "name": "저장장치/부품/주변기기",
+    "path": "/55/",
+    "superId": null
+  },
+  {
+    "catId": 56,
+    "name": "정육/계란",
+    "path": "/56/",
+    "superId": null
+  },
+  {
+    "catId": 57,
+    "name": "주방/수납/야외가구",
+    "path": "/57/",
+    "superId": null
+  },
+  {
+    "catId": 26,
+    "name": "배달/기타서비스",
+    "path": "/26/",
+    "superId": null
+  },
+  {
+    "catId": 27,
+    "name": "분유/이유식",
+    "path": "/27/",
+    "superId": null
+  },
+  {
+    "catId": 28,
+    "name": "뷰티기기",
+    "path": "/28/",
+    "superId": null
+  },
+  {
+    "catId": 29,
+    "name": "브랜드가방",
+    "path": "/29/",
+    "superId": null
+  },
+  {
+    "catId": 30,
+    "name": "브랜드남성의류",
+    "path": "/30/",
+    "superId": null
+  },
+  {
+    "catId": 39,
+    "name": "스마트기기",
+    "path": "/39/",
+    "superId": null
+  },
+  {
+    "catId": 40,
+    "name": "스포츠의류/운동화",
+    "path": "/40/",
+    "superId": null
+  },
+  {
+    "catId": 41,
+    "name": "시계/주얼리/잡화",
+    "path": "/41/",
+    "superId": null
+  },
+  {
+    "catId": 53,
+    "name": "자전거/스키/레저",
+    "path": "/53/",
+    "superId": null
+  },
+  {
+    "catId": 66,
+    "name": "커피/생수/음료",
+    "path": "/66/",
+    "superId": null
+  },
+  {
+    "catId": 67,
+    "name": "티켓/공연",
+    "path": "/67/",
+    "superId": null
+  },
+  {
+    "catId": 68,
+    "name": "학생/사무용가구",
+    "path": "/68/",
+    "superId": null
+  },
+  {
+    "catId": 62,
+    "name": "침구/커튼/매트",
+    "path": "/62/",
+    "superId": null
+  },
+  {
+    "catId": 63,
+    "name": "침실/거실가구",
+    "path": "/63/",
+    "superId": null
+  },
+  {
+    "catId": 1,
+    "name": "e쿠폰/상품권",
+    "path": "/1/",
+    "superId": null
+  },
+  {
+    "catId": 2,
+    "name": "TV/영상가전",
+    "path": "/2/",
+    "superId": null
+  },
+  {
+    "catId": 3,
+    "name": "가공식품",
+    "path": "/3/",
+    "superId": null
+  },
+  {
+    "catId": 4,
+    "name": "가방/지갑",
+    "path": "/4/",
+    "superId": null
+  },
+  {
+    "catId": 47,
+    "name": "유아동가구/실내용품",
+    "path": "/47/",
+    "superId": null
+  },
+  {
+    "catId": 48,
+    "name": "유아동신발/잡화",
+    "path": "/48/",
+    "superId": null
+  },
+  {
+    "catId": 49,
+    "name": "유아동의류",
+    "path": "/49/",
+    "superId": null
+  },
+  {
+    "catId": 50,
+    "name": "음향기기/이어폰",
+    "path": "/50/",
+    "superId": null
+  },
+  {
+    "catId": 20,
+    "name": "등산/아웃도어",
+    "path": "/20/",
+    "superId": null
+  },
+  {
+    "catId": 21,
+    "name": "렌탈",
+    "path": "/21/",
+    "superId": null
+  },
+  {
+    "catId": 22,
+    "name": "명품",
+    "path": "/22/",
+    "superId": null
+  },
+  {
+    "catId": 58,
+    "name": "주방가전",
+    "path": "/58/",
+    "superId": null
+  },
+  {
+    "catId": 59,
+    "name": "주방용품",
+    "path": "/59/",
+    "superId": null
+  },
+  {
+    "catId": 23,
+    "name": "모니터/프린터/복합기",
+    "path": "/23/",
+    "superId": null
+  },
+  {
+    "catId": 24,
+    "name": "문구/사무용품",
+    "path": "/24/",
+    "superId": null
+  },
+  {
+    "catId": 11,
+    "name": "과일/채소/쌀",
+    "path": "/11/",
+    "superId": null
+  },
+  {
+    "catId": 52,
+    "name": "자동차/오토바이",
+    "path": "/52/",
+    "superId": null
+  },
+  {
+    "catId": 51,
+    "name": "인테리어/조명/DIY",
+    "path": "/51/",
+    "superId": null
+  },
+  {
+    "catId": 54,
+    "name": "장난감/완구",
+    "path": "/54/",
+    "superId": null
+  },
+  {
+    "catId": 25,
+    "name": "반려동물",
+    "path": "/25/",
+    "superId": null
+  },
+  {
+    "catId": 17,
+    "name": "냉장/냉동/간편식",
+    "path": "/17/",
+    "superId": null
+  },
+  {
+    "catId": 18,
+    "name": "노트북/PC/태블릿",
+    "path": "/18/",
+    "superId": null
+  },
+  {
+    "catId": 19,
+    "name": "도서/음반",
+    "path": "/19/",
+    "superId": null
+  },
+  {
+    "catId": 42,
+    "name": "신발",
+    "path": "/42/",
+    "superId": null
+  }
+]

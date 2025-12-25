@@ -1,0 +1,658 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    /* 기존 스타일 유지 */
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-2xl);
+        align-items: start;
+    }
+
+    .contact-info {
+        background: var(--color-cream);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+    }
+
+    .contact-info h3 {
+        color: var(--color-primary);
+        margin-bottom: var(--space-md);
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+        padding-bottom: var(--space-md);
+        border-bottom: 1px solid var(--color-gray-light);
+    }
+
+    .contact-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--color-primary);
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-white);
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .contact-text h4 {
+        color: var(--color-text);
+        margin-bottom: 4px;
+    }
+
+    .contact-text p {
+        color: var(--color-text-light);
+        font-size: 0.9rem;
+    }
+
+    .contact-form {
+        background: var(--color-white);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+    }
+
+    .contact-form .header-section {
+        text-align: center;
+        margin-bottom: var(--space-lg);
+    }
+
+    .contact-form .header-section h3 {
+        color: var(--color-primary);
+        margin-bottom: var(--space-xs);
+        font-size: 1.5rem;
+    }
+
+    .contact-form .header-section p {
+        color: var(--color-text-light);
+        font-size: 0.95rem;
+    }
+
+    .field-wrapper {
+        margin-bottom: var(--space-md);
+    }
+
+    .field-wrapper label {
+        display: block;
+        margin-bottom: var(--space-xs);
+        font-weight: 500;
+        color: var(--color-text);
+    }
+
+    .field-wrapper label.required::after {
+        content: ' *';
+        color: #e53935;
+    }
+
+    .input-with-btn {
+        display: flex;
+        gap: 10px;
+    }
+
+    .input-with-btn input {
+        flex: 1;
+    }
+
+    .btn-address {
+        padding: var(--space-sm) var(--space-md);
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background var(--transition-fast);
+    }
+
+    .btn-address:hover {
+        background: var(--color-primary-dark);
+    }
+
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-md);
+    }
+
+    .form-control.error {
+        border-color: #e53935;
+        background: #fff5f5;
+    }
+
+    .form-control.success {
+        border-color: var(--color-accent);
+    }
+
+    .error-message {
+        color: #e53935;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        display: none;
+    }
+
+    .error-message.show {
+        display: block;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Success Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        backdrop-filter: blur(4px);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal-content {
+        background: white;
+        padding: var(--space-2xl);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: var(--shadow-xl);
+        transform: translateY(20px);
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal-overlay.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--color-success-light, #e6f4ea);
+        color: var(--color-success, #1e8e3e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin: 0 auto var(--space-md);
+    }
+
+    .modal-title {
+        color: var(--color-text);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--space-sm);
+    }
+
+    .modal-message {
+        color: var(--color-text-light);
+        margin-bottom: var(--space-xl);
+        line-height: 1.5;
+    }
+
+    .btn-home {
+        background: var(--color-primary);
+        color: white;
+        padding: var(--space-md) var(--space-xl);
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+        transition: background 0.2s;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .btn-home:hover {
+        background: var(--color-primary-dark);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>견적 문의</h1>
+        <p>도매 거래, 납품 문의를 남겨주시면 담당자가 연락드립니다</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="section">
+    <div class="container">
+        <div class="contact-grid">
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h3>연락처 정보</h3>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-text">
+                        <h4>전화 문의</h4>
+                        <p>1588-0000</p>
+                        <p>평일 09:00 - 18:00</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-text">
+                        <h4>이메일</h4>
+                        <p>sales@pre-dairy.com</p>
+                        <p>영업일 기준 24시간 내 답변</p>
+                    </div>
+                </div>
+                <!-- ...나머지 연락처 정보... -->
+            </div>
+
+            <!-- Contact Form (Salesforce Web-to-Lead) -->
+            <div class="contact-form">
+                <div class="header-section">
+                    <h3>📋 간편 견적 문의</h3>
+                    <p>학교명과 연락처만 남겨주시면 담당자가 빠르게 연락드립니다.</p>
+                </div>
+
+                <form id="leadForm"
+                    action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00DgK00000FxdUX"
+                    method="POST" onsubmit="return validateForm()">
+                    <!-- 1. 필수 Hidden Fields -->
+                    <input type="hidden" name="oid" value="00DgK00000FxdUX">
+                    <input type="hidden" name="retURL" id="retURL" value="https://www.naver.com/">
+                    <input type="hidden" name="lead_source" value="Web">
+                    <input type="hidden" name="country_code" value="KR">
+                    <!-- debug용 -->
+                    <!-- <input type="hidden" name="debug" value=1>
+                    <input type="hidden" name="debugEmail" value="lowshot31@gmail.com"> -->
+
+                    <!-- Standard Salesforce Fields (Hidden) -->
+                    <input type="hidden" name="city" id="city">
+                    <input type="hidden" name="state_code" id="state_code">
+                    <input type="hidden" name="zip" id="zip">
+
+                    <!-- 2. 소속 (Company) -->
+                    <div class="field-wrapper">
+                        <label class="required">소속</label>
+                        <div class="input-with-btn">
+                            <input type="text" id="company" name="company" class="form-control" placeholder="학교명 또는 기업명"
+                                required>
+                            <button type="button" class="btn-address" onclick="openPostcode()">
+                                🔍 주소검색
+                            </button>
+                        </div>
+                        <span class="error-message" id="companyError">소속을 입력해주세요</span>
+                    </div>
+
+
+                    <!-- 4. 상세주소 (Street) -->
+                    <div class="field-wrapper">
+                        <label class="required">상세 주소</label>
+                        <input type="text" id="street" name="street" class="form-control" placeholder="주소검색 자동입력"
+                            readonly>
+                        <span class="error-message" id="streetError">상세 주소를 입력해주세요</span>
+                    </div>
+
+                    <!-- 5. 성함 (LastName) -->
+                    <div class="field-wrapper">
+                        <label class="required">성함</label>
+                        <input type="text" id="LastName" name="last_name" class="form-control" placeholder="홍길동"
+                            required>
+                        <span class="error-message" id="lastNameError">성함을 입력해주세요</span>
+                    </div>
+
+                    <!-- 6. 연락처 (Phone) -->
+                    <div class="field-wrapper">
+                        <label class="required">연락처</label>
+                        <input type="tel" id="Phone" name="phone" class="form-control" placeholder="010-1234-5678"
+                            required pattern="[0-9]{2,3}-?[0-9]{3,4}-?[0-9]{4}" oninput="formatPhoneNumber(this)">
+                        <span class="error-message" id="phoneError">올바른 연락처를 입력해주세요</span>
+                    </div>
+
+                    <!-- 7. 이메일 (Email) -->
+                    <div class="field-wrapper">
+                        <label class="required">이메일</label>
+                        <input type="email" id="Email" name="email" class="form-control"
+                            placeholder="example@company.com" required>
+                        <span class="error-message" id="emailError">올바른 이메일을 입력해주세요</span>
+                    </div>
+
+                    <!-- 8. 업종 (Industry) - SF Value 매핑 완료 -->
+                    <div class="field-wrapper">
+                        <label class="required">업종</label>
+                        <select id="industry" name="industry" class="form-control" required>
+                            <option value="">선택해주세요</option>
+                            <option value="Education">교육</option>
+                            <option value="Food & Beverage">음식</option>
+                            <option value="Retail">소매</option>
+                            <option value="Healthcare">건강</option>
+                            <option value="Public">공공</option>
+                            <option value="Other">기타</option>
+                        </select>
+                        <span class="error-message" id="industryError">업종을 선택해주세요</span>
+                    </div>
+
+                    <!-- 9. 관심 제품 (ProductInterest) - SF ID/Value 매핑 완료 -->
+                    <div class="field-wrapper">
+                        <label class="required">관심 제품</label>
+                        <!-- SF Field: 00NgK00002m0GjG -->
+                        <select id="ProductInterest" name="00NgK00002m0GjG" class="form-control" required>
+                            <option value="">선택해주세요</option>
+                            <option value="유기농">유기농</option>
+                            <option value="저지방">저지방</option>
+                            <option value="무지방">무지방</option>
+                            <option value="락토프리">락토프리</option>
+                            <option value="고칼슘">고칼슘</option>
+                            <option value="멸균">멸균</option>
+                            <option value="프리미엄">프리미엄</option>
+                        </select>
+                        <span class="error-message" id="productError">관심 제품을 선택해주세요</span>
+                    </div>
+
+                    <!-- [추가된 필드] 10. 인원 (Number of People) -->
+                    <div class="field-wrapper">
+                        <label>인원 (명)</label>
+                        <!-- SF Field: 00NgK00002m0FX3 -->
+                        <input type="text" id="NumberOfPeople" name="00NgK00002m0FX3" class="form-control"
+                            placeholder="예: 100명">
+                    </div>
+
+                    <!-- [추가된 필드] 11. 납품 기간 -->
+                    <div class="row">
+                        <div class="field-wrapper">
+                            <label>납품 기간</label>
+                            <!-- SF Field: 00NgK00002m0RWb -->
+                            <input type="number" id="DeliveryPeriod" name="00NgK00002m0RWb" class="form-control"
+                                placeholder="예: 6(개월)">
+                        </div>
+                        <div class="field-wrapper">
+                            <label>납품 희망일자</label>
+                            <input type="date" id="DeliveryDate" class="form-control"
+                                onchange="formatDeliveryDate(this.value)">
+                            <!-- Salesforce Field: 00NgK00002m0ShB (Hidden formatted date) -->
+                            <input type="hidden" id="DeliveryDateFormatted" name="00NgK00002m0ShB">
+                            <span class="error-message" id="deliveryDateError">납품 희망일자를 선택해주세요</span>
+                        </div>
+                    </div>
+
+                    <!-- 12. 예산 (Budget) -->
+                    <div class="field-wrapper">
+                        <label class="required">예산</label>
+                        <!-- SF Field: 00NgK00002m0FjK -->
+                        <input type="text" id="Budget" name="00NgK00002m0FjK" class="form-control"
+                            placeholder="예산을 입력해주세요" required>
+                        <span class="error-message" id="budgetError">예산을 입력해주세요</span>
+                    </div>
+
+                    <!-- 13. 문의 내용 (Description) -->
+                    <div class="field-wrapper">
+                        <label>추가 문의사항</label>
+                        <textarea id="Description" name="description" class="form-control" rows="3"
+                            placeholder="기타 문의사항을 자유롭게 작성해주세요."></textarea>
+                    </div>
+
+                    <!-- 제출 버튼 -->
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-md);">
+                        간편 견적 문의하기
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section (생략 - 기존 유지) -->
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+    <div class="modal-content">
+        <div class="modal-icon">✓</div>
+        <h3 class="modal-title">접수되었습니다!</h3>
+        <p class="modal-message">
+            견적 문의가 성공적으로 접수되었습니다.<br>
+            담당자가 확인 후 빠르게 연락드리겠습니다.
+        </p>
+        <button onclick="goToMain()" class="btn-home">메인화면으로 돌아가기</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script>
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. URL 파라미터 확인 및 모달 표시
+        // const urlParams = new URLSearchParams(window.location.search);
+        // if (urlParams.get('success') === 'true') {
+        //     document.getElementById('successModal').classList.add('show');
+        // }
+        // 2. 현재 도메인 기반 retURL 설정 (로컬/배포 환경 대응)
+        // const returnUrl = window.location.origin + window.location.pathname + '?success=true';
+        // const retUrlInput = document.getElementById('retURL');
+        // if (retUrlInput) {
+        //     retUrlInput.value = returnUrl;
+        // } 
+        const dateInput = document.getElementById('DeliveryDate');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            dateInput.value = today;
+            formatDeliveryDate(today); // Initialize formatted version
+        }
+    });
+
+    // 날짜 포맷 (YYYY. MM. DD.)
+    function formatDeliveryDate(dateString) {
+        if (!dateString) return;
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const formatted = `${year}. ${month}. ${day}.`;
+        document.getElementById('DeliveryDateFormatted').value = formatted;
+    }
+    // 메인으로 이동
+    function goToMain() {
+        window.location.href = '/';
+    }
+    // 카카오 주소검색
+    function openPostcode() {
+        let companyKeyword = document.getElementById('company').value;
+        new daum.Postcode({
+            oncomplete: function (data) {
+                let buildingName = data.buildingName;
+                let region = data.sido;   // e.g. "서울", "경기"
+                let district = data.sigungu; // e.g. "강남구"
+                let fullAddress = data.roadAddress || data.jibunAddress;
+                let zonecode = data.zonecode; // 우편번호
+                // Sido Mapping for Salesforce
+                // Map '서울' -> '서울특별시' (Custom Field) & 'SEOUL' (Standard State Code)
+                const sidoMap = {
+                    '서울': { full: '서울특별시', code: 'SEOUL' },
+                    '경기': { full: '경기도', code: 'GYEONGGI' },
+                    '부산': { full: '부산광역시', code: 'BUSAN' },
+                    '대구': { full: '대구광역시', code: 'DAEGU' },
+                    '인천': { full: '인천광역시', code: 'INCHEON' },
+                    '광주': { full: '광주광역시', code: 'GWANGJU' },
+                    '대전': { full: '대전광역시', code: 'DAEJEON' },
+                    '울산': { full: '울산광역시', code: 'ULSAN' },
+                    '세종': { full: '세종특별자치시', code: 'SEJONG' },
+                    '강원': { full: '강원도', code: 'GANGWON' },
+                    '충북': { full: '충청북도', code: 'CHUNGBUK' },
+                    '충남': { full: '충청남도', code: 'CHUNGNAM' },
+                    '전북': { full: '전라북도', code: 'JEONBUK' },
+                    '전남': { full: '전라남도', code: 'JEOLLANAM' },
+                    '경북': { full: '경상북도', code: 'GYEONGBUK' },
+                    '경남': { full: '경상남도', code: 'GYEONGNAM' },
+                    '제주': { full: '제주특별자치도', code: 'JEJU' }
+                };
+
+                let mappedSido = sidoMap[region];
+                // [매핑] 각 필드 ID에 값 넣기
+                if (mappedSido) {
+                    document.getElementById('state_code').value = mappedSido.code;
+                } else {
+                    document.getElementById('state_code').value = '';
+                }
+
+                document.getElementById('city').value = district; // Map district to standard city field
+                document.getElementById('street').value = fullAddress;
+                document.getElementById('zip').value = zonecode;
+
+                if (buildingName !== '') {
+                    document.getElementById('company').value = buildingName;
+                }
+
+                // 성공 표시 (스타일)
+                ['street', 'company'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el.value) {
+                        el.classList.add('success');
+                        el.classList.remove('error');
+                        // 에러 메시지 숨기기 로직
+                        const fieldName = id === 'street' ? 'street' : 'company';
+                        const errorEl = document.getElementById(fieldName + 'Error');
+                        if (errorEl) errorEl.classList.remove('show');
+                    }
+                });
+
+                if (!document.getElementById('company').value) {
+                    document.getElementById('company').focus();
+                }
+            }
+        }).open({
+            q: companyKeyword
+        });
+    }
+
+    // 전화번호 포맷
+    function formatPhoneNumber(input) {
+        let value = input.value.replace(/[^0-9]/g, '');
+        if (value.length <= 3) {
+            input.value = value;
+        } else if (value.length <= 7) {
+            input.value = value.slice(0, 3) + '-' + value.slice(3);
+        } else if (value.length <= 11) {
+            input.value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7);
+        }
+    }
+
+    // 유효성 검사 (ValidateForm)
+    function validateForm() {
+        let isValid = true;
+
+        // 필수 필드 ID 목록 (인원 등은 선택사항으로 두어 여기 넣지 않음, 필요시 추가)
+        const requiredFields = [
+            { id: 'company', errorId: 'companyError' },
+            { id: 'street', errorId: 'streetError' },
+            { id: 'LastName', errorId: 'lastNameError' },
+            { id: 'Phone', errorId: 'phoneError' },
+            { id: 'Email', errorId: 'emailError' },
+            { id: 'industry', errorId: 'industryError' },
+            { id: 'ProductInterest', errorId: 'productError' },
+            { id: 'Budget', errorId: 'budgetError' },
+            { id: 'DeliveryDate', errorId: 'deliveryDateError' }
+        ];
+
+        requiredFields.forEach(field => {
+            const el = document.getElementById(field.id);
+            const errorEl = document.getElementById(field.errorId);
+
+            if (!el.value.trim()) {
+                el.classList.add('error');
+                if (errorEl) errorEl.classList.add('show');
+                isValid = false;
+            }
+            else if (field.id === "DeliveryDate") {
+                const selectedDate = new Date(el.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                if (selectedDate < today) {
+                    el.classList.add('error');
+                    if (errorEl) {
+                        errorEl.textContent = '배송일은 오늘보다 이전일 수 없습니다.';
+                        errorEl.classList.add('show');
+                    }
+                    isValid = false;
+                }
+            } else {
+                el.classList.remove('error');
+                el.classList.add('success');
+                if (errorEl) errorEl.classList.remove('show');
+            }
+        });
+
+        // 전화번호 정규식 등 추가 검증 로직은 필요하면 여기에 유지
+
+        if (!isValid) {
+            const firstError = document.querySelector('.form-control.error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        }
+        return isValid;
+    }
+
+    // 실시간 에러 제거
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputs = document.querySelectorAll('.form-control[required]');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                if (this.value.trim()) {
+                    this.classList.remove('error');
+                    this.classList.add('success');
+                    // 에러 메시지 ID 추론 로직 (간소화)
+                    // 실제 구현 시엔 위 requiredFields 배열 등을 활용하는 것이 더 정확함
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

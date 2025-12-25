@@ -1,0 +1,12 @@
+### GET request to example server
+GET http://localhost/categories
+
+###
+GET http://localhost/categories?catId=42
+
+###
+GET http://localhost/categories?catId=4211
+
+###
+
+GET http://localhost/category/super?catId=60604

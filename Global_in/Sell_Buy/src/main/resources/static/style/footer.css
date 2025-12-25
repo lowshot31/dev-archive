@@ -1,0 +1,30 @@
+footer {
+    bottom: 0;
+    margin-top: auto;
+    position: relative;
+    flex: 0 0 auto;
+    height: 120px;
+    width: 100%;
+    background-color: #f6f6e9;
+    text-align: center;
+    color: #64606f;
+    border-top: #a8a8a8 1px solid;
+}
+
+.footer-top {
+    margin: 0;
+    padding: 0;
+}
+
+.footer-logo {
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    height: 8%;
+    margin: 10px 20px 0;
+}
+
+.footer-top ul li {
+    text-align: left;
+    list-style-type: none;
+}

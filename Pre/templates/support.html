@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .support-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-2xl);
+        align-items: start;
+    }
+
+    .support-info {
+        background: var(--color-cream);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+    }
+
+    .support-info h3 {
+        color: var(--color-primary);
+        margin-bottom: var(--space-md);
+    }
+
+    .support-channels {
+        display: grid;
+        gap: var(--space-md);
+    }
+
+    .channel-card {
+        background: var(--color-white);
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        transition: all var(--transition-fast);
+    }
+
+    .channel-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .channel-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-white);
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .channel-text h4 {
+        color: var(--color-text);
+        margin-bottom: 4px;
+        font-size: 1rem;
+    }
+
+    .channel-text p {
+        color: var(--color-text-light);
+        font-size: 0.85rem;
+    }
+
+    .support-form {
+        background: var(--color-white);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+    }
+
+    .support-form h3 {
+        color: var(--color-primary);
+        margin-bottom: var(--space-lg);
+    }
+
+    .salesforce-notice {
+        background: linear-gradient(135deg, #0176d3 0%, #1b96ff 100%);
+        color: var(--color-white);
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--space-lg);
+        font-size: 0.9rem;
+    }
+
+    .salesforce-notice strong {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .case-type-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+    }
+
+    .case-type-btn {
+        padding: var(--space-sm);
+        border: 2px solid var(--color-gray-light);
+        border-radius: var(--radius-md);
+        background: var(--color-white);
+        cursor: pointer;
+        text-align: center;
+        transition: all var(--transition-fast);
+    }
+
+    .case-type-btn:hover,
+    .case-type-btn.active {
+        border-color: var(--color-primary);
+        background: var(--color-cream);
+    }
+
+    .case-type-btn .icon {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .case-type-btn .label {
+        font-size: 0.85rem;
+        color: var(--color-text);
+    }
+
+    @media (max-width: 768px) {
+        .support-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .case-type-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>고객 센터</h1>
+        <p>제품 문의, 불만 접수, A/S 요청을 도와드립니다</p>
+    </div>
+</section>
+
+<!-- Support Section -->
+<section class="section">
+    <div class="container">
+        <div class="support-grid">
+            <!-- Support Channels -->
+            <div class="support-info">
+                <h3>문의 채널</h3>
+
+                <div class="support-channels">
+                    <div class="channel-card">
+                        <div class="channel-icon">📞</div>
+                        <div class="channel-text">
+                            <h4>전화 상담</h4>
+                            <p>1588-0000 (평일 09:00 - 18:00)</p>
+                        </div>
+                    </div>
+
+                    <div class="channel-card">
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-text">
+                            <h4>카카오톡 상담</h4>
+                            <p>@pre_dairy (24시간 접수 가능)</p>
+                        </div>
+                    </div>
+
+                    <div class="channel-card">
+                        <div class="channel-icon">✉️</div>
+                        <div class="channel-text">
+                            <h4>이메일 문의</h4>
+                            <p>support@pre-dairy.com</p>
+                        </div>
+                    </div>
+
+                    <div class="channel-card">
+                        <div class="channel-icon">📝</div>
+                        <div class="channel-text">
+                            <h4>온라인 접수</h4>
+                            <p>오른쪽 폼으로 24시간 접수 가능</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top: var(--space-lg); padding: var(--space-md); background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); border-radius: var(--radius-md); color: white;">
+                    <h4 style="margin-bottom: 8px; color: white;">⏱️ 평균 응답 시간</h4>
+                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.9); margin: 0;">
+                        전화: 즉시 / 온라인: 영업일 기준 24시간 이내
+                    </p>
+                </div>
+            </div>
+
+            <!-- Support Form (Salesforce Web-to-Case) -->
+            <div class="support-form">
+                <h3>온라인 문의 접수</h3>
+
+                <div class="salesforce-notice">
+                    <strong>💡 Salesforce Web-to-Case 연동</strong>
+                    Setup → Service → Web-to-Case에서 폼을 생성하여 교체하세요.
+                </div>
+
+                <!--  ============================================
+              SALESFORCE WEB-TO-CASE FORM
+              아래 form 태그를 Salesforce에서 생성한 
+              Web-to-Case 폼으로 교체하세요.
+              ============================================  -->
+
+                <form id="caseForm" action="https://webto.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8"
+                    method="POST">
+
+                    <!-- Salesforce OID - 본인의 Org ID로 교체 필요 -->
+                    <input type="hidden" name="orgid" value="YOUR_ORG_ID_HERE">
+
+                    <!-- Return URL after form submission -->
+                    <input type="hidden" name="retURL" value="/">
+
+                    <!-- Case Type Selection -->
+                    <div style="margin-bottom: var(--space-md);">
+                        <label style="display: block; margin-bottom: var(--space-xs); font-weight: 500;">문의 유형</label>
+                        <div class="case-type-grid">
+                            <label class="case-type-btn">
+                                <input type="radio" name="type" value="Product Inquiry" style="display: none;">
+                                <span class="icon">📦</span>
+                                <span class="label">제품 문의</span>
+                            </label>
+                            <label class="case-type-btn">
+                                <input type="radio" name="type" value="Quality Issue" style="display: none;">
+                                <span class="icon">⚠️</span>
+                                <span class="label">품질 문제</span>
+                            </label>
+                            <label class="case-type-btn">
+                                <input type="radio" name="type" value="Delivery" style="display: none;">
+                                <span class="icon">🚚</span>
+                                <span class="label">배송 문의</span>
+                            </label>
+                            <label class="case-type-btn">
+                                <input type="radio" name="type" value="Refund" style="display: none;">
+                                <span class="icon">💰</span>
+                                <span class="label">환불 요청</span>
+                            </label>
+                            <label class="case-type-btn">
+                                <input type="radio" name="type" value="Complaint" style="display: none;">
+                                <span class="icon">📢</span>
+                                <span class="label">불만 접수</span>
+                            </label>
+                            <label class="case-type-btn">
+                                <input type="radio" name="type" value="Other" style="display: none;">
+                                <span class="icon">❓</span>
+                                <span class="label">기타</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">이름 *</label>
+                            <input type="text" id="name" name="name" class="form-control" required placeholder="홍길동">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">이메일 *</label>
+                            <input type="email" id="email" name="email" class="form-control" required
+                                placeholder="example@email.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">연락처</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="010-1234-5678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">제목 *</label>
+                        <input type="text" id="subject" name="subject" class="form-control" required
+                            placeholder="문의 제목을 입력해주세요">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">상세 내용 *</label>
+                        <textarea id="description" name="description" class="form-control" required
+                            placeholder="구매 일자, 제품명, 문제 상황 등을 자세히 작성해주세요."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        문의 접수하기
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Notice -->
+<section class="section bg-cream">
+    <div class="container">
+        <div class="section-title">
+            <h2>서비스 안내</h2>
+            <p>Pre 고객센터 이용 안내</p>
+        </div>
+
+        <div
+            style="max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg);">
+            <div
+                style="background: white; padding: 1.5rem; border-radius: 12px; text-align: center; box-shadow: var(--shadow-sm);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔄</div>
+                <h4 style="color: var(--color-primary); margin-bottom: 0.5rem;">교환/반품</h4>
+                <p style="color: var(--color-text-light); font-size: 0.9rem;">수령일로부터 7일 이내<br>제품 하자 시 100% 교환</p>
+            </div>
+
+            <div
+                style="background: white; padding: 1.5rem; border-radius: 12px; text-align: center; box-shadow: var(--shadow-sm);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">❄️</div>
+                <h4 style="color: var(--color-primary); margin-bottom: 0.5rem;">콜드체인 배송</h4>
+                <p style="color: var(--color-text-light); font-size: 0.9rem;">신선도 유지 배송<br>배송 중 문제 시 즉시 교환</p>
+            </div>
+
+            <div
+                style="background: white; padding: 1.5rem; border-radius: 12px; text-align: center; box-shadow: var(--shadow-sm);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">✅</div>
+                <h4 style="color: var(--color-primary); margin-bottom: 0.5rem;">품질 보증</h4>
+                <p style="color: var(--color-text-light); font-size: 0.9rem;">HACCP 인증 시설<br>철저한 품질 관리</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Case type button selection
+    document.querySelectorAll('.case-type-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.case-type-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+{% endblock %}

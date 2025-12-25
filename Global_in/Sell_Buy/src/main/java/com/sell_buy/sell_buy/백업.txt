@@ -1,0 +1,234 @@
+To create a user registration system using Spring Security, we will need to set up a few components:
+
+1. **Entity**: `Member`
+2. **DTO**: `MemberRegistrationDto`
+3. **Service**: `MemberService` and `MemberServiceImpl`
+4. **Controller**: `MemberController`
+5. **Validation**: `MemberValidator`
+6. **Security Configuration**: `WebSecurityConfig`
+
+### 1. Entity: `Member`
+
+```java
+package com.sell_buy.sell_buy.db.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
+@Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@DynamicUpdate
+public class Member {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mem_seq")
+    @SequenceGenerator(name = "mem_seq", sequenceName = "mem_seq", allocationSize = 1)
+    @Column(name = "mem_id")
+    private Long memId;
+    @Column(name = "img_id")
+    private Long imgId;
+    @Column(name = "login_id", unique = true)
+    private String loginId;
+    private String password;
+    private String name;
+    @Column(unique = true)
+    private String nickname;
+    private String address;
+    @Column(unique = true)
+    private String email;
+    @Column(name = "create_date")
+    private String createDate;
+    @Column(name = "phone_num", unique = true)
+    private String phoneNum;
+    @Column(name = "role")
+    private boolean role;
+}
+```
+
+
+### 3. Service: `MemberService` and `MemberServiceImpl`
+
+```java
+package com.sell_buy.sell_buy.api.service;
+
+import com.sell_buy.sell_buy.api.dto.MemberRegistrationDto;
+import com.sell_buy.sell_buy.db.entity.Member;
+
+public interface MemberService {
+    Member registerNewMember(Member member);
+}
+```
+
+```java
+package com.sell_buy.sell_buy.api.service.impl;
+
+import com.sell_buy.sell_buy.api.service.MemberService;
+import com.sell_buy.sell_buy.db.entity.Member;
+import com.sell_buy.sell_buy.db.entity.Role;
+import com.sell_buy.sell_buy.db.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public Member registerNewMember(Member member) {
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        member.setRole(Role.USER);
+        return memberRepository.save(member);
+    }
+}
+```
+
+### 4. Controller: `MemberController`
+
+```java
+package com.sell_buy.sell_buy.api.controller;
+
+import com.sell_buy.sell_buy.api.service.MemberService;
+import com.sell_buy.sell_buy.api.validator.MemberValidator;
+import com.sell_buy.sell_buy.db.entity.Member;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/api/register")
+@RequiredArgsConstructor
+public class MemberController {
+
+    private final MemberService memberService;
+    private final MemberValidator memberValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(memberValidator);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> registerUser(@Valid @RequestBody Member member, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
+        Member registeredMember = memberService.registerNewMember(member);
+        return ResponseEntity.ok(registeredMember);
+    }
+}
+```
+
+### 5. Validation: `MemberValidator`
+
+```java
+package com.sell_buy.sell_buy.api.validator;
+
+import com.sell_buy.sell_buy.db.entity.Member;
+import com.sell_buy.sell_buy.db.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import java.util.regex.Pattern;
+
+@Component
+@RequiredArgsConstructor
+public class MemberValidator implements Validator {
+
+    private final MemberRepository memberRepository;
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{10,}$");
+    private static final Pattern LOGIN_ID_PATTERN = Pattern.compile("^.{1,20}$");
+    private static final Pattern NICKNAME_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9]{2,10}$");
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^010-\\d{4}-\\d{4}$");
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return Member.class.equals(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        Member member = (Member) target;
+
+        if (memberRepository.existsByLoginId(member.getLoginId())) {
+            errors.rejectValue("loginId", "Duplicate.loginId", "Login ID already exists");
+        }
+        if (memberRepository.existsByEmail(member.getEmail())) {
+            errors.rejectValue("email", "Duplicate.email", "Email already exists");
+        }
+        if (memberRepository.existsByPhoneNum(member.getPhoneNum())) {
+            errors.rejectValue("phoneNum", "Duplicate.phoneNum", "Phone number already exists");
+        }
+
+        if (!EMAIL_PATTERN.matcher(member.getEmail()).matches()) {
+            errors.rejectValue("email", "Invalid.email", "Invalid email format");
+        }
+        if (!PASSWORD_PATTERN.matcher(member.getPassword()).matches()) {
+            errors.rejectValue("password", "Invalid.password", "Password must be at least 10 characters long and include uppercase, lowercase, number, and special character");
+        }
+        if (!LOGIN_ID_PATTERN.matcher(member.getLoginId()).matches()) {
+            errors.rejectValue("loginId", "Invalid.loginId", "Login ID must be up to 20 characters long");
+        }
+        if (!NICKNAME_PATTERN.matcher(member.getNickname()).matches()) {
+            errors.rejectValue("nickname", "Invalid.nickname", "Nickname must be between 2 and 10 characters long and can include Korean characters");
+        }
+        if (!PHONE_PATTERN.matcher(member.getPhoneNum()).matches()) {
+            errors.rejectValue("phoneNum", "Invalid.phoneNum", "Phone number must be in the format 010-0000-0000");
+        }
+    }
+}
+```
+
+### 6. Security Configuration: `WebSecurityConfig`
+
+```java
+package com.sell_buy.sell_buy.config;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@EnableWebSecurity
+@Configuration
+@RequiredArgsConstructor
+public class WebSecurityConfig {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(authorize -> authorize
+                .antMatchers("/api/register").permitAll()
+                .anyRequest().authenticated());
+
+        return http.build();
+    }
+}
+```
+
+This setup provides a basic user registration system with validation and security configuration using Spring Security.

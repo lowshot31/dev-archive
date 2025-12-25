@@ -1,0 +1,84 @@
+/* slider.css */
+.slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* 이미지 최대 너비 조정 */
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.slider-wrapper {
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.slide {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.product-image {
+    width: 100%;
+    height: auto; /* 높이 자동 조정 */
+    display: block; /* 이미지 아래 여백 제거 */
+}
+
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 10px;
+}
+
+.slider-controls button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.slider-controls button:hover {
+    opacity: 1;
+}
+
+.slide-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.slide-indicators .slide-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.slide-indicators .slide-indicator.active {
+    background-color: white;
+}
