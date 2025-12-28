@@ -6,7 +6,8 @@
 
 ### 1. [🌐 Global_in](./Global_in)
 **웹 크롤링 및 이커머스 플랫폼**
-2024.11~2025.02
+2024.11~2025.02<br>
+
 이커머스를 위한 데이터 수집 시스템과 실제 판매 플랫폼을 포함하는 통합 프로젝트입니다.
 
 - **주요 기능**: 
@@ -29,7 +30,8 @@
 
 ### 2. [🥛 Pre](./Pre)
 **유기농 유제품 회사 홈페이지**
-2025.12.10~2025.01
+2025.12.10~2025.01<br>
+
 FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce CRM과 연동됩니다.
 
 - **주요 기능**: 회사 소개, 제품 전시, 견적 문의 (Web-to-Lead), 고객 센터 (Web-to-Case)
@@ -55,7 +57,8 @@ FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce 
 
 ### 4. [☁️ multicloud-devsecops](./multicloud-devsecops)
 **GCP 기반 멀티클라우드 DevSecOps 파이프라인**
-2025.09-10
+2025.09-10<br>
+
 GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이터 파이프라인 및 DevSecOps 프로젝트입니다.
 
 - **주요 기능**: 자동화된 로그 생성, 컨테이너화, 스케줄링 실행, Datadog 모니터링
