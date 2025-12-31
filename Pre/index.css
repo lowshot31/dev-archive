@@ -150,9 +150,12 @@ p {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background: var(--color-primary);
+  background: var(--color-primary) !important;
+  backdrop-filter: blur(10px);
   z-index: 1000;
-  transition: background var(--transition-normal), box-shadow var(--transition-normal);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
 }
 
 .header.scrolled {

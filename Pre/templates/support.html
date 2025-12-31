@@ -125,6 +125,90 @@
         color: var(--color-text);
     }
 
+    .response-time-box {
+        margin-top: var(--space-lg);
+        padding: var(--space-md);
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+        border-radius: var(--radius-md);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .response-time-box h4 {
+        margin-bottom: 8px;
+        color: white !important;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .response-time-box p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9) !important;
+        margin: 0;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        transition: opacity var(--transition-normal);
+    }
+
+    .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-content {
+        background: var(--color-white);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        max-width: 450px;
+        width: 90%;
+        text-align: center;
+        box-shadow: var(--shadow-premium);
+        transform: translateY(20px);
+        transition: transform var(--transition-normal);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-icon {
+        font-size: 3rem;
+        margin-bottom: var(--space-md);
+        display: block;
+    }
+
+    .modal-title {
+        color: var(--color-primary);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--space-sm);
+    }
+
+    .modal-body {
+        color: var(--color-text-light);
+        margin-bottom: var(--space-lg);
+        line-height: 1.6;
+    }
+
+    .modal-btn {
+        width: 100%;
+    }
+
     @media (max-width: 768px) {
         .support-grid {
             grid-template-columns: 1fr;
@@ -175,7 +259,7 @@
                         <div class="channel-icon">✉️</div>
                         <div class="channel-text">
                             <h4>이메일 문의</h4>
-                            <p>support@pre-dairy.com</p>
+                            <p>sales@pre-dairy.com</p>
                         </div>
                     </div>
 
@@ -188,12 +272,9 @@
                     </div>
                 </div>
 
-                <div
-                    style="margin-top: var(--space-lg); padding: var(--space-md); background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); border-radius: var(--radius-md); color: white;">
-                    <h4 style="margin-bottom: 8px; color: white;">⏱️ 평균 응답 시간</h4>
-                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.9); margin: 0;">
-                        전화: 즉시 / 온라인: 영업일 기준 24시간 이내
-                    </p>
+                <div class="response-time-box">
+                    <h4>⏱️ 평균 응답 시간</h4>
+                    <p>전화: 즉시 / 온라인: 영업일 기준 24시간 이내</p>
                 </div>
             </div>
 
@@ -201,25 +282,14 @@
             <div class="support-form">
                 <h3>온라인 문의 접수</h3>
 
-                <div class="salesforce-notice">
-                    <strong>💡 Salesforce Web-to-Case 연동</strong>
-                    Setup → Service → Web-to-Case에서 폼을 생성하여 교체하세요.
+                <div class="salesforce-notice"
+                    style="background: var(--color-cream); color: var(--color-primary); border: 1px solid var(--color-gray-light);">
+                    <strong>📬 1:1 이메일 문의</strong>
+                    문의 내용을 작성하신 후 버튼을 누르면 고객님의 이메일 앱이 실행됩니다.
                 </div>
 
-                <!--  ============================================
-              SALESFORCE WEB-TO-CASE FORM
-              아래 form 태그를 Salesforce에서 생성한 
-              Web-to-Case 폼으로 교체하세요.
-              ============================================  -->
-
-                <form id="caseForm" action="https://webto.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8"
-                    method="POST">
-
-                    <!-- Salesforce OID - 본인의 Org ID로 교체 필요 -->
-                    <input type="hidden" name="orgid" value="YOUR_ORG_ID_HERE">
-
-                    <!-- Return URL after form submission -->
-                    <input type="hidden" name="retURL" value="/">
+                <!-- [1:1 이메일 접수 폼] -->
+                <form id="caseForm" onsubmit="return handleMailSubmit(event)">
 
                     <!-- Case Type Selection -->
                     <div style="margin-bottom: var(--space-md);">
@@ -330,6 +400,20 @@
         </div>
     </div>
 </section>
+
+<!-- Email Success Modal -->
+<div id="emailModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="modal-icon">📩</span>
+        <h3 class="modal-title">이메일 클라이언트 실행</h3>
+        <p class="modal-body">
+            고객님의 기본 이메일 프로그램이 실행됩니다.<br>
+            문의 내용이 자동으로 작성되어 있으니,<br>
+            <strong>보내기</strong> 버튼을 눌러 전송을 완료해주세요.
+        </p>
+        <button type="button" class="btn btn-primary modal-btn" onclick="closeModal()">확인</button>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -339,7 +423,57 @@
         btn.addEventListener('click', function () {
             document.querySelectorAll('.case-type-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
+
+            // Set radio button
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
         });
     });
+
+    function handleMailSubmit(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        const phone = form.phone.value;
+        const subject = form.subject.value;
+        const description = form.description.value;
+        const type = form.querySelector('input[name="type"]:checked')?.value || 'General';
+
+        const mailTo = "sales@pre-dairy.com";
+        const mailSubject = `[고객센터 문의] ${subject}`;
+        const mailBody = `
+고객 이름: ${name}
+연락처: ${phone}
+이메일: ${email}
+문의 유형: ${type}
+
+상세 내용:
+${description}
+        `.trim();
+
+        const mailtoUrl = `mailto:${mailTo}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+
+        window.location.href = mailtoUrl;
+
+        // Show custom modal
+        openModal();
+        return false;
+    }
+
+    function openModal() {
+        const modal = document.getElementById('emailModal');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('emailModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scroll
+        // Optional: clear form
+        document.getElementById('caseForm').reset();
+    }
 </script>
 {% endblock %}

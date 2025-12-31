@@ -70,6 +70,15 @@ async def contact(request: Request):
     })
 
 
+@app.get("/contact/success", response_class=HTMLResponse)
+async def contact_success(request: Request):
+    """견적 문의 성공 페이지"""
+    return templates.TemplateResponse("contact_success.html", {
+        "request": request,
+        "page_title": "문의 접수 완료 - Pre"
+    })
+
+
 @app.get("/support", response_class=HTMLResponse)
 async def support(request: Request):
     """고객 센터 페이지 (Salesforce Web-to-Case)"""
@@ -91,5 +100,16 @@ async def health_check():
 
 
 # ============================================
-# Run with: uv run uvicorn app:app --reload --host 0.0.0.0
+# Run with: uvicorn app:app --reload --host 0.0.0.0 --port 8000 --ssl-keyfile key.pem --ssl-certfile cert.pem
 # ============================================
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=8000,
+        ssl_keyfile="key.pem",
+        ssl_certfile="cert.pem",
+        reload=True
+    )

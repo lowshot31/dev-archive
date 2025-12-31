@@ -4,45 +4,36 @@
 
 ## 📂 프로젝트 목록
 
-### 1. [🌐 Global_in](./Global_in)
+### 1. [🥛 Pre](./Pre)
 
-**웹 크롤링 및 이커머스 플랫폼**
-<br>2024.11~2025.02<br>
-이커머스를 위한 데이터 수집 시스템과 실제 판매 플랫폼을 포함하는 통합 프로젝트입니다.
+**유기농 유제품 회사 홈페이지 (프론트엔드)**
+<br>2024.12~2025.01<br>
+
+FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce CRM과 연동되는 반응형 웹 애플리케이션입니다.
 
 - **주요 기능**:
-  - 웹 크롤링 (이마트, GS25, CU)
-  - 카테고리 계층 구조 생성 및 DB 저장
-  - Spring Boot 기반 이커머스 플랫폼
-  - AWS 클라우드 통합 (S3, SQS, ECR)
+  - 회사 소개 (비전/미션, 타임라인 연혁)
+  - 제품 전시 (동적 필터링, 뱃지 시스템)
+  - 견적 문의 (Web-to-Lead, 카카오 주소 검색 API)
+  - 고객 센터 (이메일 문의, FAQ 아코디언)
+  - Experience Cloud 포털 로그인 연동
 - **기술 스택**:
-  - Python, Pandas, Selenium, Oracle DB
-  - Spring Boot 3.4, Java 17, Redis, WebSocket
-  - AWS (S3, SQS, ECR), JSP + Bootstrap
-- **하위 프로젝트**:
-  - `project_crawling`: Python 웹 크롤링 및 데이터 처리
-  - `Sell_Buy`: Spring Boot 이커머스 웹 애플리케이션
-
-[📖 자세히 보기 →](./Global_in/README.md)
-
----
-
-### 2. [🥛 Pre](./Pre)
-
-**유기농 유제품 회사 홈페이지**
-<br>2025.12.10~2025.01<br>
-
-FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce CRM과 연동됩니다.
-
-- **주요 기능**: 회사 소개, 제품 전시, 견적 문의 (Web-to-Lead), 고객 센터 (Web-to-Case)
-- **기술 스택**: FastAPI, Jinja2, Uvicorn, Salesforce, ngrok
-- **특징**: 반응형 웹 디자인, CRM 자동 연동
+  - Backend: FastAPI, Uvicorn, Jinja2
+  - Frontend: Vanilla JavaScript (ES6+), HTML5, CSS3
+  - Integration: Salesforce (Web-to-Lead), 카카오 우편번호 API, Mailto
+  - Deployment: HTTPS (SSL), ngrok
+- **특화 기능**:
+  - 다중 제품 선택 태그 UI
+  - 실시간 전화번호 포매팅
+  - Scroll reveal 애니메이션
+  - Glassmorphism 디자인 시스템
+  - 주소 자동 완성 및 Salesforce 필드 매핑
 
 [📖 자세히 보기 →](./Pre/README.md)
 
 ---
 
-### 3. [🏢 Pre-SFDX](./Pre-SFDX)
+### 2. [🏢 Pre-SFDX](./Pre-SFDX)
 
 **Salesforce CRM 백엔드 및 Experience Cloud 포털**
 <br>2024.12~2025.01<br>
@@ -69,6 +60,29 @@ Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고�
   - 리드 필수 필드 및 중복 규칙
 
 [📖 자세히 보기 →](./Pre-SFDX/README.md)
+
+---
+
+### 3. [🌐 Global_in](./Global_in)
+
+**웹 크롤링 및 이커머스 플랫폼**
+<br>2024.11~2025.02<br>
+이커머스를 위한 데이터 수집 시스템과 실제 판매 플랫폼을 포함하는 통합 프로젝트입니다.
+
+- **주요 기능**:
+  - 웹 크롤링 (이마트, GS25, CU)
+  - 카테고리 계층 구조 생성 및 DB 저장
+  - Spring Boot 기반 이커머스 플랫폼
+  - AWS 클라우드 통합 (S3, SQS, ECR)
+- **기술 스택**:
+  - Python, Pandas, Selenium, Oracle DB
+  - Spring Boot 3.4, Java 17, Redis, WebSocket
+  - AWS (S3, SQS, ECR), JSP + Bootstrap
+- **하위 프로젝트**:
+  - `project_crawling`: Python 웹 크롤링 및 데이터 처리
+  - `Sell_Buy`: Spring Boot 이커머스 웹 애플리케이션
+
+[📖 자세히 보기 →](./Global_in/README.md)
 
 ---
 
@@ -150,9 +164,6 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ```
 .
-├── Global_in/              # 웹 크롤링 및 카테고리 관리
-│   ├── project_crawling/   # 카테고리 데이터 처리
-│   └── Sell_Buy/           # (개발 예정)
 ├── Pre/                    # 유기농 유제품 홈페이지 (프론트엔드)
 │   ├── static/             # CSS, JS, 이미지
 │   └── templates/          # HTML 템플릿
@@ -165,6 +176,9 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 │       ├── Salesforce_ERD.md
 │       ├── Custom_Apex_Classes_Documentation.md
 │       └── Lead_Required_Fields_and_Duplicate_Rules.md
+├── Global_in/              # 웹 크롤링 및 카테고리 관리
+│   ├── project_crawling/   # 카테고리 데이터 처리
+│   └── Sell_Buy/           # (개발 예정)
 ├── coinbot/                # 업비트 급등 알림 봇
 │   └── main.py             # 메인 애플리케이션
 ├── multicloud-devsecops/   # GCP DevSecOps 파이프라인
