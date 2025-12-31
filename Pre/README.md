@@ -259,7 +259,7 @@ sequenceDiagram
     API-->>SF: Response (Status: Success/Fail)
     
     SF->>User: 실시간 상태 반영 및 포털 업데이트
-
+```
 
 
 ---
