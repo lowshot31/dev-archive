@@ -7,7 +7,7 @@
 ### 1. [🥛 Pre](./Pre)
 
 **유기농 유제품 회사 홈페이지 (프론트엔드)**
-<br>2024.12~2025.01<br>
+<br>2025.12~2026.01<br>
 
 FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce CRM과 연동되는 반응형 웹 애플리케이션입니다.
 
@@ -36,7 +36,7 @@ FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce 
 ### 2. [🏢 Pre-SFDX](./Pre-SFDX)
 
 **Salesforce CRM 백엔드 및 Experience Cloud 포털**
-<br>2024.12~2025.01<br>
+<br>2025.12~2026.01<br>
 
 Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고객 포털 시스템입니다.
 
@@ -63,7 +63,38 @@ Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고�
 
 ---
 
-### 3. [🌐 Global_in](./Global_in)
+---
+
+### 3. [☁️ multicloud-devsecops](./multicloud-devsecops)
+
+**GCP 기반 멀티클라우드 DevSecOps 파이프라인**
+<br>2025.09-10<br>
+
+GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이터 파이프라인 및 DevSecOps 프로젝트입니다.
+
+- **주요 기능**: 자동화된 로그 생성, 컨테이너화, 스케줄링 실행, Datadog 모니터링
+- **기술 스택**: GCP (Cloud Run, Artifact Registry, Cloud Scheduler), Terraform, GitHub Actions, Datadog, Python
+- **특징**: Workload Identity Federation, IaC, CI/CD 자동화, 비용 최적화 (99.7% 절감)
+
+[📖 자세히 보기 →](./multicloud-devsecops/README.md)
+
+---
+
+### 4. [🤖 coinbot](./coinbot)
+
+**업비트 암호화폐 급등 알림 텔레그램 봇**
+<br>2025.08<br>
+업비트 거래소의 실시간 시세를 모니터링하여 급등하는 코인을 텔레그램으로 알려주는 봇입니다.
+
+- **주요 기능**: 실시간 KRW 마켓 모니터링, 급등 감지 알고리즘, 텔레그램 알림, 다중 사용자 지원
+- **기술 스택**: Python, python-telegram-bot, asyncio, Upbit API
+- **특징**: 비동기 처리, API 제한 준수, 실시간 제어
+
+[📖 자세히 보기 →](./coinbot/README.md)
+
+---
+
+### 5. [🌐 Global_in](./Global_in)
 
 **웹 크롤링 및 이커머스 플랫폼**
 <br>2024.11~2025.02<br>
@@ -83,35 +114,6 @@ Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고�
   - `Sell_Buy`: Spring Boot 이커머스 웹 애플리케이션
 
 [📖 자세히 보기 →](./Global_in/README.md)
-
----
-
-### 4. [🤖 coinbot](./coinbot)
-
-**업비트 암호화폐 급등 알림 텔레그램 봇**
-<br>2025.08<br>
-업비트 거래소의 실시간 시세를 모니터링하여 급등하는 코인을 텔레그램으로 알려주는 봇입니다.
-
-- **주요 기능**: 실시간 KRW 마켓 모니터링, 급등 감지 알고리즘, 텔레그램 알림, 다중 사용자 지원
-- **기술 스택**: Python, python-telegram-bot, asyncio, Upbit API
-- **특징**: 비동기 처리, API 제한 준수, 실시간 제어
-
-[📖 자세히 보기 →](./coinbot/README.md)
-
----
-
-### 5. [☁️ multicloud-devsecops](./multicloud-devsecops)
-
-**GCP 기반 멀티클라우드 DevSecOps 파이프라인**
-<br>2025.09-10<br>
-
-GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이터 파이프라인 및 DevSecOps 프로젝트입니다.
-
-- **주요 기능**: 자동화된 로그 생성, 컨테이너화, 스케줄링 실행, Datadog 모니터링
-- **기술 스택**: GCP (Cloud Run, Artifact Registry, Cloud Scheduler), Terraform, GitHub Actions, Datadog, Python
-- **특징**: Workload Identity Federation, IaC, CI/CD 자동화, 비용 최적화 (99.7% 절감)
-
-[📖 자세히 보기 →](./multicloud-devsecops/README.md)
 
 ---
 
