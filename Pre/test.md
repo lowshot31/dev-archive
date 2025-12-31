@@ -1,3 +1,6 @@
+### 🔄 System Data Flow Diagram
+
+```mermaid
 sequenceDiagram
     participant User as User (Experience Cloud/Web)
     participant SF as Salesforce (LWC/Apex)
