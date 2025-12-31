@@ -1,0 +1,70 @@
+:host {
+    display: block;
+    --color-primary: #2d4a3e;
+    --color-accent: #7cb342;
+}
+
+.case-form-container {
+    padding: 1rem;
+}
+
+.custom-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.file-input-wrapper {
+    position: relative;
+    margin-top: 5px;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.selected-files-list {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    border: 1px dashed #ccc;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    color: #555;
+    font-size: 0.85rem;
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+}
+
+.btn-submit {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}

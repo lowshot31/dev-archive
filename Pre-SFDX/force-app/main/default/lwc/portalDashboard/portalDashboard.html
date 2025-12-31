@@ -1,0 +1,320 @@
+<template>
+    <div class="main-content">
+        <div class="dashboard-container">
+            <!-- Header Actions -->
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Portal Dashboard</h1>
+                <div class="header-actions">
+                    <template lwc:if={showNewOrderButton}>
+                        <lightning-button label="New Order" onclick={handleOpenModal} variant="brand"></lightning-button>
+                    </template>
+                    <template lwc:if={showNewCaseButton}>
+                        <lightning-button label="New Case" onclick={handleCreateCase} variant="brand"></lightning-button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Case Detail View -->
+            <template lwc:if={isCaseDetailView}>
+                <c-portal-case-detail
+                    case-id={selectedCase.Id}
+                    case-subject={selectedCase.Subject}
+                    case-status={selectedCase.Status}
+                    case-number={selectedCase.CaseNumber}
+                    case-priority={selectedCase.Priority}
+                    case-created-date={selectedCase.CreatedDate}
+                    case-description={selectedCase.Description}
+                    case-issue-date={selectedCase.Issue_Date__c}
+                    case-product={selectedCase.ProductName}
+                    case-owner={selectedCase.OwnerName}
+                    onback={handleBackToDashboard}>
+                </c-portal-case-detail>
+            </template>
+
+            <!-- Dashboard View -->
+            <template lwc:if={isDashboardView}>
+                <template lwc:if={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </template>
+
+                <lightning-tabset active-tab-value={activeTab}>
+                        <!-- Overview Tab -->
+                        <lightning-tab label="Overview" value="overview" onactive={handleTabActive}>
+                            <div class="overview-grid">
+                                <!-- Recent Orders -->
+                                <div class="section-card">
+                                    <h3 class="section-title">Recent Orders</h3>
+                                    <template lwc:if={orders.length}>
+                                        <template for:each={visibleOrdersSummary} for:item="order">
+                                            <div key={order.Id} class="item-card">
+                                                <div class="card-header">
+                                                    <span class="card-number">{order.OrderNumber}</span>
+                                                    <span class={order.badgeClass}>{order.Status}</span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="info-row">
+                                                        <span class="label">금액:</span>
+                                                        <span class="value">{order.TotalAmount} 원</span>
+                                                    </div>
+                                                    <div class="info-row">
+                                                        <span class="label">배송:</span>
+                                                        <span class={order.deliveryBadgeClass}>{order.Delivery_Staus__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <template lwc:else>
+                                        <p class="empty-message">주문 내역이 없습니다.</p>
+                                    </template>
+                                </div>
+
+                                <!-- Recent Cases -->
+                                <div class="section-card">
+                                    <h3 class="section-title">Recent Cases</h3>
+                                    <template lwc:if={cases.length}>
+                                        <template for:each={visibleCasesSummary} for:item="caseItem">
+                                            <div key={caseItem.Id} class="item-card clickable" data-id={caseItem.Id} onclick={handleCaseClick}>
+                                                <div class="card-header">
+                                                    <span class="card-number">{caseItem.CaseNumber}</span>
+                                                    <span class={caseItem.badgeClass}>{caseItem.Status}</span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="card-title">{caseItem.Subject}</div>
+                                                    <div class="info-row">
+                                                        <span class="label">이슈 발생일:</span>
+                                                        <span class="value">{caseItem.Issue_Date__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <template lwc:else>
+                                        <p class="empty-message">문의 내역이 없습니다.</p>
+                                    </template>
+                                </div>
+
+                                <!-- Recent Contracts -->
+                                <div class="section-card">
+                                    <h3 class="section-title">Recent Contracts</h3>
+                                    <template lwc:if={contracts.length}>
+                                        <template for:each={visibleContractsSummary} for:item="contract">
+                                            <div key={contract.Id} class="item-card">
+                                                <div class="card-header">
+                                                    <span class="card-number">{contract.ContractNumber}</span>
+                                                    <span class={contract.badgeClass}>{contract.Status}</span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="info-row">
+                                                        <span class="label">시작일:</span>
+                                                        <span class="value">{contract.StartDate}</span>
+                                                    </div>
+                                                    <div class="info-row">
+                                                        <span class="label">종료일:</span>
+                                                        <span class="value">{contract.EndDate}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <template lwc:else>
+                                        <p class="empty-message">계약 내역이 없습니다.</p>
+                                    </template>
+                                </div>
+                            </div>
+                        </lightning-tab>
+
+                        <!-- Orders Tab -->
+                        <lightning-tab label="Orders" value="orders" onactive={handleTabActive}>
+                            <template lwc:if={orderState.visibleData.length}>
+                                <div class="list-container">
+                                    <template for:each={orderState.visibleData} for:item="order">
+                                        <div key={order.Id} class="list-item-card">
+                                            <div class="list-card-header">
+                                                <div>
+                                                    <span class="card-number-large">{order.OrderNumber}</span>
+                                                    <span class="card-date">{order.CreatedDate}</span>
+                                                </div>
+                                                <span class={order.badgeClass}>{order.Status}</span>
+                                            </div>
+                                            <div class="list-card-body">
+                                                <div class="info-grid">
+                                                    <div class="info-item">
+                                                        <span class="label">총 금액</span>
+                                                        <span class="value-large">{order.TotalAmount} 원</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="label">배송 현황</span>
+                                                        <span class={order.deliveryBadgeClass}>{order.Delivery_Staus__c}</span>
+                                                    </div>
+                                                    <div class="info-item full-width">
+                                                        <span class="label">주문 내용</span>
+                                                        <span class="value">{order.Description}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <!-- Pagination -->
+                                <div class="pagination">
+                                    <lightning-button 
+                                        label="이전" 
+                                        onclick={handlePrev} 
+                                        data-type="order" 
+                                        disabled={orderState.disablePrev}
+                                        variant="neutral">
+                                    </lightning-button>
+                                    <span class="page-info">페이지 {orderState.currentPage} / {orderState.totalPages}</span>
+                                    <lightning-button 
+                                        label="다음" 
+                                        onclick={handleNext} 
+                                        data-type="order" 
+                                        disabled={orderState.disableNext}
+                                        variant="neutral">
+                                    </lightning-button>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <p class="empty-message-large">주문 내역이 없습니다.</p>
+                            </template>
+                        </lightning-tab>
+
+                        <!-- Cases Tab -->
+                        <lightning-tab label="Cases" value="cases" onactive={handleTabActive}>
+                            <template lwc:if={caseState.visibleData.length}>
+                                <div class="list-container">
+                                    <template for:each={caseState.visibleData} for:item="caseItem">
+                                        <div key={caseItem.Id} class="list-item-card clickable" data-id={caseItem.Id} onclick={handleCaseClick}>
+                                            <div class="list-card-header">
+                                                <div>
+                                                    <span class="card-number-large">{caseItem.CaseNumber}</span>
+                                                    <span class="card-date">{caseItem.CreatedDate}</span>
+                                                </div>
+                                                <span class={caseItem.badgeClass}>{caseItem.Status}</span>
+                                            </div>
+                                            <div class="list-card-body">
+                                                <div class="case-subject">{caseItem.Subject}</div>
+                                                <div class="info-grid">
+                                                    <div class="info-item">
+                                                        <span class="label">관련 제품</span>
+                                                        <span class="value">{caseItem.ProductName}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="label">이슈 발생일</span>
+                                                        <span class="value">{caseItem.Issue_Date__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <!-- Pagination -->
+                                <div class="pagination">
+                                    <lightning-button 
+                                        label="이전" 
+                                        onclick={handlePrev} 
+                                        data-type="case" 
+                                        disabled={caseState.disablePrev}
+                                        variant="neutral">
+                                    </lightning-button>
+                                    <span class="page-info">페이지 {caseState.currentPage} / {caseState.totalPages}</span>
+                                    <lightning-button 
+                                        label="다음" 
+                                        onclick={handleNext} 
+                                        data-type="case" 
+                                        disabled={caseState.disableNext}
+                                        variant="neutral">
+                                    </lightning-button>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <p class="empty-message-large">문의 내역이 없습니다.</p>
+                            </template>
+                        </lightning-tab>
+
+                        <!-- Contracts Tab -->
+                        <lightning-tab label="Contracts" value="contracts" onactive={handleTabActive}>
+                            <template lwc:if={contractState.visibleData.length}>
+                                <div class="list-container">
+                                    <template for:each={contractState.visibleData} for:item="contract">
+                                        <div key={contract.Id} class="list-item-card">
+                                            <div class="list-card-header">
+                                                <span class="card-number-large">{contract.ContractNumber}</span>
+                                                <span class={contract.badgeClass}>{contract.Status}</span>
+                                            </div>
+                                            <div class="list-card-body">
+                                                <div class="info-grid">
+                                                    <div class="info-item">
+                                                        <span class="label">시작일</span>
+                                                        <span class="value">{contract.StartDate}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="label">종료일</span>
+                                                        <span class="value">{contract.EndDate}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <!-- Pagination -->
+                                <div class="pagination">
+                                    <lightning-button 
+                                        label="이전" 
+                                        onclick={handlePrev} 
+                                        data-type="contract" 
+                                        disabled={contractState.disablePrev}
+                                        variant="neutral">
+                                    </lightning-button>
+                                    <span class="page-info">페이지 {contractState.currentPage} / {contractState.totalPages}</span>
+                                    <lightning-button 
+                                        label="다음" 
+                                        onclick={handleNext} 
+                                        data-type="contract" 
+                                        disabled={contractState.disableNext}
+                                        variant="neutral">
+                                    </lightning-button>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <p class="empty-message-large">계약 내역이 없습니다.</p>
+                            </template>
+                        </lightning-tab>
+                    </lightning-tabset>
+                </template>
+        </div>
+    </div>
+
+    <!-- Create Order Modal -->
+    <template lwc:if={showModal}>
+        <c-portal-new-order-form
+            account-id={recordId}
+            onsuccess={handleOrderSuccess}
+            oncancel={handleCloseModal}>
+        </c-portal-new-order-form>
+    </template>
+    
+    <!-- Create Case Modal -->
+    <template lwc:if={showCaseModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseCaseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">새 문의 접수</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-portal-new-case-form
+                        account-id={recordId}
+                        onsuccess={handleCaseSuccess}
+                        oncancel={handleCloseCaseModal}>
+                    </c-portal-new-case-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
