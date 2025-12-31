@@ -239,7 +239,6 @@ python generate_cert.py
 .\ngrok config add-authtoken YOUR_AUTHTOKEN
 ```
 
----
 ### 🔄 System Data Flow Diagram
 
 ```mermaid
@@ -261,6 +260,9 @@ sequenceDiagram
     
     SF->>User: 실시간 상태 반영 및 포털 업데이트
 
+
+
+---
 
 ## 📖 추가 문서
 
