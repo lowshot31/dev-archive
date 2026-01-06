@@ -19,8 +19,17 @@ app = FastAPI(
 # Get the base directory
 BASE_DIR = Path(__file__).resolve().parent
 
-# Mount static files
+# Mount static files with cache control
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+
+# Add cache control middleware for static files
+@app.middleware("http")
+async def add_cache_control_header(request, call_next):
+    response = await call_next(request)
+    # Cache static files for 1 hour (3600 seconds)
+    if request.url.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "public, max-age=3600"
+    return response
 
 # Setup Jinja2 templates
 templates = Jinja2Templates(directory=BASE_DIR / "templates")

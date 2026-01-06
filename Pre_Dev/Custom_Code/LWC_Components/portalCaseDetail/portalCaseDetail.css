@@ -1,0 +1,163 @@
+/* portalCaseDetail.css */
+:host {
+    --primary-color: #2d4a3e;
+    --secondary-color: #f3f3f3;
+    --accent-color: #0070d2;
+}
+
+.case-detail-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.back-link {
+    color: #666;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.back-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.slds-text-heading_medium {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.status-row .label {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.status-row .value {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    background-color: #eee;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* Chat Feed Styles */
+.input-wrapper {
+    position: relative;
+    background: #f9f9f9;
+    padding: 6px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.comment-input {
+    flex-grow: 1;
+    --slds-c-input-color-border: transparent;
+    --slds-c-input-shadow: none;
+    --slds-c-input-spacing-horizontal: 0.5rem;
+}
+
+.send-btn {
+    background: var(--accent-color);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.send-btn:hover {
+    background: #005fb2;
+}
+
+.feed-list {
+    display: flex;
+    flex-direction: column-reverse; /* Newest at bottom visually if we want, but usually newest at bottom in chat code, but here HTML loop order matters. Let's keep normal order (oldest top) or match screenshot (Desc/Asc). Screenshot: "Salesforce Support Dec 12", "Jinbi Dec 11". Newest top? No, usually chats are Newest Bottom. Let's assume standard chat: Oldest Top. 
+    User screenshot shows Support (Dec 12) above Jinbi (Dec 11)? Wait.
+    Screenshot data: 
+    Top: Salesforce Support (Dec 12)
+    Bottom: Jinbi Jung (Dec 11)
+    This implies Newest on Top? Or maybe threaded. 
+    Standard chat is Newest at Bottom.
+    However, support tickets often show Newest at Top. 
+    I will stick to standard: Oldest Top, Newest Bottom (Chat style). 
+    Wait, screenshot 2 shows Support (Dec 12) ABOVE Jinbi (Dec 11)??
+    "Dec 12 1:07 AM"
+    "Dec 11 1:16 AM"
+    So the NEWEST is at the TOP. 
+    I will implement Newest at Top. */
+    gap: 1.5rem;
+}
+
+.feed-item {
+    display: flex;
+    gap: 1rem;
+    max-width: 80%;
+}
+
+.feed-item.outbound { /* Me */
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.feed-item.inbound { /* Support/Others */
+    align-self: flex-start;
+}
+
+.avatar-container {
+    width: 40px;
+    height: 40px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.feed-item.outbound .avatar-container {
+     background-color: var(--primary-color);
+}
+
+.feed-item.outbound .avatar-icon {
+    --slds-c-icon-color-foreground: white;
+}
+
+.message-content {
+    background: #f3f3f3;
+    padding: 1rem;
+    border-radius: 12px;
+    border-top-left-radius: 2px;
+}
+
+.feed-item.outbound .message-content {
+    background: #e3f2fd;
+    border-radius: 12px;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 12px;
+}
+
+.message-header {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.author-name {
+    font-weight: 700;
+}

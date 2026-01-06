@@ -1,0 +1,173 @@
+<template>
+    <div class="case-detail-container">
+        <!-- Header Section -->
+        <div class="case-header slds-card slds-p-around_medium slds-m-bottom_medium">
+            <div class="slds-grid slds-grid_align-spread">
+                <div>
+                    <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                        <a href="javascript:void(0);" onclick={handleBack} class="back-link">
+                            <lightning-icon icon-name="utility:back" size="xx-small"></lightning-icon> 
+                            Back to Dashboard
+                        </a>
+                        <span class="slds-m-horizontal_small">|</span>
+                        #{caseNumber} Case
+                    </div>
+                    <h1 class="slds-text-heading_medium slds-m-bottom_small">{caseSubject}</h1>
+                </div>
+                <div>
+                     <template lwc:if={isClosed}>
+                        <lightning-button label="Reopen Case" variant="neutral" class="reopen-btn" disabled></lightning-button>
+                     </template>
+                </div>
+            </div>
+            
+            <div class="slds-grid slds-gutters status-row">
+                <div class="slds-col">
+                    <p class="label">STATUS</p>
+                    <p class="value"><span class="status-badge">{caseStatus}</span></p>
+                </div>
+                <div class="slds-col">
+                    <p class="label">DATE OPENED</p>
+                    <p class="value">{caseCreatedDate}</p>
+                </div>
+                <div class="slds-col">
+                    <p class="label">PRIORITY</p>
+                    <p class="value">{casePriority}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case Details Section -->
+        <div class="case-details slds-card slds-p-around_medium slds-m-bottom_medium">
+            <h2 class="slds-text-heading_small slds-m-bottom_medium">Case Details</h2>
+            
+            <div class="slds-grid slds-gutters slds-wrap">
+                <!-- Description -->
+                <template lwc:if={caseDescription}>
+                    <div class="slds-col slds-size_1-of-1 slds-m-bottom_medium">
+                        <p class="label">Description</p>
+                        <div class="value description-text">
+                            <lightning-formatted-text value={caseDescription}></lightning-formatted-text>
+                        </div>
+                    </div>
+                </template>
+                
+                <!-- Issue Date -->
+                <template lwc:if={caseIssueDate}>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                        <p class="label">이슈 발생일</p>
+                        <p class="value">
+                            <lightning-formatted-date-time value={caseIssueDate} 
+                                year="numeric" month="numeric" day="numeric">
+                            </lightning-formatted-date-time>
+                        </p>
+                    </div>
+                </template>
+                
+                <!-- Related Product -->
+                <template lwc:if={caseProduct}>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                        <p class="label">관련 제품</p>
+                        <p class="value">{caseProduct}</p>
+                    </div>
+                </template>
+                
+                <!-- Case Owner -->
+                <template lwc:if={caseOwner}>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                        <p class="label">담당자</p>
+                        <p class="value">{caseOwner}</p>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- NEW: Manual File Upload Section (STYLISH & PROPER) -->
+        <div class="manual-upload-section slds-card slds-p-around_medium slds-m-bottom_medium" style="border: 2px solid #2d4a3e;">
+            <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                <lightning-icon icon-name="utility:attach" size="small" class="slds-m-right_small" variant="brand"></lightning-icon>
+                <h2 class="slds-text-heading_small" style="color: #2d4a3e; font-weight: bold;">파일 업로드 (추가 자료 제출)</h2>
+            </div>
+            
+            <div class="upload-area" style="background: #f8f9fa; border: 1px dashed #2d4a3e; padding: 1.5rem; text-align: center; border-radius: 8px;">
+                <input type="file" id="manual-file-input" onchange={handleFileSelection} multiple style="display: none;">
+                <label for="manual-file-input" class="slds-button slds-button_neutral" style="cursor: pointer;">
+                    <lightning-icon icon-name="utility:add" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                    파일 선택하기
+                </label>
+                
+                <template lwc:if={selectedFiles.length}>
+                    <div class="slds-m-top_medium" style="text-align: left;">
+                        <p style="font-weight: bold; margin-bottom: 5px;">선택된 파일 ({selectedFiles.length}개):</p>
+                        <ul class="slds-list_dotted">
+                            <template for:each={selectedFiles} for:item="f">
+                                <li key={f.name} style="font-size: 0.9rem;">{f.name} ({f.sizeKB} KB)</li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <p class="slds-m-top_small slds-text-color_weak">선택된 파일이 없습니다.</p>
+                </template>
+
+                <button class="slds-button slds-button_brand slds-m-top_medium" style="width: 100%; background-color: #2d4a3e; border: none; height: 45px; font-weight: bold;" 
+                        onclick={uploadFilesManual} disabled={isUploadDisabled}>
+                    <template lwc:if={isProcessing}>
+                        <lightning-spinner size="xx-small" alternative-text="Uploading..."></lightning-spinner>
+                    </template>
+                    🚀 선택한 파일 전송하기
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Feed Section -->
+        <div class="chat-feed slds-card slds-p-around_medium">
+            <!-- Comment Input -->
+            <div class="input-area slds-m-bottom_large">
+                <div class="input-wrapper">
+                    <lightning-input 
+                        variant="label-hidden" 
+                        placeholder="Add a comment..." 
+                        class="comment-input"
+                        value={newComment}
+                        onchange={handleCommentChange}
+                        oncommit={handleAddComment}>
+                    </lightning-input>
+                    <button class="send-btn" onclick={handleAddComment} title="Send Comment" aria-label="Send Comment">
+                        <lightning-icon icon-name="utility:send" size="small" variant="inverse"></lightning-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feed Items -->
+            <div class="feed-list">
+                 <template lwc:if={isLoading}>
+                    <div class="slds-is-relative" style="height: 100px;">
+                        <lightning-spinner size="small"></lightning-spinner>
+                    </div>
+                 </template>
+                
+                <template for:each={comments} for:item="comment">
+                    <div key={comment.Id} class={comment.cssClass}>
+                        <div class="avatar-container">
+                            <lightning-icon icon-name="standard:user" size="small" class="avatar-icon"></lightning-icon>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="author-name">{comment.authorName}</span>
+                                <span class="message-date">{comment.formattedDate}</span>
+                            </div>
+                            <div class="message-body">
+                                <lightning-formatted-text value={comment.CommentBody}></lightning-formatted-text>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                 <template lwc:if={hasNoComments}>
+                    <p class="slds-text-align_center slds-text-color_weak slds-p-vertical_large">No comments yet.</p>
+                 </template>
+            </div>
+        </div>
+    </div>
+</template>

@@ -11,8 +11,8 @@
 - **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **External APIs**:
   - Salesforce Web-to-Lead (영업 리드 수집)
+  - Salesforce Web-to-Case (고객 지원 접수)
   - 카카오 우편번호 서비스 API (주소 검색)
-  - Mailto (이메일 클라이언트 연동)
 - **Deployment**: Local HTTPS (via uvicorn & SSL certificates), ngrok (외부 터널링)
 
 ---
@@ -71,10 +71,10 @@
 
 #### 🎧 `support.html` (고객 센터)
 
-- **mailto 링크**를 통한 이메일 문의 양식.
+- Salesforce **Web-to-Case** 연동 양식.
 - **구성**:
   - **FAQ 아코디언**: 사용자가 자주 묻는 질문을 클릭하여 내용을 펼쳐볼 수 있는 인터랙션.
-  - **문의 접수**: 폼 제출 시 이메일 클라이언트가 열리며 문의 내용이 자동으로 본문에 작성됨.
+  - **문의 접수**: 고객의 불편 사항이나 제안을 Case 객체로 직접 접수.
 
 ---
 
