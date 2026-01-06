@@ -61,9 +61,9 @@
 │                └─> Case                     │
 │                                             │
 │  ⚙️ Automation (Apex Triggers)              │
-│    - AccountTrigger: 배송점 자동 배정        │
-│    - LeadDistanceSharingTrigger: 담당자 공유
-│                                  및 알림
+│    - AccountTrigger: 배송점 자동 배정         │
+│    - LeadDistanceSharingTrigger: 담당자 공유 │
+│                                  및 알림     │
 │                                             │
 │  🎨 UI Layer (LWC)                          │
 │    - portalDashboard: 주문/Case 목록         │
@@ -370,12 +370,6 @@ export default class PortalDashboard extends LightningElement {
 - 조직 간 **실시간 정보 공유** (Chatter)
 - 배송 대리점 자동 배정으로 **물류 효율** 향상
 - 고객 셀프서비스로 **고객 만족도** 향상
-
-### 향후 계획 (Phase 2)
-
-1. **Einstein Analytics**: 영업 대시보드 및 예측 분석
-2. **Mobile App**: Salesforce Mobile로 현장 영업 지원
-3. **ERP 연동**: 배송·재고 데이터 실시간 동기화
 
 ---
 
