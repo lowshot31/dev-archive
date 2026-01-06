@@ -502,9 +502,8 @@ Portal 사용자는 Salesforce 내부 사용자보다 훨씬 제한된 권한을
 
 **A**: 3가지 개선 방향
 
-1. **Einstein Analytics**: 영업 담당자가 Lead 전환율, 지역별 매출을 시각적으로 분석
-2. **ERP 연동**: 배송 상태를 수동 업데이트 → 실시간 자동 동기화
-3. **Mobile 최적화**: Salesforce Mobile App으로 배송 기사가 현장에서 배송 완료 처리
+1. **ERP 연동**: 배송 상태를 수동 업데이트 → 실시간 자동 동기화
+2. **Mobile 최적화**: Salesforce Mobile App으로 배송 기사가 현장에서 배송 완료 처리
 
 ---
 
