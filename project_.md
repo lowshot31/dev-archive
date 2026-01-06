@@ -62,7 +62,8 @@
 │                                             │
 │  ⚙️ Automation (Apex Triggers)              │
 │    - AccountTrigger: 배송점 자동 배정        │
-│    - LeadDistanceSharingTrigger: 담당자 공유│
+│    - LeadDistanceSharingTrigger: 담당자 공유
+│                                  및 알림
 │                                             │
 │  🎨 UI Layer (LWC)                          │
 │    - portalDashboard: 주문/Case 목록         │
