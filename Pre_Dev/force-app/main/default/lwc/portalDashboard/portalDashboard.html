@@ -133,7 +133,7 @@
                                             <div class="list-card-header">
                                                 <div>
                                                     <span class="card-number-large">{order.OrderNumber}</span>
-                                                    <span class="card-date">{order.CreatedDate}</span>
+                                                    <span class="card-date">{order.EffectiveDate}</span>
                                                 </div>
                                                 <span class={order.badgeClass}>{order.Status}</span>
                                             </div>
@@ -146,6 +146,10 @@
                                                     <div class="info-item">
                                                         <span class="label">배송 현황</span>
                                                         <span class={order.deliveryBadgeClass}>{order.Delivery_Staus__c}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="label">배송 대리점</span>
+                                                        <span class="value">{order.AgencyName} ({order.AgencyPhone})</span>
                                                     </div>
                                                     <div class="info-item full-width">
                                                         <span class="label">주문 내용</span>

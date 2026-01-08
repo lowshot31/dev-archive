@@ -169,7 +169,9 @@ export default class PortalDashboard extends NavigationMixin(LightningElement) {
             this.orders = (data.orders || []).map(order => ({
                 ...order,
                 badgeClass: this.getOrderBadgeClass(order.Status),
-                deliveryBadgeClass: this.getDeliveryBadgeClass(order.Delivery_Staus__c)
+                deliveryBadgeClass: this.getDeliveryBadgeClass(order.Delivery_Staus__c),
+                AgencyName: order.Account?.Delivery_Agent__r?.Name || '지정되지 않음',
+                AgencyPhone: order.Account?.Delivery_Agent__r?.Phone || '-'
             }));
             
             // Transform cases to add computed fields and badge class

@@ -1,27 +1,30 @@
 <template>
     <div class="case-form-container">
         <template lwc:if={isLoading}>
-            <lightning-spinner alternative-text="업로드 중..." size="medium"></lightning-spinner>
+            <lightning-spinner alternative-text="처리 중..." size="medium"></lightning-spinner>
         </template>
         
         <h2 class="form-title">새 문의 접수</h2>
         
         <div class="slds-form slds-p-around_medium">
-            <!-- 제목 -->
+            <!-- Subject -->
             <div class="form-field">
                 <label class="custom-label">제목 *</label>
                 <lightning-input
+                    variant="label-hidden"
                     name="subject"
                     value={subject}
                     onchange={handleSubjectChange}
+                    placeholder="문의 제목을 입력하세요"
                     required>
                 </lightning-input>
             </div>
 
-            <!-- 문의 유형 -->
+            <!-- Reason -->
             <div class="form-field">
                 <label class="custom-label">문의 유형</label>
                 <lightning-combobox
+                    variant="label-hidden"
                     name="reason"
                     value={reason}
                     placeholder="문의 유형 선택"
@@ -30,67 +33,81 @@
                 </lightning-combobox>
             </div>
 
-            <!-- 상세 내용 -->
+            <!-- Description -->
             <div class="form-field">
                 <label class="custom-label">상세 내용 *</label>
                 <lightning-textarea
+                    variant="label-hidden"
                     name="description"
                     value={description}
-                    placeholder="상세 내용을 입력하세요"
+                    placeholder="최대한 상세히 기재해 주시면 빠른 처리가 가능합니다"
                     onchange={handleDescriptionChange}
-                    rows="4"
+                    rows="5"
                     required>
                 </lightning-textarea>
             </div>
 
-            <!-- 이슈 발생일 -->
-            <div class="form-field">
-                <label class="custom-label">이슈 발생일</label>
-                <lightning-input
-                    type="date"
-                    name="issueDate"
-                    value={issueDate}
-                    onchange={handleIssueDateChange}>
-                </lightning-input>
-            </div>
-
-            <!-- 관련 제품 -->
-            <div class="form-field">
-                <label class="custom-label">관련 제품</label>
-                <lightning-combobox
-                    name="product"
-                    value={selectedProductId}
-                    placeholder="이슈 관련 제품 선택"
-                    options={productOptions}
-                    onchange={handleProductChange}>
-                </lightning-combobox>
-            </div>
-
-            <!-- 파일 첨부 -->
-            <div class="attachment-section">
-                <label class="custom-label">파일 첨부 (선택 사항, 대용량 지원)</label>
-                <div class="file-input-wrapper">
-                    <input type="file" onchange={handleFileChange} multiple id="file-input">
-                    <label class="file-upload-label" for="file-input">
-                        <lightning-icon icon-name="utility:upload" size="x-small"></lightning-icon>
-                        <span>파일 선택</span>
-                    </label>
+            <!-- Date & Product Row -->
+            <div class="form-field slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-2">
+                    <label class="custom-label">이슈 발생일</label>
+                    <lightning-input
+                        variant="label-hidden"
+                        type="date"
+                        name="issueDate"
+                        value={issueDate}
+                        onchange={handleIssueDateChange}>
+                    </lightning-input>
                 </div>
-                
-                <template lwc:if={selectedFiles.length}>
-                    <ul class="selected-files-list">
-                        <template for:each={selectedFiles} for:item="file">
-                            <li key={file.name} class="file-item">
-                                <lightning-icon icon-name="doctype:attachment" size="xx-small"></lightning-icon>
-                                <span>{file.name} ({file.sizeText})</span>
-                            </li>
-                        </template>
-                    </ul>
-                </template>
+                <div class="slds-col slds-size_1-of-2">
+                    <label class="custom-label">관련 제품</label>
+                    <lightning-combobox
+                        variant="label-hidden"
+                        name="product"
+                        value={selectedProductId}
+                        placeholder="제품 선택"
+                        options={productOptions}
+                        onchange={handleProductChange}>
+                    </lightning-combobox>
+                </div>
             </div>
 
-            <!-- Footer -->
-            <div class="footer-actions">
+            <!-- Unified Attachment Section (Guaranteed Success Upload) -->
+            <div class="attachment-section slds-m-top_large">
+                <label class="custom-label">파일 첨부 (6MB 이상 대용량 지원)</label>
+                <div class="upload-wrapper" style="border: 1px dashed #d0d0d0; padding: 1rem; border-radius: 8px; background: #fafafa;">
+                    <lightning-file-upload
+                        label="이미지 및 파일 업로드 (최대 2GB)"
+                        name="fileUploader"
+                        accept={acceptedFormats}
+                        record-id={currentUserId}
+                        onuploadfinished={handleUploadFinished}
+                        multiple>
+                    </lightning-file-upload>
+                    
+                    <template lwc:if={uploadedFiles.length}>
+                        <div class="slds-m-top_small">
+                            <p class="slds-text-body_small slds-text-color_success" style="font-weight: bold;">
+                                <lightning-icon icon-name="utility:check" size="xx-small" variant="success" class="slds-m-right_xx-small"></lightning-icon>
+                                업로드 대기 중: {uploadedFiles.length}건
+                            </p>
+                            <ul class="slds-m-top_xx-small" style="font-size: 0.8rem; color: #666;">
+                                <template for:each={uploadedFiles} for:item="file">
+                                    <li key={file.id}>📎 {file.name}</li>
+                                </template>
+                            </ul>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="info-badge slds-m-top_large">
+                <lightning-icon icon-name="utility:info_alt" size="xx-small" variant="info" class="slds-m-right_xx-small"></lightning-icon>
+                <span>파일을 먼저 업로드하신 후 [문의 접수하기] 버튼을 눌러주세요.</span>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="footer-actions slds-m-top_xx-large">
                 <lightning-button label="취소" onclick={handleCancel} variant="neutral"></lightning-button>
                 <button class="btn-submit" onclick={handleSubmit}>문의 접수하기</button>
             </div>

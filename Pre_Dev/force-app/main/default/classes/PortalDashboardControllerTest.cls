@@ -69,7 +69,7 @@ private class PortalDashboardControllerTest {
         // Note: This will fail in test context without proper PricebookEntry setup
         // but validates the method signature
         try {
-            Order newOrder = PortalDashboardController.createOrder(acc.Id, null, products, description);
+            Order newOrder = PortalDashboardController.createOrder(acc.Id, null, products, description, Date.today());
         } catch (Exception e) {
             // Expected to fail without proper test data setup
             System.assert(e.getMessage().contains('계약서') || e.getMessage().contains('Contract'), 'Should fail due to missing contract');

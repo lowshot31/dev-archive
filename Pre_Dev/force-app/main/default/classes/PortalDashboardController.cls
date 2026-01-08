@@ -183,10 +183,11 @@ public with sharing class PortalDashboardController {
             DashboardData data = new DashboardData();
             try {
                 data.orders = [SELECT Id, OrderNumber, Status, TotalAmount, EffectiveDate, 
-                                     Delivery_Staus__c, Description, CreatedDate
+                                     Delivery_Staus__c, Description, CreatedDate,
+                                     Account.Delivery_Agent__r.Name, Account.Delivery_Agent__r.Phone
                               FROM Order 
                               WHERE AccountId = :accountId 
-                              ORDER BY CreatedDate DESC];
+                              ORDER BY EffectiveDate DESC];
                               
                 data.cases = [SELECT Id, CaseNumber, Subject, Status, Priority, CreatedDate,
                                     Description, Owner.Name,
@@ -251,7 +252,7 @@ public with sharing class PortalDashboardController {
 
     @AuraEnabled
     public static Order createOrder(String accountId, String contractId, 
-                                     List<Map<String, Object>> products, String description) {
+                                     List<Map<String, Object>> products, String description, Date effectiveDate) {
         try {
             // Security: Verify user has access to this account
             String userAccountId = getUserAccountId();
@@ -296,7 +297,7 @@ public with sharing class PortalDashboardController {
             newOrder.AccountId = targetAccountId;
             newOrder.ContractId = contractId;
             newOrder.Status = 'Requested';
-            newOrder.EffectiveDate = Date.today();
+            newOrder.EffectiveDate = effectiveDate != null ? effectiveDate : Date.today();
             newOrder.Description = description;
             newOrder.Pricebook2Id = c.Pricebook2Id;
             newOrder.Delivery_Staus__c = 'Ready'; // Default delivery status
@@ -364,26 +365,26 @@ public with sharing class PortalDashboardController {
             throw auraEx;
         }
     }
-    
+    // Inner class without sharing to handle file upload and linking for portal users
     public without sharing class FileUploader {
         public void verifyAndInsert(String recordId, List<Map<String, String>> files, Id userId) {
-            // 1. Get User AccountId without sharing
+            // 1. Get User AccountId
             User u = [SELECT Contact.AccountId, AccountId FROM User WHERE Id = :userId LIMIT 1];
             String userAccId = (u.Contact != null && u.Contact.AccountId != null) ? u.Contact.AccountId : u.AccountId;
 
-            // 2. Fetch Case without sharing
+            // 2. Fetch Case
             List<Case> targetCases = [SELECT Id, AccountId FROM Case WHERE Id = :recordId LIMIT 1];
             if (targetCases.isEmpty()) {
-                throw new AuraHandledException('해당 케이스를 찾을 수 없습니다.');
+                throw new IllegalArgumentException('해당 케이스를 찾을 수 없습니다.');
             }
+            Case targetCase = targetCases[0];
             
-            // 3. Ownership Check
-            if (String.isNotBlank(userAccId) && targetCases[0].AccountId != userAccId) {
-                throw new AuraHandledException('본인 계정의 케이스가 아닙니다.');
+            // 3. Simple Security Check
+            if (String.isNotBlank(userAccId) && targetCase.AccountId != null && targetCase.AccountId != userAccId) {
+                throw new IllegalArgumentException('본인 계정의 케이스가 아닙니다.');
             }
 
-            // 4. Insert Files
-            List<ContentVersion> cvList = new List<ContentVersion>();
+            // 4. Manual Process (Create ContentVersion THEN ContentDocumentLink)
             for (Map<String, String> f : files) {
                 String base64 = f.get('base64Data');
                 if (String.isBlank(base64)) continue;
@@ -392,41 +393,76 @@ public with sharing class PortalDashboardController {
                 cv.Title = f.get('fileName');
                 cv.PathOnClient = f.get('fileName');
                 cv.VersionData = EncodingUtil.base64Decode(base64);
-                cv.Origin = 'H'; 
-                cv.FirstPublishLocationId = recordId; 
-                cvList.add(cv);
-            }
-            if (!cvList.isEmpty()) {
-                insert cvList;
+                cv.Origin = 'C';
+                cv.ContentLocation = 'S';
+                insert cv;
+                
+                Id conDocId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id].ContentDocumentId;
+                
+                ContentDocumentLink cdl = new ContentDocumentLink();
+                cdl.ContentDocumentId = conDocId;
+                cdl.LinkedEntityId = recordId;
+                cdl.ShareType = 'V'; 
+                cdl.Visibility = 'AllUsers'; 
+                insert cdl;
             }
         }
     }
 
     
-    // Helper method to get current user's AccountId
+    // Helper method to keep existing calls working
     private static String getUserAccountId() {
-        User u = [SELECT Contact.AccountId, AccountId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-        if (u.Contact != null && u.Contact.AccountId != null) {
-            return u.Contact.AccountId;
+        AccountHelper helper = new AccountHelper();
+        return helper.getVerifiedAccountId();
+    }
+
+    // Inner class without sharing to fetch user data safely
+    public without sharing class AccountHelper {
+        public String getVerifiedAccountId() {
+            User u = [SELECT Contact.AccountId, AccountId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            if (u.Contact != null && u.Contact.AccountId != null) {
+                return u.Contact.AccountId;
+            }
+            return u.AccountId;
         }
-        return u.AccountId;
+    }
+
+    // Inner class without sharing to create case safely for portal users
+    public without sharing class CaseCreator {
+        public Case createAndLink(Case newCase, List<String> fileIds) {
+            insert newCase;
+            
+            if (fileIds != null && !fileIds.isEmpty()) {
+                List<ContentDocumentLink> links = new List<ContentDocumentLink>();
+                for (String docId : fileIds) {
+                    ContentDocumentLink cdl = new ContentDocumentLink();
+                    cdl.ContentDocumentId = docId;
+                    cdl.LinkedEntityId = newCase.Id;
+                    cdl.ShareType = 'V'; 
+                    cdl.Visibility = 'AllUsers';
+                    links.add(cdl);
+                }
+                insert links;
+            }
+            
+            // Return with all necessary fields for the UI
+            return [SELECT Id, CaseNumber, Subject, Status FROM Case WHERE Id = :newCase.Id];
+        }
     }
     
     // --- Create Case ---
     @AuraEnabled
     public static Case createCase(String accountId, String subject, String priority, 
                                    String reason, String description, Date issueDate, 
-                                   String relatedProductId) {
+                                   String relatedProductId, List<String> fileIds) {
         try {
-            // Security: Get verified User AccountId
-            String userAccountId = getUserAccountId();
+            // Security: Get verified User AccountId without sharing
+            AccountHelper helper = new AccountHelper();
+            String userAccountId = helper.getVerifiedAccountId();
             
             if (String.isBlank(userAccountId)) {
-                throw new IllegalArgumentException('사용자 계정 정보를 찾을 수 없습니다. (포털 사용자 정보를 확인해주세요)');
+                throw new IllegalArgumentException('사용자 정보를 찾을 수 없습니다.');
             }
-            
-            // Override with verified ID to prevent manipulation or mismatch errors
-            String targetAccountId = userAccountId;
             
             // Validate required fields
             if (String.isBlank(subject)) {
@@ -434,7 +470,7 @@ public with sharing class PortalDashboardController {
             }
             
             Case newCase = new Case();
-            newCase.AccountId = targetAccountId;
+            newCase.AccountId = userAccountId;
             newCase.Subject = subject;
             newCase.Priority = priority;
             newCase.Reason = reason;
@@ -444,9 +480,10 @@ public with sharing class PortalDashboardController {
             newCase.Origin = 'Web';
             newCase.Status = 'New';
             
-            insert newCase;
+            // Use specialized creator to bypass sharing and handle linking
+            CaseCreator creator = new CaseCreator();
+            return creator.createAndLink(newCase, fileIds);
             
-            return newCase;
         } catch (Exception e) {
             String errorMsg = e.getMessage();
             System.debug('Case Creation Error: ' + errorMsg);

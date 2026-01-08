@@ -127,7 +127,8 @@ export default class PortalNewOrderForm extends LightningElement {
                 accountId: this.accountId,
                 contractId: this.selectedContractId || null,
                 description: this.description,
-                products: selectedProducts
+                products: selectedProducts,
+                effectiveDate: this.effectiveDate
             });
 
             this.showToast('성공', '주문이 정상적으로 접수되었습니다.', 'success');
