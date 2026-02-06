@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gidne | 투자 내비게이션 플랫폼 포트폴리오</title>
+    <meta
+      name="description"
+      content="Gidne - 파편화된 금융 데이터를 유기적으로 연결하여 투자자에게 최적의 경로를 제공하는 차세대 투자 플랫폼"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;700&display=swap");
+
+      :root {
+        --bg-color: #050507;
+        --card-bg: rgba(15, 15, 20, 0.7);
+        --accent-primary: #00f2ff;
+        --accent-secondary: #6366f1;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0ab;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.05);
+        --neon-glow: 0 0 20px rgba(0, 242, 255, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+      }
+
+      h1, h2, h3, h4, .brand-font {
+        font-family: "Outfit", sans-serif;
+      }
+
+      .bg-glow {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.1) 0%,
+          rgba(0, 242, 255, 0.05) 50%,
+          rgba(5, 5, 7, 0) 100%
+        );
+        filter: blur(80px);
+        z-index: -1;
+        pointer-events: none;
+        animation: pulse 10s infinite alternate;
+      }
+
+      @keyframes pulse {
+        0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+        100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      section {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 1.2rem 0;
+        background: rgba(5, 5, 7, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 100px;
+      }
+
+      .hero h1 {
+        font-size: clamp(3rem, 8vw, 5rem);
+        margin-bottom: 1rem;
+        font-weight: 800;
+      }
+
+      .hero p.tagline {
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        max-width: 800px;
+        margin-bottom: 2rem;
+      }
+
+      .concept-badge {
+        padding: 0.5rem 1.5rem;
+        background: rgba(0, 242, 255, 0.1);
+        border: 1px solid var(--accent-primary);
+        border-radius: 100px;
+        color: var(--accent-primary);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .bento-item {
+        background: var(--card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+      }
+
+      .bento-item:hover {
+        border-color: var(--accent-primary);
+        transform: translateY(-5px);
+        box-shadow: var(--neon-glow);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--glass-border);
+        font-size: 0.9rem;
+      }
+
+      th {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--accent-primary);
+      }
+
+      .card-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .persona-card {
+        background: var(--card-bg);
+        border-radius: 24px;
+        padding: 2rem;
+        border: 1px solid var(--glass-border);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: var(--accent-secondary);
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      .highlight { color: var(--accent-primary); font-weight: 600; }
+      .gradient-text {
+        background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      [data-reveal].revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .mockup-container {
+        width: 100%;
+        margin: 3rem 0;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      .mockup-container img { width: 100%; display: block; }
+
+      .footer {
+        padding: 40px 0;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      @media print {
+        .bg-glow, nav { display: none; }
+        body { background: white; color: black; }
+        .container { max-width: 100%; padding: 0; }
+        .bento-item, .persona-card { border: 1px solid #ddd; background: white; color: black; break-inside: avoid; }
+        .highlight, .gradient-text { color: #0088cc !important; -webkit-text-fill-color: #0088cc !important; }
+        th { background: #f0f0f0 !important; color: black !important; }
+        h2 { page-break-before: always; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+
+    <nav>
+      <div class="container nav-content">
+        <div class="logo">GIDNE</div>
+        <div style="color: var(--text-secondary); font-size: 0.9rem">
+          Product Manager Portfolio
+        </div>
+      </div>
+    </nav>
+
+    <main class="container">
+        <!-- 1. Hero Section -->
+        <section class="hero" id="home">
+            <div data-reveal>
+                <div class="concept-badge">Guide + Node = Gidne</div>
+                <h1><span class="gradient-text">Gidne</span>: 투자 내비게이션</h1>
+                <p class="tagline">"복잡한 데이터의 숲에서 수익으로 가는 길을 제시하다"</p>
+            </div>
+            
+            <div class="mockup-container" data-reveal>
+                <img src="gidne_mockup.png" alt="Gidne Dashboard Mockup">
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 10px;">Bento Grid 기반 고성능 대시보드 UI 예시</p>
+            </div>
+        </section>
+
+        <!-- 2. 제품 설계 철학 -->
+        <section id="philosophy" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">2. 제품 설계 철학 (Core Logic)</h2>
+            <div class="bento-item" style="border-left: 4px solid var(--accent-primary);">
+                <h3 style="margin-bottom: 1rem;">📈 상대 강도(RS) 로직에 기반한 의사결정</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    단순 가격 변동은 시장의 소음(Noise)일 뿐입니다. 특히 <strong>레버리지 트레이딩 환경</strong>에서는 시장의 중력을 이겨내는 <strong>'상대적 강세'</strong>만이 실질적인 수익의 지표가 됩니다.
+                </p>
+                <div style="background: rgba(0, 242, 255, 0.05); padding: 20px; border-radius: 12px; font-family: monospace;">
+                    <p style="color: var(--accent-primary); font-weight: bold;">RS 공식: <span style="color: var(--text-primary);">RS Spread = Ticker %Δ - Index %Δ</span></p>
+                </div>
+                <p style="margin-top: 1rem; color: var(--text-secondary);">지수 대비 초과 수익을 내는 '진짜 대장주'를 실시간으로 필터링하여 리스크는 줄이고 수익률은 극대화합니다.</p>
+            </div>
+        </section>
+
+        <!-- 3. 정보 시냅스 체계 -->
+        <section id="synapse" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">3. 정보 시냅스 체계 (Data Architecture)</h2>
+            
+            <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">🇺🇸 Section 1: Macro & Global Equity</h3>
+            <div class="bento-item" style="margin-bottom: 2rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th>세부 데이터</th>
+                            <th>수집 방식</th>
+                            <th>시냅스 로직 및 선택 이유</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>시장 지수</td><td>나스닥 100, S&P 500, 코스피</td><td>Websocket</td><td><span class="highlight">[심장]</span> RS 계산의 기준 분모</td></tr>
+                        <tr><td>금리</td><td>미 국채 10Y, 2Y, Spread</td><td>REST</td><td>금리 발작 및 장단기 역전 해소 감지</td></tr>
+                        <tr><td>통화/환율</td><td>DXY, USD/KRW</td><td>Websocket</td><td>위험 자산 압박 및 외인 수급 추적</td></tr>
+                        <tr><td>물가 지표</td><td>US CPI (YoY)</td><td>REST</td><td>장기 인플레이션 추세 확인</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">₿ Section 2: Event Horizon & Alpha Metrics</h3>
+            <div class="bento-item" style="margin-bottom: 2rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th>세부 데이터</th>
+                            <th>수집 방식</th>
+                            <th>시냅스 로직 및 선택 이유</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>경제 일정</td><td>FOMC 금리 결정, CPI 발표일</td><td>REST (Webhook)</td><td>발표 직전 카운트다운 및 변동성 대응</td></tr>
+                        <tr><td>선행 지표</td><td>한국 수출 데이터 (KCS)</td><td>REST (Monthly)</td><td>글로벌 경기 및 반도체 업항 선행 시그널</td></tr>
+                        <tr><td>온체인 강도</td><td>김치 프리미엄, 스테이블 유입</td><td>REST / Custom</td><td>시장 내 대기 자금 및 투심 과열 측정</td></tr>
+                        <tr><td>청산/고래</td><td>실시간 청산액, Whale Alert</td><td>Websocket</td><td>지지/저항 파악 및 물량 투하 감지</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="color: var(--accent-secondary); margin-bottom: 1rem;">💧 Section 3: Liquidity & System Logic</h3>
+            <div class="bento-item">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                        <h4 class="highlight" style="margin-bottom: 10px;">순유동성 (Net Liquidity)</h4>
+                        <code style="display: block; font-size: 0.8rem; margin-bottom: 10px;">WALCL - (WTREGEN + RRPONTSYD)</code>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">연준 자산에서 TGA, 역레포를 차감하여 실질 현금 흐름 추정</p>
+                    </div>
+                    <div style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                        <h4 class="highlight" style="margin-bottom: 10px;">변동성 괴리</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">MOVE Index vs VIX 분석을 통해 채권/주식 시장 온도차 분석</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 기술적 차별점 -->
+        <section id="technical" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">4. 기술적 차별점</h2>
+            <div class="card-container">
+                <div class="persona-card">
+                    <h3 class="highlight">Websocket First</h3>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">시세 지연은 곧 손실입니다. REST API가 아닌 Websocket Stream 방식을 우선하여 실시간 데이터를 지향합니다.</p>
+                </div>
+                <div class="persona-card">
+                    <h3 class="highlight">Data Synergy</h3>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">거시 경제, 실시간 시세, 온체인 데이터를 하나의 시냅스로 연결하여 통합 인사이트를 제공합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 타겟 유저 및 페르소나 -->
+        <section id="persona" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">5. 타겟 유저 및 페르소나</h2>
+            <div class="card-container">
+                <div class="persona-card">
+                    <div class="badge">Primary</div>
+                    <h3>"시간 부족한 스마트 개미"</h3>
+                    <ul style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+                        <li>• 25-40세, 직장인 또는 대학원생</li>
+                        <li>• 퇴근 후 30분 안에 시장 상황 파악 및 포지션 결정</li>
+                        <li>• <span class="highlight">Goal:</span> 효율적인 의사결정 경로 확보</li>
+                    </ul>
+                </div>
+                <div class="persona-card">
+                    <div class="badge" style="background: var(--accent-primary); color: black;">Secondary</div>
+                    <h3>"풀타임 트레이더"</h3>
+                    <ul style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+                        <li>• 30-50세, 전업 투자자</li>
+                        <li>• 데이터 간의 '맥락' 연결에 갈증을 느낌</li>
+                        <li>• <span class="highlight">Goal:</span> 매크로 변화의 크립토 전이 선제 포착</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 문제 정의 -->
+        <section id="problem" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">6. 문제 정의 (Problem Statement)</h2>
+            <div class="bento-item">
+                <h3 style="color: #ff4b4b; margin-bottom: 1.5rem;">🔴 현재 투자자가 겪는 핵심 문제</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div><h4 class="highlight">정보 파편화</h4><p style="font-size: 0.9rem; color: var(--text-secondary);">여러 플랫폼에 흩어진 데이터</p></div>
+                    <div><h4 class="highlight">맥락 부재</h4><p style="font-size: 0.9rem; color: var(--text-secondary);">자산 간 연결성 파악의 어려움</p></div>
+                    <div><h4 class="highlight">시간 비용</h4><p style="font-size: 0.9rem; color: var(--text-secondary);">정보 종합에 하루 1-2시간 소요</p></div>
+                </div>
+                <div style="margin-top: 2rem; padding: 20px; background: rgba(0, 242, 255, 0.05); border-radius: 12px; border: 1px dashed var(--accent-primary);">
+                    <p class="highlight" style="text-align: center; font-size: 1.1rem;">"Gidne는 하나의 화면에서 실시간으로 맥락을 연결합니다."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. 경쟁 분석 -->
+        <section id="competitive" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">7. 경쟁 분석 (Competitive Analysis)</h2>
+            <div class="bento-item">
+                <table>
+                    <thead>
+                        <tr><th>서비스</th><th>강점 / 약점</th><th>Gidne 차별점</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>TradingView</td><td>분석 최강 / 매크로 통합 부족</td><td><span class="highlight">매크로-크립토 시냅스 연결</span></td></tr>
+                        <tr><td>Coinglass</td><td>크립토 데이터 표준 / UI 노후화</td><td><span class="highlight">주식/매크로 통합 + 모던 UI</span></td></tr>
+                        <tr><td>Investing.com</td><td>경제 캘린더 / 광고 과다, 복잡함</td><td><span class="highlight">클린 UI, 핵심 이벤트 집중</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 8. 성공 지표 -->
+        <section id="metrics" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">8. 성공 지표 (Success Metrics)</h2>
+            <div class="bento-grid">
+                <div class="bento-item" style="grid-column: span 2;">
+                    <h3>North Star Metric</h3>
+                    <p style="font-size: 1.8rem; margin: 1rem 0;" class="highlight">"사용자당 주간 의사결정 횟수"</p>
+                    <p style="color: var(--text-secondary);">Gidne를 보고 실제 매매 결정을 내린 유의미한 행동 (목표: 주 5회 이상)</p>
+                </div>
+                <div class="bento-item">
+                    <h4 class="highlight">DAU 목표</h4>
+                    <p style="font-size: 1.5rem;">1,000명+</p>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">런칭 3개월 내</p>
+                </div>
+                <div class="bento-item">
+                    <h4 class="highlight">알림 CTR</h4>
+                    <p style="font-size: 1.5rem;">20% 이상</p>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">시냅스 알림 효율</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. MVP 우선순위 및 스코프 -->
+        <section id="mvp" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">9. MVP 스코프 및 우선순위</h2>
+            <div class="bento-grid">
+                <div class="bento-item">
+                    <div class="badge">P0 - 필수</div>
+                    <h4 class="highlight">Global Ticker</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">상단 실시간 시세 스트림, 즉각적 가치 전달</p>
+                </div>
+                <div class="bento-item">
+                    <div class="badge">P0 - 필수</div>
+                    <h4 class="highlight">Macro Compass</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">금리/VIX/DXY 등 핵심 매크로 지표 통합</p>
+                </div>
+                <div class="bento-item">
+                    <div class="badge">P0 - 필수</div>
+                    <h4 class="highlight">Crypto Alpha Map</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">BTC OI/FR/청산맵 등 타겟 유저 핵심 니즈</p>
+                </div>
+                <div class="bento-item">
+                    <div class="badge" style="background: rgba(255,255,255,0.1);">P1 - 확장</div>
+                    <h4 class="highlight">Event Horizon</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">FOMC/CPI 주요 일정 카운트다운</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. 리스크 및 완화 전략 -->
+        <section id="risks" data-reveal>
+            <h2 class="brand-font" style="font-size: 2.5rem; margin-bottom: 2rem;">10. 리스크 및 완화 전략 (Risks)</h2>
+            <div class="card-container">
+                <div class="persona-card">
+                    <h4 class="highlight" style="margin-bottom: 10px;">데이터 지연 및 장애</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">다중 소스 Fallback 로직 및 장애 시 즉각적인 상태 알림 표시 시스템 구축</p>
+                </div>
+                <div class="persona-card">
+                    <h4 class="highlight" style="margin-bottom: 10px;">API 비용 관리</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">무료 티어 우선 활용, 서버 사이드 캐싱 전략을 통한 불필요한 호출 최소화</p>
+                </div>
+                <div class="persona-card">
+                    <h4 class="highlight" style="margin-bottom: 10px;">경쟁사 모방 리스크</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">단순 데이터 나열이 아닌 독자적인 '시냅스 로직' 고도화 및 빠른 기능 업데이트</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 Gidne Project. Designed for Excellence and Insight.</p>
+    </footer>
+
+    <script>
+      // Reveal animation on scroll
+      const observerOptions = { threshold: 0.1 };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll("[data-reveal]").forEach((el) => {
+        observer.observe(el);
+      });
+    </script>
+  </body>
+</html>
