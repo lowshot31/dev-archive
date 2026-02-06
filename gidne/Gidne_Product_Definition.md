@@ -64,7 +64,7 @@ SYNAPSE AI TERMINAL의 근거가 되는 백엔드 연산 로직입니다.
 
 ### 🖥️ 대시보드 UI 컨셉 (Dashboard Mockup)
 
-![[gidne_mockup.png]]
+![Gidne Dashboard Mockup](./gidne_mockup.png)
 
 > _Bento Grid 기반 고성능 대시보드 UI 예시_
 
