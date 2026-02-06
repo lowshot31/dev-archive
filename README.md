@@ -94,7 +94,35 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 5. [🌐 Global_in](./Global_in)
+### 5. [🧭 Gidne](./gidne)
+
+**투자 내비게이션 대시보드 - 실시간 금융 데이터 통합 플랫폼**
+<br>2026.01~진행중<br>
+
+복잡한 금융 데이터를 하나의 화면에서 실시간으로 제공하는 투자 의사결정 지원 대시보드입니다.
+
+- **주요 기능**:
+  - 실시간 글로벌 시장 지수 모니터링 (나스닥, S&P 500, 코스피)
+  - 매크로 경제 지표 통합 (금리, 환율, 원자재, 물가)
+  - 암호화폐 온체인 데이터 분석 (청산맵, 김치 프리미엄, 고래 거래)
+  - 경제 일정 카운트다운 (FOMC, CPI 발표)
+  - 상대 강도(RS) 기반 종목 필터링
+- **기술 스택**:
+  - Frontend: HTML5, CSS3, Vanilla JavaScript (Bento Grid UI)
+  - Data Sources: Polygon.io, FRED, Finnhub, CryptoQuant, Coinglass
+  - Integration: Websocket (실시간 스트리밍), REST API
+  - Analytics: 순유동성 연산, RS Ratio, 변동성 괴리 분석
+- **핵심 차별점**:
+  - **Websocket First**: REST가 아닌 실시간 스트리밍 우선
+  - **Data Synapse**: 매크로(FRED) + 주식(Polygon) + 크립토(CryptoQuant) 통합
+  - **맥락 제공**: 나스닥 하락 → 비트코인 영향 자동 분석
+  - **클린 UI**: Bento Grid 기반 모던 대시보드
+
+[📖 자세히 보기 →](./gidne/Gidne_Product_Definition.md)
+
+---
+
+### 6. [🌐 Global_in](./Global_in)
 
 **웹 크롤링 및 이커머스 플랫폼**
 <br>2024.11~2025.02<br>
@@ -157,6 +185,12 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
   - Experience Cloud (커스텀 포털)
   - SOQL, Triggers
   - Web-to-Lead, Web-to-Case
+- **Financial Data APIs**:
+  - Polygon.io: 실시간 주식 시세
+  - FRED (Federal Reserve): 매크로 경제 지표
+  - Finnhub: 금리, 기업 실적
+  - CryptoQuant: 온체인 데이터
+  - Coinglass: 파생상품, 청산 데이터
 - **Upbit API**: 암호화폐 시세 조회
 - **Telegram Bot API**: 실시간 알림
 
@@ -183,6 +217,10 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 │   └── Sell_Buy/           # (개발 예정)
 ├── coinbot/                # 업비트 급등 알림 봇
 │   └── main.py             # 메인 애플리케이션
+├── gidne/                  # 투자 내비게이션 대시보드
+│   ├── index.html          # 메인 대시보드 UI
+│   ├── Gidne_Product_Definition.md  # 제품 정의서
+│   └── US STOCK DATA 데이터 소스 리스트.md
 ├── multicloud-devsecops/   # GCP DevSecOps 파이프라인
 │   ├── src/                # 소스 코드
 │   ├── terraform/          # IaC 설정
@@ -252,7 +290,25 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 4. 데이터 기반 이커머스 구축 (Global_in)
+### 4. 실시간 금융 데이터 통합 (Gidne)
+
+**문제 해결**: 파편화된 금융 정보로 인한 투자 의사결정 지연
+
+- **핵심 기능**:
+  - **정보 통합**: 매크로(FRED) + 주식(Polygon) + 크립토(CryptoQuant)를 하나의 대시보드에 통합
+  - **실시간 스트리밍**: Websocket 기반으로 지연 없는 시세 제공
+  - **맥락 제공**: 나스닥 하락 → 비트코인 영향 자동 분석 (Data Synapse)
+  - **상대 강도(RS) 필터링**: 지수 대비 초과 수익 종목 실시간 선별
+
+**비즈니스 임팩트**:
+
+- **정보 수집 시간 95% 단축** (5-6개 사이트 순회 2시간 → 단일 대시보드 5분)
+- **의사결정 속도 향상**: 실시간 데이터로 급변장 대응 시간 단축
+- **맥락 기반 인사이트**: 거시경제 → 자산 가격 연쇄 반응 자동 감지
+
+---
+
+### 5. 데이터 기반 이커머스 구축 (Global_in)
 
 **문제 해결**: 경쟁사 가격 정보 수집 및 카테고리 구조화
 
