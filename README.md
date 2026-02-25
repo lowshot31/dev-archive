@@ -4,7 +4,58 @@
 
 ## 📂 프로젝트 목록
 
-### 1. [🥛 Pre](./Pre)
+### 1. [🎙️ Qwen-TTS Integration](./qwen-tts-integration)
+
+**AI 음성 합성 시스템 구축 · 최적화 · FastAPI 서비스화**
+<br>2026.02 (진행 중)<br>
+
+오픈소스 AI TTS 모델(**Qwen3-TTS**)의 한국어 버그를 직접 수정하고, 완전한 로컬 API 서버로 서비스화한 프로젝트입니다.
+모델 트러블슈팅부터 실시간 스트리밍 최적화, 커스텀 보이스 클로닝까지 전 과정을 독립적으로 수행했습니다.
+
+- **핵심 성과**:
+  - 한국어 음성 출력 시 발생하는 토크나이저·오디오 파이프라인 버그 독립 분석 및 수정
+  - FastAPI + Astro 기반 TTS Web Studio (백엔드 + 프론트엔드) 구현
+  - 실시간 스트리밍 지원 (chunked streaming, WAV header on-the-fly)
+  - **모델 스왑 시스템**: VRAM 효율을 위해 시스템 화자 모델과 보이스 클로닝 모델을 동적으로 교체
+  - WSL2 환경 오디오 드라이버 연동 표준화
+  - 비전문가도 따라 할 수 있는 Technical Writing 문서 5종 직접 작성
+- **기술 스택**:
+  - **Backend**: Python, FastAPI, Uvicorn, PyTorch, soundfile, numpy
+  - **Frontend**: Astro, Vanilla JavaScript
+  - **TTS Model**: Qwen3-TTS (CustomVoice + Base 듀얼 모델)
+  - **GPU**: CUDA (VRAM 6GB+ 권장), RTX 3060 실사용 검증
+  - **Infra**: WSL2 (Ubuntu), Conda 환경 관리
+- **아키텍처**:
+  ```
+  [Astro Web UI :4321]
+       ↓ HTTP API
+  [FastAPI Server :8000]
+       ↓ 모델 스왑
+  [CustomVoice 모델] ↔ [Base 모델]  ← VRAM에 하나만 로드
+  ```
+- **시스템 내장 화자** (다국어):
+  - `speaker_sohee` (Korean), `speaker_ryan` / `speaker_serena` (English), `speaker_ono_anna` (Japanese), `speaker_uncle_fu` (Chinese)
+- **주요 API 엔드포인트**:
+
+  | Method     | Endpoint             | 설명                             |
+  | ---------- | -------------------- | -------------------------------- |
+  | `GET/POST` | `/tts/generate`      | TTS 음성 생성 (스트리밍/일반)    |
+  | `POST`     | `/voices/register`   | 커스텀 보이스 클로닝 등록        |
+  | `GET`      | `/voices`            | 보이스 목록 조회 (시스템+커스텀) |
+  | `DELETE`   | `/voices/{voice_id}` | 커스텀 보이스 삭제               |
+
+- **기술 문서 (Technical Writing)**:
+  1. [`README_API.md`](./qwen-tts-integration/README_API.md) — 외부 서비스 연동용 API 명세서
+  2. [`WSL_MIGRATION_GUIDE.md`](./qwen-tts-integration/WSL_MIGRATION_GUIDE.md) — Windows-WSL 환경 마이그레이션 가이드
+  3. [`Qwen3-TTS Optimization Report.md`](./qwen-tts-integration/Qwen3-TTS%20Optimization%20Report.md) — 추론 속도·음질 개선 리포트
+  4. [`WORKFLOW_INTEGRATION.md`](./qwen-tts-integration/WORKFLOW_INTEGRATION.md) — 시스템 아키텍처 및 데이터 흐름
+  5. [`LEARNING_GUIDE.md`](./qwen-tts-integration/LEARNING_GUIDE.md) — 모델 구조 이해 및 트러블슈팅 학습 가이드
+
+[📖 자세히 보기 →](./qwen-tts-integration/README.md)
+
+---
+
+### 2. [🥛 Pre](./Pre)
 
 **유기농 유제품 회사 홈페이지 (프론트엔드)**
 <br>2025.12~2026.01<br>
@@ -33,7 +84,7 @@ FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce 
 
 ---
 
-### 2. [🏢 Pre-SFDX](./Pre_Dev)
+### 3. [🏢 Pre-SFDX](./Pre_Dev)
 
 **Salesforce CRM 백엔드 및 Experience Cloud 포털**
 <br>2025.12~2026.01<br>
@@ -63,7 +114,7 @@ Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고�
 
 ---
 
-### 3. [☁️ multicloud-devsecops](./multicloud-devsecops)
+### 4. [☁️ multicloud-devsecops](./multicloud-devsecops)
 
 **GCP 기반 멀티클라우드 DevSecOps 파이프라인**
 <br>2025.09-10<br>
@@ -75,21 +126,6 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 - **특징**: Workload Identity Federation, IaC, CI/CD 자동화, 비용 최적화 (99.7% 절감)
 
 [📖 자세히 보기 →](./multicloud-devsecops/README.md)
-
----
-
-### 4. [🎙️ Qwen3-TTS Integration](./qwen-tts-integration)
-
-**AI 음성 합성 시스템 통합 및 최적화**
-<br>2026.02 (진행 중)<br>
-
-오픈소스 AI 모델의 한국어 버그를 수정하고 로컬 API 환경을 구축한 프로젝트입니다.
-
-- **주요 기능**: 한국어 음성 출력 최적화, REST API 명세서 작성, WSL 환경 가이드 제작
-- **기술 스택**: Python, PyTorch, FastAPI, WSL2
-- **특징**: AI 모델 트러블슈팅, 기술 문서화(Technical Writing) 역량 입증
-
-[📖 자세히 보기 →](./qwen-tts-integration/README.md)
 
 ---
 
@@ -167,11 +203,13 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 
 ### Frameworks & Libraries
 
 - **Backend**: FastAPI, Spring Boot, Uvicorn
-- **Frontend**: Lightning Web Components (LWC), JSP, Bootstrap
+- **Frontend**: Astro, Lightning Web Components (LWC), JSP, Bootstrap
+- **AI/ML**: PyTorch, Qwen3-TTS, soundfile, numpy
 - **Data Processing**: Pandas, openpyxl
 - **Automation**: Selenium, python-telegram-bot, asyncio
 - **Infrastructure**: Terraform
@@ -183,6 +221,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 - **CI/CD**: GitHub Actions
 - **Monitoring**: Datadog
 - **Containerization**: Docker
+- **Environment**: WSL2 (Ubuntu), Conda
 
 ### Databases
 
@@ -213,6 +252,13 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ```
 .
+├── qwen-tts-integration/   # 🎙️ AI 음성 합성 시스템 (1순위)
+│   ├── README.md           # 프로젝트 개요 및 트러블슈팅
+│   ├── README_API.md       # API 명세서 (기술 문서)
+│   ├── WSL_MIGRATION_GUIDE.md     # WSL 환경 설정 가이드
+│   ├── Qwen3-TTS Optimization Report.md  # 최적화 리포트
+│   ├── WORKFLOW_INTEGRATION.md    # 아키텍처 및 데이터 흐름
+│   └── LEARNING_GUIDE.md          # 학습 가이드
 ├── Pre/                    # 유기농 유제품 홈페이지 (프론트엔드)
 │   ├── static/             # CSS, JS, 이미지
 │   └── templates/          # HTML 템플릿
@@ -225,10 +271,6 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 │       ├── Salesforce_ERD.md
 │       ├── Custom_Apex_Classes_Documentation.md
 │       └── Lead_Required_Fields_and_Duplicate_Rules.md
-├── qwen-tts-integration/   # AI 음성 합성 시스템 통합
-│   ├── README.md           # 프로젝트 개요 및 트러블슈팅
-│   ├── README_API.md       # API 명세서
-│   └── WSL_MIGRATION_GUIDE.md # 환경 설정 가이드
 ├── Global_in/              # 웹 크롤링 및 카테고리 관리
 │   ├── project_crawling/   # 카테고리 데이터 처리
 │   └── Sell_Buy/           # (개발 예정)
@@ -250,7 +292,26 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ## 💡 솔루션의 가치
 
-### 1. 엔드-투-엔드 비즈니스 자동화 (Pre 프로젝트)
+### 1. AI 음성 합성 시스템 구축 (qwen-tts-integration) ⭐ 대표 프로젝트
+
+**문제 해결**: 최신 오픈소스 LLM TTS 모델의 한국어 지원 미비 및 높은 구축 난이도
+
+- **해결 전략**:
+  - 오디오 파이프라인 직접 분석 → **한국어 음성 버그 독립 수정**
+  - VRAM 효율을 위한 **동적 모델 스왑 시스템** 설계 (6GB GPU 최적화)
+  - FastAPI + 실시간 스트리밍으로 **즉각적인 응답성** 확보
+  - 비전문가 대상 **Technical Writing 5종** 직접 작성
+
+**비즈니스 임팩트**:
+
+- 기술적 난제에 대한 **독립적인 원인 분석 및 해결 역량** 입증
+- **실서비스 수준**의 API 설계 및 구현 (스트리밍, 보이스 클로닝, 다국어)
+- 최신 AI 모델(Qwen3-TTS)의 실무 적용 가능성 직접 검증
+- 재사용 가능한 **기술 문서 자산** 확보
+
+---
+
+### 2. 엔드-투-엔드 비즈니스 자동화 (Pre 프로젝트)
 
 **문제 해결**: 유기농 유제품 업체의 디지털 전환 및 고객 관리 자동화
 
@@ -271,7 +332,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 2. 클라우드 비용 최적화 및 자동화 (multicloud-devsecops)
+### 3. 클라우드 비용 최적화 및 자동화 (multicloud-devsecops)
 
 **문제 해결**: GCP 서비스 비용 폭탄 문제 (월 $65 청구)
 
@@ -285,22 +346,6 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 - **비용 99.7% 절감** (월 $65 → $0.22)
 - CI/CD 파이프라인 자동화로 **배포 시간 10분 → 2분**
 - Datadog 통합으로 **장애 감지 실시간 대응**
-
----
-
-### 3. AI 기반 트러블슈팅 및 문서화 (qwen-tts-integration)
-
-**문제 해결**: 오픈소스 모델의 한국어 지원 미비 및 구축 난이도
-
-- **해결 전략**:
-  - 오디오 파이프라인 수정을 통한 **한국어 음성 출력 버그 해결**
-  - 비전문가도 따라 할 수 있는 **상세 기술 문서(Technical Writing) 작성**
-  - WSL 환경의 복잡한 오디오 연동 프로세스 표준화
-
-**비즈니스 임팩트**:
-- 기술적 난제에 대한 **독립적인 해결 역량** 입증
-- 효율적인 지식 전달을 위한 **문서화 자산** 확보
-- 최신 AI 모델의 실무 적용 가능성 검증
 
 ---
 
@@ -364,7 +409,32 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ### 아키텍처 패턴별 분류
 
-#### 1️⃣ **API 통합 아키텍처** (Pre + Pre-SFDX)
+#### 1️⃣ **AI 스트리밍 서비스 아키텍처** (qwen-tts-integration)
+
+```
+[사용자]
+    ↓ HTTP (스트리밍)
+[FastAPI Server :8000]
+    ↓ 모델 스왑 판단
+[DualTTSService]
+    ├─ 시스템 화자 → [CustomVoice 모델]
+    └─ 커스텀 보이스 → [Base 모델]
+    ↓ chunked audio
+[Astro Web UI :4321]
+    ↓
+[사용자 — 실시간 재생]
+```
+
+**핵심 연동 포인트**:
+
+- **FastAPI ↔ PyTorch**: 실시간 스트리밍 오디오 청크 전송
+- **모델 스왑**: VRAM 효율을 위한 동적 모델 교체 (기존 모델 해제 후 새 모델 로드)
+- **VoiceManager**: `voices_db.json`으로 커스텀 보이스 메타데이터 영속화
+- **Astro UI ↔ REST API**: 비동기 스트리밍 재생
+
+---
+
+#### 2️⃣ **API 통합 아키텍처** (Pre + Pre-SFDX)
 
 ```
 [사용자]
@@ -395,7 +465,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-#### 2️⃣ **이벤트 드리븐 아키텍처** (multicloud-devsecops)
+#### 3️⃣ **이벤트 드리븐 아키텍처** (multicloud-devsecops)
 
 ```
 [GitHub Push]
@@ -426,7 +496,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-#### 3️⃣ **실시간 스트리밍 아키텍처** (coinbot)
+#### 4️⃣ **실시간 스트리밍 아키텍처** (coinbot)
 
 ```
 [Upbit WebSocket API]
@@ -454,7 +524,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-#### 4️⃣ **ETL 파이프라인 아키텍처** (Global_in)
+#### 5️⃣ **ETL 파이프라인 아키텍처** (Global_in)
 
 ```
 [웹사이트 (이마트/GS25/CU)]
@@ -487,6 +557,13 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ## 🎯 핵심 역량
 
+### AI/ML 실무 적용
+
+✅ **LLM 기반 TTS 모델 트러블슈팅**: 오픈소스 모델 버그 독립 분석 및 수정  
+✅ **AI 서비스화**: FastAPI 기반 실시간 스트리밍 API 구현  
+✅ **GPU 최적화**: VRAM 6GB 환경 최적화, 동적 모델 스왑 설계  
+✅ **Technical Writing**: 비전문가 대상 기술 문서 5종 직접 작성
+
 ### 시스템 통합 전문성
 
 ✅ **멀티 플랫폼 연동**: Salesforce, GCP, AWS, Telegram, Upbit  
@@ -503,7 +580,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ### 풀스택 역량
 
-✅ **프론트엔드**: Vanilla JS, LWC, Jinja2  
+✅ **프론트엔드**: Astro, Vanilla JS, LWC, Jinja2  
 ✅ **백엔드**: FastAPI, Spring Boot, Apex  
 ✅ **인프라**: Terraform, Docker, CI/CD  
 ✅ **데이터**: Pandas, Oracle, Redis
@@ -519,4 +596,4 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-**© 2025 Portfolio Projects**
+**© 2025-2026 Portfolio Projects**

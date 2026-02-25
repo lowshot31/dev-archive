@@ -514,8 +514,8 @@ Portal 사용자는 Salesforce 내부 사용자보다 훨씬 제한된 권한을
 
 ## 📚 참고 문서
 
-- [Pre 프로젝트 상세](./Pre/PROJECT_DETAIL.md)
-- [Pre-SFDX 상세](./Pre-SFDX/문서정리/)
+- [Pre Home 상세(웹)](./Pre_Home/README.md)
+- [Pre-SFDX 상세(앱)](./Pre_Dev/.agent/Pre_Portal_System_Mockup.md)
 - [Salesforce Developer Guide](https://developer.salesforce.com/)
 - [Lightning Web Components Guide](https://lwc.dev/)
 
