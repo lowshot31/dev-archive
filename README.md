@@ -63,8 +63,6 @@ Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고�
 
 ---
 
----
-
 ### 3. [☁️ multicloud-devsecops](./multicloud-devsecops)
 
 **GCP 기반 멀티클라우드 DevSecOps 파이프라인**
@@ -80,7 +78,22 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 4. [🤖 coinbot](./coinbot)
+### 4. [🎙️ Qwen3-TTS Integration](./qwen-tts-integration)
+
+**AI 음성 합성 시스템 통합 및 최적화**
+<br>2026.02 (진행 중)<br>
+
+오픈소스 AI 모델의 한국어 버그를 수정하고 로컬 API 환경을 구축한 프로젝트입니다.
+
+- **주요 기능**: 한국어 음성 출력 최적화, REST API 명세서 작성, WSL 환경 가이드 제작
+- **기술 스택**: Python, PyTorch, FastAPI, WSL2
+- **특징**: AI 모델 트러블슈팅, 기술 문서화(Technical Writing) 역량 입증
+
+[📖 자세히 보기 →](./qwen-tts-integration/README.md)
+
+---
+
+### 5. [🤖 coinbot](./coinbot)
 
 **업비트 암호화폐 급등 알림 텔레그램 봇**
 <br>2025.08<br>
@@ -94,7 +107,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 5. [🧭 Gidne](./gidne)
+### 6. [🧭 Gidne](./gidne)
 
 **투자 내비게이션 대시보드 - 실시간 금융 데이터 통합 플랫폼**
 <br>2026.01~진행중<br>
@@ -122,7 +135,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 6. [🌐 Global_in](./Global_in)
+### 7. [🌐 Global_in](./Global_in)
 
 **웹 크롤링 및 이커머스 플랫폼**
 <br>2024.11~2025.02<br>
@@ -212,6 +225,10 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 │       ├── Salesforce_ERD.md
 │       ├── Custom_Apex_Classes_Documentation.md
 │       └── Lead_Required_Fields_and_Duplicate_Rules.md
+├── qwen-tts-integration/   # AI 음성 합성 시스템 통합
+│   ├── README.md           # 프로젝트 개요 및 트러블슈팅
+│   ├── README_API.md       # API 명세서
+│   └── WSL_MIGRATION_GUIDE.md # 환경 설정 가이드
 ├── Global_in/              # 웹 크롤링 및 카테고리 관리
 │   ├── project_crawling/   # 카테고리 데이터 처리
 │   └── Sell_Buy/           # (개발 예정)
@@ -228,8 +245,6 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 ├── README.md               # 이 파일
 └── RESUME_DRAFT.md         # 이력서 초안
 ```
-
----
 
 ---
 
@@ -273,7 +288,23 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 3. 실시간 시장 기회 포착 (coinbot)
+### 3. AI 기반 트러블슈팅 및 문서화 (qwen-tts-integration)
+
+**문제 해결**: 오픈소스 모델의 한국어 지원 미비 및 구축 난이도
+
+- **해결 전략**:
+  - 오디오 파이프라인 수정을 통한 **한국어 음성 출력 버그 해결**
+  - 비전문가도 따라 할 수 있는 **상세 기술 문서(Technical Writing) 작성**
+  - WSL 환경의 복잡한 오디오 연동 프로세스 표준화
+
+**비즈니스 임팩트**:
+- 기술적 난제에 대한 **독립적인 해결 역량** 입증
+- 효율적인 지식 전달을 위한 **문서화 자산** 확보
+- 최신 AI 모델의 실무 적용 가능성 검증
+
+---
+
+### 4. 실시간 시장 기회 포착 (coinbot)
 
 **문제 해결**: 24시간 암호화폐 시장 모니터링 불가능
 
@@ -290,7 +321,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 4. 실시간 금융 데이터 통합 (Gidne)
+### 5. 실시간 금융 데이터 통합 (Gidne)
 
 **문제 해결**: 파편화된 금융 정보로 인한 투자 의사결정 지연
 
@@ -308,7 +339,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 ---
 
-### 5. 데이터 기반 이커머스 구축 (Global_in)
+### 6. 데이터 기반 이커머스 구축 (Global_in)
 
 **문제 해결**: 경쟁사 가격 정보 수집 및 카테고리 구조화
 
