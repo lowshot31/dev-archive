@@ -59,7 +59,7 @@ Pre 프로젝트의 Salesforce 백엔드로, Experience Cloud를 활용한 고�
   - 커스텀 Apex 클래스 상세 문서
   - 리드 필수 필드 및 중복 규칙
 
-[📖 자세히 보기 →](./Pre_Dev/README.md)
+[📖 자세히 보기 →](./Pre_Dev/.agent)
 
 ---
 
