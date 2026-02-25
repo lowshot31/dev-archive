@@ -33,7 +33,7 @@ FastAPI 기반의 유기농 유제품 전문 기업 홈페이지로, Salesforce 
 
 ---
 
-### 2. [🏢 Pre-SFDX](./Pre-SFDX)
+### 2. [🏢 Pre-SFDX](./Pre_Dev)
 
 **Salesforce CRM 백엔드 및 Experience Cloud 포털**
 <br>2025.12~2026.01<br>
