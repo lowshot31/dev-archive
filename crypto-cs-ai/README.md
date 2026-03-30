@@ -7,24 +7,24 @@
 
 ## 🎯 프로젝트 목적 및 해결 과제
 
-가상자산 거래소(예: Coinone)의 고객 문의(CS) 단계에서 발행하는 수동적인 데이터 추출 및 대조 과정을 AI 에이전트와 외부 API로 대체하여 운영 비용과 응답 지연을 획기적으로 낮춥니다.
+가상자산 거래소(예: Coinone)의 고객 문의(CS) 단계에서 발생하는 수동적인 데이터 추출 및 대조 과정을 AI 에이전트와 외부 API로 대체하여 운영 비용과 응답 지연을 획기적으로 낮춥니다.
 LLM의 환각(Hallucination)을 제어하기 위해 룰 기반 검증 레이어와 듀얼 모델을 도입했습니다.
 
 ## 🚀 워크플로우 흐름 아키텍처
 
 ```mermaid
 graph TD
-    A[Chat Trigger] --> B(PII 마스킹<br>Ollama: qwen3)
-    B --> C(구조화 데이터 추출<br>Ollama: qwen2.5-coder)
-    C --> D{JSON & Regex<br>Validator}
-    D --> E{의도(Intent) 기반<br>라우팅}
-    E -->|deposit_delay| F{EVM 여부 판별}
-    F -->|EVM 체인| G[Etherscan V2 API 조회]
-    F -->|비-EVM 체인| H[수동 리뷰 전환]
-    G --> I(운영 액션 판단 Code)
-    I --> J[CS Slack 자동 채널 발송]
+    A["Chat Trigger"] --> B["PII 마스킹<br>Ollama: qwen3"]
+    B --> C["구조화 데이터 추출<br>Ollama: qwen2.5-coder"]
+    C --> D{"JSON & Regex<br>Validator"}
+    D --> E{"의도(Intent) 기반<br>라우팅"}
+    E -->|"deposit_delay"| F{"EVM 여부 판별"}
+    F -->|"EVM 체인"| G["Etherscan V2 API 조회"]
+    F -->|"비-EVM 체인"| H["수동 리뷰 전환"]
+    G --> I["운영 액션 판단 Code"]
+    I --> J["CS Slack 자동 채널 발송"]
     H --> J
-    E -->|wrong_deposit| K[오입금 전담 채널 알림] --> J
+    E -->|"wrong_deposit"| K["오입금 전담 채널 알림"] --> J
 ```
 
 ## ✨ 주요 기능 및 구현 성과
