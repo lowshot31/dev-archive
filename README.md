@@ -17,7 +17,7 @@ Salesforce CRM (Apex/LWC/SOQL) 인프라와 FastAPI를 연동하여 포털 시�
   - **카카오 API + 자율 할당(Assignment Rule)**: 고객 위치 정보를 카카오 주소 API로 획득하고 가장 인접한 유치 대리점으로 기회를 분배하는 백엔드 프로세스 빌딩.
 - **주요 기술**: Salesforce (Apex, SOQL, LWC, Experience Cloud), Python (FastAPI), REST API
 
-[📖 상세 문서 확인 →](./Pre_Dev/README.md)
+[📖 상세 문서 확인 →](./project_.md)
 
 ---
 
