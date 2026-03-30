@@ -4,7 +4,7 @@ Salesforce CRM 프레임워크와 API 자동화 솔루션을 통합 설계하는
 
 ## 📂 프로젝트 목록
 
-### 1. [🥛 Pre Dairy](./Pre)
+### 1. [🥛 Pre Dairy](./Pre_home)
 
 **Pre Dairy B2B 셀프서비스 포털 (Salesforce 기반)**  
 _2025.12 ~ 2026.01_
@@ -17,7 +17,7 @@ Salesforce CRM (Apex/LWC/SOQL) 인프라와 FastAPI를 연동하여 포털 시�
   - **카카오 API + 자율 할당(Assignment Rule)**: 고객 위치 정보를 카카오 주소 API로 획득하고 가장 인접한 유치 대리점으로 기회를 분배하는 백엔드 프로세스 빌딩.
 - **주요 기술**: Salesforce (Apex, SOQL, LWC, Experience Cloud), Python (FastAPI), REST API
 
-[📖 상세 문서 확인 →](./Pre-SFDX/README.md)
+[📖 상세 문서 확인 →](./Pre_Dev/README.md)
 
 ---
 
@@ -172,10 +172,10 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ```
 .
-├── Pre/                    # 유기농 유제품 홈페이지 (프론트엔드)
+├── Pre_home/               # 유기농 유제품 홈페이지 (프론트엔드)
 │   ├── static/             # CSS, JS, 이미지
 │   └── templates/          # HTML 템플릿
-├── Pre-SFDX/               # Salesforce CRM 백엔드 및 포털
+├── Pre_Dev/                # Salesforce CRM 백엔드 및 포털
 │   ├── force-app/          # Salesforce 소스 코드
 │   │   ├── classes/        # Apex 클래스 (30개)
 │   │   ├── lwc/            # Lightning 웹 컴포넌트 (15개)
