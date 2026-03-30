@@ -364,7 +364,7 @@ export default class PortalDashboard extends LightningElement {
 
 - 조직 간 **실시간 정보 공유** (Chatter)
 - 배송 대리점 자동 배정으로 **물류 효율** 향상
-- 고객 셀프서비스로 **고객 만족도** 향상
+- 고객 셀프서비스 전환으로 **운영팀의 단순 조회 수기 응대 리소스 대폭 절감**
 
 ---
 
