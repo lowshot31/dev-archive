@@ -7,6 +7,22 @@ description: 주간 회고. 이번 주 뭘 했고, 뭘 배웠고, 다음 주 뭘
 ## Step 1: 데이터 수집
 
 ### Git 통계
+
+에이전트는 사용자의 OS 환경에 맞는 명령어를 실행하여 통계를 수집한다.
+
+#### 🪟 Windows (PowerShell)
+```powershell
+# 이번 주 커밋
+git log --since="1 week ago" --oneline --author="$(git config user.name)"
+
+# 변경량
+git log --since="1 week ago" --author="$(git config user.name)" --shortstat
+
+# 자주 수정한 파일 Top 20
+git log --since="1 week ago" --author="$(git config user.name)" --name-only --format="" | Where-Object { $_ -ne "" } | Group-Object | Sort-Object Count -Descending | Select-Object -First 20 Name, Count
+```
+
+#### 🍎 macOS / 🐧 Linux (Bash)
 ```bash
 # 이번 주 커밋
 git log --since="1 week ago" --oneline --author="$(git config user.name)"
@@ -14,7 +30,7 @@ git log --since="1 week ago" --oneline --author="$(git config user.name)"
 # 변경량
 git log --since="1 week ago" --author="$(git config user.name)" --shortstat
 
-# 파일별 변경
+# 자주 수정한 파일 Top 20
 git log --since="1 week ago" --author="$(git config user.name)" --name-only --format="" | sort | uniq -c | sort -rn | head -20
 ```
 

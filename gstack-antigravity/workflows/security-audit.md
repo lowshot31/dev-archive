@@ -11,18 +11,14 @@ description: OWASP Top 10 + STRIDE 위협 모델 기반 보안 감사. "보안 �
 ## Step 1: 코드베이스 스캔
 
 ### 1.1: 어택 서피스 매핑
-```bash
-# API 엔드포인트 찾기
-grep -r "app\.\(get\|post\|put\|delete\|patch\)" --include="*.ts" --include="*.js" -l
-grep -r "@(Get|Post|Put|Delete|Patch)" --include="*.ts" -l
-grep -r "router\.\(get\|post\|put\|delete\)" --include="*.py" -l
+**에이전트 지시:** 내장된 `grep_search` 도구를 사용하여 다음 패턴을 찾으세요. (터미널 명령어를 직접 실행하지 마세요.)
 
-# 환경변수 사용
-grep -r "process\.env\|os\.environ\|env\." --include="*.ts" --include="*.js" --include="*.py" -l
-
-# 시크릿/키 패턴
-grep -rn "password\|secret\|api_key\|token\|private_key" --include="*.ts" --include="*.js" --include="*.py" --include="*.env"
-```
+1. **API 엔드포인트 찾기:**
+   - 정규식 패턴: `app\.(get|post|put|delete|patch)` 또는 `@(Get|Post|Put|Delete|Patch)` 또는 `router\.(get|post|put|delete)`
+2. **환경변수 사용:**
+   - 정규식 패턴: `process\.env|os\.environ|env\.`
+3. **시크릿/키 하드코딩 패턴:**
+   - 정규식 패턴: `(?i)(password|secret|api_key|token|private_key)`
 
 ---
 
@@ -60,6 +56,19 @@ grep -rn "password\|secret\|api_key\|token\|private_key" --include="*.ts" --incl
 
 ## Step 4: 의존성 보안
 
+**에이전트 지시:** 프로젝트에 맞는 패키지 매니저 보안 검사를 실행하세요. 사용자의 환경에 맞는 터미널 명령어를 사용하세요.
+
+#### 🪟 Windows (PowerShell)
+```powershell
+# Node.js
+npm audit; $null
+
+# Python
+pip audit; $null
+safety check; $null
+```
+
+#### 🍎 macOS / 🐧 Linux (Bash)
 ```bash
 # Node.js
 npm audit 2>/dev/null || true
