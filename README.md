@@ -21,6 +21,37 @@ Salesforce CRM (Apex/LWC/SOQL) 인프라와 FastAPI를 연동하여 포털 시�
 
 ---
 
+### 2. [🤖 Crypto CS AI](./crypto-cs-ai)
+
+**API 통합 전주기 워크플로우 자동화 엔진 (n8n & LLM 멀티라우팅)**  
+*2026.03*
+
+가상자산 고객 문의(CS) 단계에서 발생하는 수동적인 데이터 추출 및 대조 과정을 n8n 플랫폼, 로컬 LLM, 외부 온체인 오픈 API 망을 활용하여 완전 자동화 파이프라인으로 구축한 구조화 추출 AI 챗봇입니다.
+
+- **성과 중심 핵심 요약**:
+  - **Etherscan V2 API & Slack 통합**: 채팅 입력에서 추출된 txid를 Etherscan REST API를 거쳐 실시간 온체인 결과를 도출하고, 그에 따른 운영 가이드를 1초 내로 Slack에 전송해 워크플로우를 자동화.
+  - **환각(Hallucination) 방어 설계 체계화**: 단순 생성 챗봇이 아닌, 정규표현식(Regex) 검증 레이어, EVM 체인/비EVM 체인을 판별하는 동적 라우팅을 도입해 시스템 오작동 소스를 차단함.
+  - **효율적 다중 로컬 모델 최적화**: Ollama 위에서 뉘앙스 파악용 자연어 모델(qwen3)과 구조화 추출 전담 모델(qwen2.5-coder) 두 개를 오케스트레이션하여 응답 안정성 확보.
+- **주요 기술**: n8n, Ollama, Etherscan API, Slack Webhook, Docker Compose
+
+[📖 상세 문서 확인 →](./crypto-cs-ai/README.md)
+
+---
+
+### 3. [🧠 Gstack-Antigravity AI Agent System](https://github.com/lowshot31/gstack-antigravity)
+
+**프롬프트 튜닝 및 Google 에이전트 워크플로우 시스템 포팅**  
+*2026.03*
+
+Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, 이를 Google Antigravity 엔진 문법에 맞추어 변환, 맞춤형 워크플로우(office-hours, investigate 등) 룰셋을 새롭게 이식한 튜닝/설계 프로세스 경험입니다.
+
+- **성과 중심 핵심 요약**:
+  - **AI Agent 구조파악 및 역설계**: 복잡한 에이전트 작동 방식과 시스템 프롬프팅 구조를 해체하고, 명령어 기반 체인을 새 플랫폼에 안정적으로 빌드업.
+  - **생산성 가속화 파이프라인 수립**: 코드 작업 전 브레인스토밍(/office-hours)부터 디버깅(/investigate)을 자율 행동 에이전트에 위임하는 설계 문서 자동화 체계 수립.
+- **주요 기술**: Prompt Engineering, Agent Orchestration, Bash Script
+
+---
+
 ### 4. [🤖 coinbot](./coinbot)
 
 **업비트 암호화폐 급등 알림 텔레그램 봇**
@@ -380,7 +411,19 @@ Salesforce CRM (Apex/LWC/SOQL) 인프라와 FastAPI를 연동하여 포털 시�
 [이커머스 플랫폼]
 ```
 
-- **Focus**: 단순 대화를 넘어 검증된 API 통신(Etherscan)을 경유하여 비즈니스 가치(액션) 판단, 슬랙 알림까지 End-to-End 오케스트레이션 자동화.
+- **Focus**: 이기종 시스템(Oracle DB, Redis)을 관통하며 대용량 크롤링 상품 데이터를 안정적으로 적재하는 ETL 아키텍처.
+
+---
+
+#### 5️⃣ **다중 API 결합 운영 자동화 파이프라인** (Crypto CS AI)
+
+```
+[CS 자연어 입력] → [Ollama LLM (Intent/JSON Regex Parsing)] 
+                                ↓ (Intent Switch/Router)
+[Etherscan V2 API 조회] ↔ [n8n Automation Engine] → [Slack Webhook 자동 전송]
+```
+
+- **Focus**: 단순 대화를 넘어 검증된 API 통신(Etherscan)을 경유하여 비즈니스 가치 판단 및 슬랙 알림까지 End-to-End 오케스트레이션 수행.
 
 ---
 
