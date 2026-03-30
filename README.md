@@ -4,16 +4,16 @@ Salesforce CRM 프레임워크와 API 자동화 솔루션을 통합 설계하는
 
 ## 📂 프로젝트 목록
 
-### 1. [🥛 Pre](./Pre)
+### 1. [🥛 Pre Dairy](./Pre)
 
-**Salesforce 환경 기반 B2B 셀프서비스 포털 구축 및 연동 자동화 전략**  
+**Pre Dairy B2B 셀프서비스 포털 (Salesforce 기반)**  
 _2025.12 ~ 2026.01_
 
 Salesforce CRM (Apex/LWC/SOQL) 인프라와 FastAPI를 연동하여 포털 시스템 및 고객 데이터 수집 시스템을 자동화한 프로젝트입니다. 비즈니스 로직(할당/배송 자동화)과 CRM 플랫폼 연동 경험을 담았습니다.
 
 - **성과 중심 핵심 요약**:
   - **포털/고객 셀프서비스 (Experience Cloud)**: 고객이 직접 주문 현황 관리와 케이스 조회를 수행할 수 있도록 권한을 위임한 LWC(Lightning Web Components) 대시보드 포털 환경을 구축하여 B2B 셀프서비스 구조 확립.
-  - **REST API 데이터 파이프라인 (Web-to-Lead/Case)**: 외부 홈페이지(FastAPI) 고객 문의 폼(Form)의 입력을 Salesforce에 실시간 Lead/Case로 생성하도록 REST 통신 연동.
+  - **REST API 데이터 파이프라인 (Web-to-Lead/Case)**: 외부 파트너사 웹사이트(Python/FastAPI)에서 입력된 폼 데이터를 Salesforce로 적재하기 위해, HTML 인터페이스 속성(Class, Name)을 매핑하고 REST 당김 로직 구현.
   - **카카오 API + 자율 할당(Assignment Rule)**: 고객 위치 정보를 카카오 주소 API로 획득하고 가장 인접한 유치 대리점으로 기회를 분배하는 백엔드 프로세스 빌딩.
 - **주요 기술**: Salesforce (Apex, SOQL, LWC, Experience Cloud), Python (FastAPI), REST API
 
@@ -29,7 +29,7 @@ Salesforce CRM (Apex/LWC/SOQL) 인프라와 FastAPI를 연동하여 포털 시�
 가상자산 고객 문의(CS) 단계에서 발생하는 수동적인 데이터 추출 및 대조 과정을 n8n 플랫폼, 로컬 LLM, 외부 온체인 오픈 API 망을 활용하여 완전 자동화 파이프라인으로 구축한 구조화 추출 AI 챗봇입니다.
 
 - **성과 중심 핵심 요약**:
-  - **Etherscan V2 API & Slack 통합**: 채팅 입력에서 추출된 txid를 Etherscan REST API를 거쳐 실시간 온체인 결과를 도출하고, 그에 따른 운영 가이드를 1초 내로 Slack에 전송해 워크플로우를 자동화.
+  - **실시간 API 통합으로 자동화율 100% 달성**: 자연어에서 데이터 구조화 추출이 완료되면, 즉시 **Etherscan V2 API를 동적 호출(REST)**하여 결과를 Slack 운영 채널로 **1초 이내(Real-time)** 전송하는 로우 레이턴시 파이프라인 구축.
   - **환각(Hallucination) 방어 설계 체계화**: 단순 생성 챗봇이 아닌, 정규표현식(Regex) 검증 레이어, EVM 체인/비EVM 체인을 판별하는 동적 라우팅을 도입해 시스템 오작동 소스를 차단함.
   - **효율적 다중 로컬 모델 최적화**: Ollama 위에서 뉘앙스 파악용 자연어 모델(qwen3)과 구조화 추출 전담 모델(qwen2.5-coder) 두 개를 오케스트레이션하여 응답 안정성 확보.
 - **주요 기술**: n8n, Ollama, Etherscan API, Slack Webhook, Docker Compose
@@ -207,11 +207,11 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ## 💡 솔루션의 가치
 
-### 1. 엔드-투-엔드 비즈니스 자동화 (Pre 프로젝트)
+### 1. 엔드-투-엔드 비즈니스 자동화 (Pre Dairy 프로젝트)
 
 **문제 해결**: 유기농 유제품 업체의 디지털 전환 및 고객 관리 자동화
 
-- **프론트엔드 혁신** (Pre):
+- **프론트엔드 혁신** (Pre Dairy):
   - 카카오 주소 API 연동으로 **정확한 배송지 매핑** → 배송 오류 방지
   - 다중 제품 선택 태그 UI로 **견적 문의 효율 3배 향상**
   - Glassmorphism 디자인으로 **프리미엄 브랜드 이미지 구축**
@@ -305,7 +305,7 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ### 아키텍처 패턴별 분류
 
-#### 1️⃣ **API 통합 아키텍처** (Pre + Pre-SFDX)
+#### 1️⃣ **API 통합 아키텍처** (Pre Dairy + Pre-SFDX)
 
 ```
 [사용자]
