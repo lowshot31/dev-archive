@@ -135,13 +135,11 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 - **Automation**: Selenium, python-telegram-bot, asyncio
 - **Infrastructure**: Terraform
 
-### Cloud & DevOps
+### Cloud & Infra (Foundational)
 
-- **AWS**: S3, SQS, ECR
-- **GCP**: Cloud Run, Artifact Registry, Cloud Scheduler, Cloud Build
-- **CI/CD**: GitHub Actions
-- **Monitoring**: Datadog
-- **Containerization**: Docker
+- **Cloud Platform 기본 활용**: GCP (Cloud Run, Cloud Scheduler), AWS (S3 단일 객체 저장소)
+- **CI/CD 및 환경**: GitHub Actions 기반 기초 배포, Docker
+- **Monitoring 경험**: Datadog (Faker 연동 커스텀 메트릭 전송 테스트)
 
 ### Databases
 
@@ -213,35 +211,35 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 - **프론트엔드 혁신** (Pre Dairy):
   - 카카오 주소 API 연동으로 **정확한 배송지 매핑** → 배송 오류 방지
-  - 다중 제품 선택 태그 UI로 **견적 문의 효율 3배 향상**
-  - Glassmorphism 디자인으로 **프리미엄 브랜드 이미지 구축**
-- **백엔드 통합** (Pre-SFDX):
-  - **공정한 기회 배분**: '거리+업종' 기반 자동 배정으로 영업사원 간 기회 불평등 해소 및 **대응 시간 60% 단축**
-  - **고객 셀프서비스**: 포털 대시보드 구축으로 고객이 직접 주문/문의 관리 → **CS 비용 절감**
-  - **물류 최적화**: 가장 인접한 배송 대리점 자동 연결로 **물류 프로세스 효율화**
+  - 다중 제품 선택 UI 도입으로 **고객 견적 문의 UX 개선 및 이탈률 감소**
+  - Glassmorphism 디자인으로 **프리미엄 브랜드 경험 제공**
+- **백엔드 통합** (Pre_Dev):
+  - **공정한 기회 배분**: '거리+업종' 기반 거리 계산 알고리즘(DISTANCE)으로 수동 리드 분배에 따른 **병목 해소 및 영업사원 단축 배정**
+  - **고객 셀프서비스**: 포털 대시보드 구축으로 고객이 직접 주문/문의 조회 환경을 갖추어 **CS 운영 채널 부담 완화**
+  - **물류 최적화**: 가장 인접한 유통 대리점 자동 연결 로직으로 결제부터 유통까지의 **파이프라인 결합**
 
 **비즈니스 임팩트**:
 
-- 리드 처리 속도 3배 향상
-- 고객 문의 대응 자동화 80%
-- 영업-배송 간 데이터 사일로 제거
+- 외부 고객 유입부터 내부 배송망 연결까지 **엔드투엔드 파이프라인 수립**
+- 운영팀의 수기(Excel) 고객 응대 채널을 시스템화하여 **CRM 트랜잭션 전환 효율 안정화**
+- 영업-배송 간 데이터 사일로 제거 및 **팀 간 가시성(Visibility) 향상**
 
 ---
 
 ### 2. 클라우드 비용 최적화 및 자동화 (multicloud-devsecops)
 
-**문제 해결**: GCP 서비스 비용 폭탄 문제 (월 $65 청구)
+**문제 해결**: 불필요한 Always-on 클라우드 프로비저닝에 따른 과도한 유휴 리소스 비용 발생
 
 - **해결 전략**:
-  - Cloud Run Jobs + Cloud Scheduler로 **온디맨드 실행**
-  - Terraform IaC로 **인프라 재현성 100% 보장**
-  - Workload Identity Federation으로 **키 관리 불필요**
+  - Cloud Run Jobs + Cloud Scheduler를 결합하여 **서버리스/온디맨드 아키텍처로 완전 전환**
+  - Terraform IaC로 인프라 구성 관리를 코드화하여 **인프라 재현성 및 배포 안정성 확보**
+  - Workload Identity Federation을 도입해 **장기 임시 키 오픈 없이 안전한 CI/CD 패스 구현**
 
 **비즈니스 임팩트**:
 
-- **비용 99.7% 절감** (월 $65 → $0.22)
-- CI/CD 파이프라인 자동화로 **배포 시간 10분 → 2분**
-- Datadog 통합으로 **장애 감지 실시간 대응**
+- 서버리스 및 온디맨드 전환을 통해 유휴 클라우드 인프라 **운영 비용 최소화 (비용 누수 원천 차단)**
+- CI/CD 파이프라인 자동화를 통해 매뉴얼 배포 프로세스를 걷어내고 **배포 소요 시간 대폭 단축**
+- Datadog 커스텀 메트릭 연동을 통한 **장애 조기 감지 체계 확립**
 
 ---
 
@@ -429,26 +427,23 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ## 🎯 핵심 역량
 
-### 시스템 통합 전문성
+### 시스템 통합 역량
 
-✅ **멀티 플랫폼 연동**: Salesforce, GCP, AWS, Telegram, Upbit  
-✅ **API 설계 및 구현**: REST, WebSocket, Webhook  
-✅ **인증/보안**: OAuth, WIF, SSL/TLS  
-✅ **비동기 처리**: asyncio, Multi-threading
+✅ **서드파티/플랫폼 연동**: Salesforce CRM 인프라 및 외부 오픈 API(Telegram, 온체인 등) 간의 데이터 흐름 확보  
+✅ **API 인터페이스 활용**: 상황에 맞는 REST, WebSocket, Webhook 인터페이스 통신 설계  
+✅ **비동기 처리**: 비동기(asyncio) 통신 및 트랜잭션 스케줄링을 통한 API 제한 준수 및 병목 완화  
 
 ### 문제 해결 중심 개발
 
-✅ **비용 최적화**: 99.7% 클라우드 비용 절감  
-✅ **성능 개선**: 리드 처리 속도 3배, 크롤링 시간 93% 단축  
-✅ **자동화**: 수작업 → 완전 자동화로 전환  
-✅ **확장성**: 멀티 사용자, 대용량 데이터 처리
+✅ **비용/리소스 최적화**: 서버리스 아키텍처 및 온디맨드(On-demand) 접근을 통한 유휴 인프라 비용 절감  
+✅ **비즈니스 로직 자동화**: 수작업(엑셀, 수동 배정) 의존도가 높은 업무 프로세스를 식별하여 파이프라인 시스템으로 전환  
+✅ **시스템 안정성 방어**: 정규표현식(Regex) 기반 데이터 검증 및 예외 처리(Error Handling)로 시스템 오작동 차단  
 
-### 풀스택 역량
+### 기술 스택 및 베이스
 
-✅ **프론트엔드**: Vanilla JS, LWC, Jinja2  
-✅ **백엔드**: FastAPI, Spring Boot, Apex  
-✅ **인프라**: Terraform, Docker, CI/CD  
-✅ **데이터**: Pandas, Oracle, Redis
+✅ **프론트엔드**: Vanilla JS, LWC(Lightning Web Components) 기반 대시보드 및 경량 UI 구현  
+✅ **백엔드/데이터**: FastAPI, Apex 중심의 서버 로직 구현 및 Pandas를 활용한 기초 데이터 정제 파이프라인  
+✅ **클라우드/모니터링 (Basic)**: GCP/AWS 클라우드 환경 테스트 배포 및 Datadog 커스텀 메트릭 연동을 통한 모니터링 기초 경험
 
 ---
 

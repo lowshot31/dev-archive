@@ -34,8 +34,8 @@
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/lowshot31/lowshot31.git
-cd lowshot31/coinbot
+git clone https://github.com/lowshot31/dev-archive.git
+cd dev-archive/coinbot
 
 # 2. 필수 라이브러리 설치
 pip install python-telegram-bot requests

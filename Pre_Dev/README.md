@@ -1,18 +1,19 @@
-# Salesforce DX Project: Next Steps
+# 🥛 Pre Dairy (Salesforce CRM 백엔드 & 포털)
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+본 디렉토리는 **Pre Dairy B2B 셀프서비스 포털** 프로젝트의 Salesforce 백엔드 로직(Apex, SOQL) 및 포털 UI(LWC) 소스 코드를 포함하고 있습니다.
 
-## How Do You Plan to Deploy Your Changes?
+## 📖 통합 문서 안내 (필독)
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+기획 배경, 전체 2-Tier 시스템 아키텍처, 데이터 모델, 핵심 기술 챌린지 및 Q&A 등 전체 프로젝트에 대한 구체적인 명세는 루트 디렉토리에 통합되어 있습니다. 
 
-## Configure Your Salesforce DX Project
+👉 **[통합 프로젝트 명세서 (project_.md) 읽어보기](../project_.md)**
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+---
 
-## Read All About It
+## 📁 주요 소스 코드 구조
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+- `force-app/main/default/classes/`: Apex 컨트롤러 및 서비스 클래스 (거리 기반 리드 배정, 자동 공유 등)
+- `force-app/main/default/lwc/`: Lightning Web Components (고객용 Experience Cloud 대시보드 컴포넌트)
+- `force-app/main/default/triggers/`: 자동화 트랜잭션 트리거 로직
+
+*본 코드는 표준 Salesforce DX (SFDX) 프로젝트 구조로 구성되어 있습니다.*
