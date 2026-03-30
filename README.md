@@ -123,7 +123,7 @@ GCP Cloud Run Jobs, GitHub Actions, Terraform을 활용한 자동화된 데이�
 
 - **주요 기능**: 자동화된 로그 생성, 컨테이너화, 스케줄링 실행, Datadog 모니터링
 - **기술 스택**: GCP (Cloud Run, Artifact Registry, Cloud Scheduler), Terraform, GitHub Actions, Datadog, Python
-- **특징**: Workload Identity Federation, IaC, CI/CD 자동화, 비용 최적화 (99.7% 절감)
+- **특징**: Workload Identity Federation, IaC, CI/CD 자동화, 비용 최적화
 
 [📖 자세히 보기 →](./multicloud-devsecops/README.md)
 
