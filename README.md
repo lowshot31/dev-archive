@@ -170,33 +170,18 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ```
 .
-├── Pre_home/               # 유기농 유제품 홈페이지 (프론트엔드)
-│   ├── static/             # CSS, JS, 이미지
-│   └── templates/          # HTML 템플릿
-├── Pre_Dev/                # Salesforce CRM 백엔드 및 포털
-│   ├── force-app/          # Salesforce 소스 코드
-│   │   ├── classes/        # Apex 클래스 (30개)
-│   │   ├── lwc/            # Lightning 웹 컴포넌트 (15개)
-│   │   └── triggers/       # Apex 트리거 (2개)
-│   └── 문서정리/            # 프로젝트 문서
-│       ├── Salesforce_ERD.md
-│       ├── Custom_Apex_Classes_Documentation.md
-│       └── Lead_Required_Fields_and_Duplicate_Rules.md
-├── Global_in/              # 웹 크롤링 및 카테고리 관리
-│   ├── project_crawling/   # 카테고리 데이터 처리
-│   └── Sell_Buy/           # (개발 예정)
-├── coinbot/                # 업비트 급등 알림 봇
-│   └── main.py             # 메인 애플리케이션
-├── gidne/                  # 투자 내비게이션 대시보드
-│   ├── index.html          # 메인 대시보드 UI
-│   ├── Gidne_Product_Definition.md  # 제품 정의서
-│   └── US STOCK DATA 데이터 소스 리스트.md
-├── multicloud-devsecops/   # GCP DevSecOps 파이프라인
-│   ├── src/                # 소스 코드
-│   ├── terraform/          # IaC 설정
-│   └── docs/               # 프로젝트 문서
-├── README.md               # 이 파일
-└── RESUME_DRAFT.md         # 이력서 초안
+├── Pre_home/                 # 유기농 유제품 홈페이지 (프론트엔드 - FastAPI)
+├── Pre_Dev/                  # Salesforce CRM 백엔드 및 포털 (Apex/LWC)
+├── crypto-cs-ai/             # 가상자산 고객 대응 워크플로우 자동화 (n8n/LLM)
+├── gstack-antigravity/       # AI 에이전트 시스템 워크플로우 및 통합 룰셋
+├── qwen-tts-integration/     # WSL2 로컬 모델 트러블슈팅 및 오디오 파이프라인
+├── Global_in/                # 외부 벤더 웹 크롤링 및 카테고리 데이터 적재 (ETL)
+├── coinbot/                  # 업비트 급등 알림 봇 (비동기 API)
+├── gidne/                    # 투자 내비게이션 대시보드 (진행중)
+├── multicloud-devsecops/     # GCP/Datadog 클라우드 인프라 모니터링 실습 (PoC)
+├── project_.md               # Pre Dairy 프로젝트 통합 기술 명세 문서 (아키텍처/Q&A)
+├── README.md                 # 포트폴리오 메인 문단 (본 파일)
+└── RESUME_DRAFT.md           # 국문 이력서 초안
 ```
 
 ---
@@ -221,25 +206,23 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 **비즈니스 임팩트**:
 
 - 외부 고객 유입부터 내부 배송망 연결까지 **엔드투엔드 파이프라인 수립**
-- 운영팀의 수기(Excel) 고객 응대 채널을 시스템화하여 **CRM 트랜잭션 전환 효율 안정화**
-- 영업-배송 간 데이터 사일로 제거 및 **팀 간 가시성(Visibility) 향상**
+- 영업 기회(Opportunity) 성공에 따른 Account 전환 시, **고객 위치 기반 최적 대리점 매핑 로직 구현**
 
 ---
 
-### 2. 클라우드 비용 최적화 및 자동화 (multicloud-devsecops)
+### 2. 클라우드 모니터링 및 인프라 연동 (multicloud-devsecops PoC)
 
-**문제 해결**: 불필요한 Always-on 클라우드 프로비저닝에 따른 과도한 유휴 리소스 비용 발생
+**학습 목표**: 클라우드 인프라(GCP) 상의 서버리스 구동 및 외부 모니터링 툴 연동 기초 습득
 
-- **해결 전략**:
-  - Cloud Run Jobs + Cloud Scheduler를 결합하여 **서버리스/온디맨드 아키텍처로 완전 전환**
-  - Terraform IaC로 인프라 구성 관리를 코드화하여 **인프라 재현성 및 배포 안정성 확보**
-  - Workload Identity Federation을 도입해 **장기 임시 키 오픈 없이 안전한 CI/CD 패스 구현**
+- **구현 내용**:
+  - Python 기반 Faker 로직을 활용한 모의(Mock) 로그 제너레이터 스크립트 작성
+  - Cloud Run (Jobs) + Cloud Scheduler를 결합하여 필요 시점에만 구동되도록 설정
+  - 생성된 모의 서버 로그를 Datadog Log Management 커스텀 메트릭으로 전송/수집
 
-**비즈니스 임팩트**:
+**학습 임팩트**:
 
-- 서버리스 및 온디맨드 전환을 통해 유휴 클라우드 인프라 **운영 비용 최소화 (비용 누수 원천 차단)**
-- CI/CD 파이프라인 자동화를 통해 매뉴얼 배포 프로세스를 걷어내고 **배포 소요 시간 대폭 단축**
-- Datadog 커스텀 메트릭 연동을 통한 **장애 조기 감지 체계 확립**
+- 상시 구동(Always-on) 인스턴스 대신 유휴 리소스 비용을 절감하는 온디맨드(On-Demand) 개념 이해
+- 외부 솔루션(Datadog)과의 연동을 통해 클라우드 파이프라인의 관측성(Observability) 기초 체득
 
 ---
 
@@ -278,24 +261,20 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ---
 
-### 5. 데이터 기반 이커머스 구축 (Global_in)
+### 5. 이커머스 상품 데이터 적재 (Global_in)
 
-**문제 해결**: 경쟁사 가격 정보 수집 및 카테고리 구조화
+**문제 해결**: 파편화된 외부 벤더의 상품 정보 수집 및 RDBMS 체계화
 
-- **크롤링 엔진** (project_crawling):
-  - 이마트/GS25/CU 3대 채널 동시 수집
-  - 계층형 카테고리 자동 생성 및 DB 저장
-  - Excel 기반 데이터 검증 시스템
-- **이커머스 플랫폼** (Sell_Buy - 개발 예정):
-  - Spring Boot 3.4 + Redis 기반 고성능 백엔드
-  - WebSocket 실시간 재고 업데이트
-  - AWS 클라우드 인프라 (S3, SQS, ECR)
+- **크롤링 및 적재 엔진**:
+  - Selenium, Pandas를 활용해 이마트/GS25/CU 웹 채널 동시 상품 수집 및 Excel 기반 중간 데이터 정제 처리
+  - 수집된 원시 데이터를 Oracle DB의 계층형 카테고리에 맞추어 파싱 후 자동 적재(Insert)
+- **로컬 플랫폼 구동 (진행 중)**:
+  - 수집된 DB 스키마를 바탕으로 Spring Boot 3.4 로컬 서버를 세팅하여 백엔드 데이터베이스 호출 구조 마련
 
-**비즈니스 임팩트**:
+**주요 성과**:
 
-- 시장 조사 시간 **수동 2주 → 자동 1시간**
-- 실시간 경쟁 가격 비교 가능
-- 데이터 기반 가격 전략 수립
+- Oracle DB와 Python(Pandas) 스크립트 간 이기종 시스템 대용량 데이터 적재(ETL) 경험 확보
+- 프론트웹의 비정형 데이터를 백엔드 가용성 데이터로 변환하는 백오피스 수준의 데이터 정제 수립 경험
 
 ---
 
@@ -334,38 +313,7 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 ---
 
-#### 2️⃣ **이벤트 드리븐 아키텍처** (multicloud-devsecops)
-
-```
-[GitHub Push]
-    ↓ webhook
-[GitHub Actions]
-    ↓ Docker Build
-[Artifact Registry]
-    ↓ Terraform Apply
-[Cloud Run Jobs]
-    ↓ Scheduled
-[Cloud Scheduler]
-    ↓ Metrics
-[Datadog Monitoring]
-```
-
-**핵심 연동 포인트**:
-
-- **GitHub ↔ GCP**: Workload Identity Federation (키리스 인증)
-- **Terraform ↔ GCP**: 선언적 인프라 관리
-- **Cloud Run ↔ Datadog**: 커스텀 메트릭 전송
-- **Cloud Scheduler ↔ Cloud Run**: Cron 기반 실행
-
-**기술적 챌린지 해결**:
-
-- 비용 폭탄: Always-on → On-demand로 전환
-- 보안: Service Account Key → WIF로 마이그레이션
-- 모니터링: Datadog Agent + API 통합
-
----
-
-#### 3️⃣ **실시간 스트리밍 아키텍처** (coinbot)
+#### 2️⃣ **실시간 스트리밍 아키텍처** (coinbot)
 
 ```
 [Upbit WebSocket API]
@@ -381,47 +329,43 @@ Garry Tan의 'gstack' 에이전트 워크플로우 시스템을 분석하고, �
 
 **핵심 연동 포인트**:
 
-- **Upbit API ↔ Python**: REST + WebSocket 하이브리드
-- **asyncio ↔ Telegram**: 비동기 메시지 전송
-- **Rate Limiter ↔ API**: 초당 요청 제한 준수
+- **Upbit API ↔ Python**: REST + WebSocket 하이브리드 통신
+- **asyncio ↔ Telegram**: 이벤트 루프를 활용한 비동기 메시지 전송
+- **Rate Limiter ↔ API**: 초당 요청 제한(Limit) 방어
 
 **기술적 챌린지 해결**:
 
-- API Limit: asyncio.sleep + 요청 큐 관리
-- 동시성: 여러 사용자 동시 처리 (async/await)
-- 안정성: 예외 처리 + 자동 재연결
+- API Limit: asyncio.sleep + 자체 요청 큐 관리 구현
+- 동시성: 비동기(async/await)를 통해 스레드 블로킹 문제 회피
+- 안정성: 네트워크 타임아웃 예외 처리 + 자체 재연결 로직
 
 ---
 
-#### 4️⃣ **ETL 파이프라인 아키텍처** (Global_in)
+#### 3️⃣ **데이터 파이프라인 (ETL) 연동** (Global_in)
 
 ```
-[웹사이트 (이마트/GS25/CU)]
-    ↓ Selenium
-[크롤링 엔진]
-    ↓ Pandas
-[데이터 변환]
-    ↓ openpyxl
-[Excel 검증]
-    ↓ Oracle DB
-[데이터 웨어하우스]
-    ↓ Spring Boot API
-[이커머스 플랫폼]
+[웹사이트 (이마트/GS25 등)]
+    ↓ Selenium 크롤링
+[Pandas 데이터 정제]
+    ↓ Excel 1차 검증
+[Oracle DB 계층형 적재]
+    ↓ MyBatis/JPA
+[Spring Boot 서버 연동]
 ```
 
-- **Focus**: 이기종 시스템(Oracle DB, Redis)을 관통하며 대용량 크롤링 상품 데이터를 안정적으로 적재하는 ETL 아키텍처.
+- **Focus**: 프론트엔드 크롤링 데이터를 RDBMS(Oracle)의 테이블 정규화 구조에 적재하고, Spring 애플리케이션에서 이를 API로 꺼내 쓸 수 있도록 잇는 기초 백엔드 파이프라인 구현 경험.
 
 ---
 
-#### 5️⃣ **다중 API 결합 운영 자동화 파이프라인** (Crypto CS AI)
+#### 4️⃣ **다중 API 결합 운영 자동화 채널** (Crypto CS AI)
 
 ```
-[CS 자연어 입력] → [Ollama LLM (Intent/JSON Regex Parsing)] 
-                                ↓ (Intent Switch/Router)
-[Etherscan V2 API 조회] ↔ [n8n Automation Engine] → [Slack Webhook 자동 전송]
+[자연어 입력] → [Ollama LLM (Intent / Regex Parsing)] 
+                            ↓ 조건 분기점 (Router)
+[Etherscan V2 온체인 조회] ↔ [n8n 엔진] → [Slack Webhook 알림]
 ```
 
-- **Focus**: 단순 대화를 넘어 검증된 API 통신(Etherscan)을 경유하여 비즈니스 가치 판단 및 슬랙 알림까지 End-to-End 오케스트레이션 수행.
+- **Focus**: 단순 단일 스크립트를 넘어, 내부 정규표현식 검증, REST API 통신(Etherscan 연동), 슬랙 통합 알림까지 오작동 없이 흘러가도록 다중 워크플로우를 오케스트레이션.
 
 ---
 
