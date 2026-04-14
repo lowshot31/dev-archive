@@ -1,5 +1,5 @@
 {
-  "name": "My workflow",
+  "name": "Crypto CS Agent",
   "nodes": [
     {
       "parameters": {
@@ -16,7 +16,7 @@
         1488
       ],
       "id": "0dac4c6e-800e-4368-9fd6-325a3e7a1ab5",
-      "name": "Edit Fields"
+      "name": "Prepare Agent Input"
     },
     {
       "parameters": {
@@ -39,7 +39,7 @@
         1488
       ],
       "id": "1d5bdb1f-a06a-4cf6-869f-4ad4b138905c",
-      "name": "Edit Fields1"
+      "name": "Capture Raw Input"
     },
     {
       "parameters": {
@@ -289,7 +289,7 @@
         1616
       ],
       "id": "36ff95c7-b14e-4eb7-adcb-c2e8d8930c49",
-      "name": "Execute a SQL query",
+      "name": "DB Insert Case",
       "credentials": {
         "postgres": {
           "id": "BrXyaMS30DeC21AE",
@@ -349,7 +349,7 @@
         2192
       ],
       "id": "ea068d7e-1340-4dc7-be81-d451d8856f68",
-      "name": "HTTP Request"
+      "name": "Slack Update Status"
     },
     {
       "parameters": {
@@ -362,7 +362,7 @@
         2144
       ],
       "id": "aaf3713a-5765-47b5-a367-7ae2d6e4badf",
-      "name": "AI Agent"
+      "name": "Slot Filling Agent"
     },
     {
       "parameters": {
@@ -375,7 +375,7 @@
         2400
       ],
       "id": "f8922476-4539-471e-85f1-29acc0935b1b",
-      "name": "Ollama Chat Model1",
+      "name": "Ollama (Slot Filling)",
       "credentials": {
         "ollamaApi": {
           "id": "sdUObMv5AnURmDiB",
@@ -398,7 +398,7 @@
         1184
       ],
       "id": "aed790d9-246a-4d02-8dff-79cddb44aed4",
-      "name": "AI Agent1"
+      "name": "CS Agent (ReAct)"
     },
     {
       "parameters": {
@@ -412,7 +412,7 @@
         1504
       ],
       "id": "30481d6b-f663-4508-a5bf-c4ea859f8028",
-      "name": "Ollama Chat Model2",
+      "name": "Ollama (CS Agent)",
       "credentials": {
         "ollamaApi": {
           "id": "sdUObMv5AnURmDiB",
@@ -429,7 +429,7 @@
         1504
       ],
       "id": "56b4a054-9868-4c1b-a4f7-d4d061468bdf",
-      "name": "Simple Memory"
+      "name": "Conversation Memory"
     },
     {
       "parameters": {
@@ -475,7 +475,7 @@
         1808
       ],
       "id": "ac574168-c705-4199-82ee-e2526fa556f1",
-      "name": "Qdrant Vector Store1",
+      "name": "Qdrant FAQ Store",
       "credentials": {
         "qdrantApi": {
           "id": "bLM9viP4CXkrPQ0O",
@@ -494,7 +494,7 @@
         1952
       ],
       "id": "07b9f96c-238c-40bb-973b-8eb42844e2d8",
-      "name": "Embeddings Ollama1",
+      "name": "BGE-M3 Embeddings",
       "credentials": {
         "ollamaApi": {
           "id": "sdUObMv5AnURmDiB",
@@ -514,7 +514,7 @@
         1920
       ],
       "id": "b9391a76-f266-4015-935e-9055244c02ef",
-      "name": "Ollama Chat Model3",
+      "name": "Ollama (RAG)",
       "credentials": {
         "ollamaApi": {
           "id": "sdUObMv5AnURmDiB",
@@ -567,7 +567,7 @@
         1504
       ],
       "id": "34769c5f-df7f-4cca-ac2b-cc0eefc869a0",
-      "name": "If1"
+      "name": "Is Escalation?"
     },
     {
       "parameters": {
@@ -609,7 +609,7 @@
   ],
   "pinData": {},
   "connections": {
-    "Edit Fields": {
+    "Prepare Agent Input": {
       "main": [
         [
           {
@@ -620,7 +620,7 @@
         ]
       ]
     },
-    "Edit Fields1": {
+    "Capture Raw Input": {
       "main": [
         [
           {
@@ -635,7 +635,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields1",
+            "node": "Capture Raw Input",
             "type": "main",
             "index": 0
           }
@@ -657,7 +657,7 @@
       "main": [
         [
           {
-            "node": "AI Agent1",
+            "node": "CS Agent (ReAct)",
             "type": "main",
             "index": 0
           }
@@ -668,7 +668,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
+            "node": "Prepare Agent Input",
             "type": "main",
             "index": 0
           }
@@ -731,7 +731,7 @@
             "index": 0
           },
           {
-            "node": "HTTP Request",
+            "node": "Slack Update Status",
             "type": "main",
             "index": 0
           }
@@ -770,7 +770,7 @@
         ]
       ]
     },
-    "Execute a SQL query": {
+    "DB Insert Case": {
       "main": [
         [
           {
@@ -785,40 +785,40 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Slack Update Status",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Ollama Chat Model1": {
+    "Ollama (Slot Filling)": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent",
+            "node": "Slot Filling Agent",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Ollama Chat Model2": {
+    "Ollama (CS Agent)": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent1",
+            "node": "CS Agent (ReAct)",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Simple Memory": {
+    "Conversation Memory": {
       "ai_memory": [
         [
           {
-            "node": "AI Agent1",
+            "node": "CS Agent (ReAct)",
             "type": "ai_memory",
             "index": 0
           }
@@ -829,7 +829,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent1",
+            "node": "CS Agent (ReAct)",
             "type": "ai_tool",
             "index": 0
           }
@@ -840,14 +840,14 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent1",
+            "node": "CS Agent (ReAct)",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Qdrant Vector Store1": {
+    "Qdrant FAQ Store": {
       "ai_vectorStore": [
         [
           {
@@ -858,18 +858,18 @@
         ]
       ]
     },
-    "Embeddings Ollama1": {
+    "BGE-M3 Embeddings": {
       "ai_embedding": [
         [
           {
-            "node": "Qdrant Vector Store1",
+            "node": "Qdrant FAQ Store",
             "type": "ai_embedding",
             "index": 0
           }
         ]
       ]
     },
-    "Ollama Chat Model3": {
+    "Ollama (RAG)": {
       "ai_languageModel": [
         [
           {
@@ -880,7 +880,7 @@
         ]
       ]
     },
-    "AI Agent1": {
+    "CS Agent (ReAct)": {
       "main": [
         [
           {
@@ -895,14 +895,14 @@
       "main": [
         [
           {
-            "node": "If1",
+            "node": "Is Escalation?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "If1": {
+    "Is Escalation?": {
       "main": [
         [
           {
@@ -922,7 +922,7 @@
             "index": 0
           },
           {
-            "node": "Execute a SQL query",
+            "node": "DB Insert Case",
             "type": "main",
             "index": 0
           }
