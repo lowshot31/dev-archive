@@ -1,0 +1,145 @@
+{
+  "name": "FAQ Ingestion",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d9dadfbc-960b-4085-9399-906371a784a3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const faq = [\n  // === 입금 (Deposit) ===\n  { title: \"입금 미반영\", category: \"deposit\", text: \"블록체인 네트워크 컨펌 수에 따라 반영 시간이 다릅니다. BTC: 2컨펌(약20분), ETH/ERC-20: 12컨펌(약3분), BSC/BEP-20: 15컨펌(약1분), SOL: 32컨펌(약15초), XRP: 즉시(태그 누락 시 수동처리). 컨펌 완료 후에도 미반영 시 TX Hash와 함께 고객센터에 문의해 주세요.\" },\n  { title: \"EVM 호환 체인 간 오입금 복구\", category: \"deposit\", text: \"ETH, BSC, Polygon, Arbitrum, Optimism 등 EVM 호환 체인 간 오입금은 복구 가능합니다. 동일 주소에서 해당 네트워크로 접속하여 자산을 회수할 수 있으며, 거래소 지갑인 경우 기술팀 검토 후 복구 처리됩니다. 처리 기간: 영업일 기준 3~7일. 복구 수수료가 발생할 수 있습니다.\" },\n  { title: \"비EVM 체인 오입금\", category: \"deposit\", text: \"Solana, XRP, Cosmos(ATOM), Cardano(ADA) 등 비EVM 체인으로의 오입금은 주소 체계가 완전히 다르기 때문에 복구가 불가능한 경우가 대부분입니다. 입금 전 반드시 네트워크를 확인해 주세요.\" },\n  { title: \"메모/태그 누락 입금\", category: \"deposit\", text: \"XRP, XLM, ATOM, EOS 등 메모(태그) 기반 코인은 메모 누락 시 자동 반영이 되지 않습니다. TX Hash와 보낸 주소를 고객센터에 전달해 주시면 수동 반영 처리됩니다. 처리 기간: 영업일 기준 1~3일.\" },\n  { title: \"최소 입금 금액\", category: \"deposit\", text: \"각 코인별 최소 입금 금액이 있습니다. 최소 금액 미만 입금 시 잔고에 반영되지 않으며 복구가 불가능합니다. BTC: 0.0001 BTC, ETH: 0.001 ETH, USDT(ERC-20): 1 USDT, USDT(TRC-20): 1 USDT. 정확한 최소 금액은 입금 페이지에서 확인해 주세요.\" },\n  { title: \"입금 주소 변경\", category: \"deposit\", text: \"보안상의 이유로 입금 주소가 변경될 수 있습니다. 입금 전 항상 최신 입금 주소를 확인해 주세요. 이전 입금 주소로 보낸 자산은 정상 반영되지만, 신규 입금 시에는 반드시 현재 표시된 주소를 사용해야 합니다.\" },\n\n  // === 출금 (Withdrawal) ===\n  { title: \"출금 처리 지연\", category: \"withdrawal\", text: \"출금은 보안 검증 절차를 거칩니다. 소액(100만원 미만): 자동처리 5~30분, 대액(100만원 이상): 수동검토 1~2시간, 고액(5000만원 이상): AML 검토 영업일 1~3일. 24시간 이상 지연 시 고객센터로 문의해 주세요.\" },\n  { title: \"출금 주소 오류\", category: \"withdrawal\", text: \"블록체인 특성상 이미 전송된 트랜잭션은 취소가 불가능합니다. 잘못된 주소가 실존하는 주소인 경우 자산 복구가 불가능합니다. 출금 전 반드시 주소를 재확인하고, 소액 테스트 전송을 권장합니다.\" },\n  { title: \"출금 한도 및 레벨\", category: \"withdrawal\", text: \"인증 레벨에 따라 출금 한도가 다릅니다. Level 1(이메일): 일 100만원, Level 2(본인인증): 일 5000만원, Level 3(추가서류): 일 10억원. 한도 상향을 위해서는 추가 인증이 필요합니다.\" },\n  { title: \"출금 취소\", category: \"withdrawal\", text: \"블록체인에 브로드캐스트되기 전(대기 상태)의 출금은 취소 가능합니다. 출금 내역에서 '취소' 버튼을 클릭해 주세요. 이미 네트워크에 전파된 트랜잭션은 취소할 수 없습니다.\" },\n\n  // === 거래 (Trading) ===\n  { title: \"주문 미체결\", category: \"trading\", text: \"지정가 주문은 시장 가격이 지정 가격에 도달해야 체결됩니다. 시장가 주문을 사용하면 즉시 체결되지만, 유동성이 낮은 코인은 슬리피지가 발생할 수 있습니다. 미체결 주문은 주문 내역에서 언제든 취소 가능합니다.\" },\n  { title: \"수수료 체계\", category: \"trading\", text: \"현물 거래 기본 수수료: Maker 0.1%, Taker 0.2%. VIP 등급별 30일 거래량 기준 최대 50% 할인. 거래소 자체 토큰으로 수수료 결제 시 25% 추가 할인이 적용됩니다.\" },\n  { title: \"슬리피지란\", category: \"trading\", text: \"슬리피지는 주문 시점과 실제 체결 시점의 가격 차이를 말합니다. 시장가 주문 시 발생하며, 유동성이 낮거나 변동성이 큰 시장에서 더 크게 나타납니다. 슬리피지를 줄이려면 지정가 주문 사용을 권장합니다.\" },\n  { title: \"마켓 오더 vs 리밋 오더\", category: \"trading\", text: \"마켓 오더(시장가)는 현재 시장 최적가로 즉시 체결되며, 리밋 오더(지정가)는 사용자가 원하는 가격에 도달할 때 체결됩니다. 급등락 장에서는 지정가 주문이 보호 수단이 됩니다.\" },\n\n  // === 계정/보안 (Account & Security) ===\n  { title: \"2FA 분실\", category: \"security\", text: \"본인 확인 절차를 통해 2FA를 초기화할 수 있습니다. 필요 서류: 신분증 사진, 셀피(신분증 들고 촬영), 가입 이메일에서 보낸 초기화 요청 메일. 처리 기간: 영업일 기준 1~3일. 초기화 후 24시간 출금 제한됩니다.\" },\n  { title: \"계정 잠김\", category: \"security\", text: \"비밀번호 5회 이상 오입력 시 자동 잠금. 30분 후 자동 해제되며, 즉시 해제를 원하시면 등록된 이메일로 비밀번호 재설정을 진행해 주세요.\" },\n  { title: \"해킹 의심 대응\", category: \"security\", text: \"즉시 고객센터에 연락하여 계정 동결을 요청해 주세요. 조치 순서: 1)계정동결 2)비밀번호변경 3)2FA재설정 4)API키 전체 삭제 5)접속기록 확인. 24시간 긴급 대응 전용 이메일: security@exchange.com\" },\n  { title: \"피싱/스캠 주의\", category: \"security\", text: \"거래소는 절대로 DM이나 이메일로 비밀번호, OTP, 시드구문을 요구하지 않습니다. 공식 URL(https://로 시작)을 항상 확인하세요. 에어드롭이나 이벤트를 사칭한 피싱 사이트에 주의하세요. 의심스러운 링크는 절대 클릭하지 마세요.\" },\n  { title: \"API 키 보안\", category: \"security\", text: \"API키 권한: Read(조회), Trade(주문), Withdraw(출금, IP Whitelist 필수). 보안을 위해 필요한 최소 권한만 부여하고, 반드시 IP Whitelist를 설정하세요. 미사용 API 키는 즉시 삭제하고, 키를 공개 저장소에 노출하지 마세요.\" },\n\n  // === KYC/AML (규제) ===\n  { title: \"KYC 인증 거부\", category: \"kyc\", text: \"거부 사유 확인 후 재제출해 주세요. 일반적 거부 사유: 신분증 사진 흐릿, 셀피 얼굴 가려짐, 서류 유효기간 만료, 이름 불일치(영문/한글). 재제출은 즉시 가능하며 재심사는 영업일 1~2일 소요됩니다.\" },\n  { title: \"여행규칙(Travel Rule)\", category: \"kyc\", text: \"2025년부터 시행된 가상자산 여행규칙에 따라, 100만원 이상의 가상자산 전송 시 송신자와 수신자의 실명 정보(이름, 주소)가 함께 전송됩니다. 미등록 지갑(개인지갑)으로 전송 시 추가 본인확인이 필요할 수 있습니다.\" },\n  { title: \"해외 거주자 이용\", category: \"kyc\", text: \"FATF 고위험 국가 거주자는 서비스 이용이 제한됩니다. 그 외 해외 거주 한국인은 KYC Level 2 인증 완료 시 이용 가능합니다. 일부 국가에서는 현지 법규에 따라 추가 제한이 적용될 수 있습니다.\" },\n\n  // === 네트워크별 가이드 ===\n  { title: \"이더리움(ETH) 입출금 가이드\", category: \"network\", text: \"이더리움은 ERC-20 네트워크를 사용합니다. 가스비가 높을 때는 Layer2(Arbitrum, Optimism)를 이용하면 수수료를 절약할 수 있습니다. ERC-20 토큰 입금 시 반드시 ETH 네트워크를 선택해 주세요. BSC(BEP-20)로 보내면 오입금이 됩니다.\" },\n  { title: \"BSC(BNB Chain) 입출금 가이드\", category: \"network\", text: \"BSC는 BEP-20 네트워크를 사용합니다. 이더리움과 주소 형식이 동일(0x...)하지만 별개의 네트워크입니다. 입금 시 반드시 BNB Smart Chain(BEP-20) 네트워크를 선택해 주세요. 가스비가 매우 저렴하여 소액 전송에 유리합니다.\" },\n  { title: \"솔라나(SOL) 입출금 가이드\", category: \"network\", text: \"솔라나는 독자적인 주소 체계를 사용합니다. SPL 토큰 입금 시 해당 토큰의 입금 주소를 정확히 확인해 주세요. 솔라나 네트워크 혼잡 시 트랜잭션 실패가 발생할 수 있으며, 이 경우 자산은 원래 지갑으로 반환됩니다.\" },\n\n  // === 스테이킹/DeFi ===\n  { title: \"스테이킹이란\", category: \"staking\", text: \"스테이킹은 보유한 가상자산을 네트워크 검증에 참여시켜 보상을 받는 것입니다. 거래소 스테이킹은 별도의 기술적 설정 없이 간편하게 참여할 수 있습니다. 연이율(APY)은 코인과 네트워크 상황에 따라 변동됩니다.\" },\n  { title: \"스테이킹 해제(언스테이킹)\", category: \"staking\", text: \"스테이킹 해제 시 언본딩 기간이 있습니다. ETH: 약 1~5일, ATOM: 21일, DOT: 28일. 언본딩 기간 중에는 자산을 거래하거나 출금할 수 없습니다. 긴급 출금이 필요한 경우 사전에 언스테이킹을 진행해 주세요.\" },\n\n  // === API ===\n  { title: \"API Rate Limit\", category: \"api\", text: \"API 호출 제한: 초당 10회, 분당 300회. 제한 초과 시 429(Too Many Requests) 에러가 반환됩니다. WebSocket을 활용하면 실시간 데이터를 효율적으로 수신할 수 있습니다. 대량 데이터 조회 시 페이지네이션을 활용해 주세요.\" },\n\n  // === 지갑/콜드월렛 ===\n  { title: \"콜드월렛 정책\", category: \"wallet\", text: \"거래소 자산의 95% 이상은 인터넷에 연결되지 않은 콜드월렛에 보관됩니다. 대규모 출금 요청 시 콜드월렛에서 핫월렛으로 자산 이동이 필요하여 처리 시간이 길어질 수 있습니다. 이는 고객 자산 보호를 위한 보안 조치입니다.\" },\n  { title: \"내부 전송 vs 온체인 전송\", category: \"wallet\", text: \"같은 거래소 회원 간 전송은 내부 전송으로 처리되어 수수료가 무료이고 즉시 반영됩니다. 외부 지갑이나 다른 거래소로 전송하는 경우 온체인 트랜잭션이 발생하며 네트워크 수수료가 부과됩니다.\" }\n];\n\nreturn faq.map((item, i) => ({\n  json: {\n    text: `[${item.category}] ${item.title}: ${item.text}`,\n    metadata: { source: 'crypto-exchange-faq', chunk_index: i, title: item.title, category: item.category }\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5dfdcb19-24dc-4d1a-bc0b-0b6f676b4064",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "crypto-faq-v3",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "63854b69-8bc7-4713-ad96-03a03f7fa8d7",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "bLM9viP4CXkrPQ0O",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "bge-m3:latest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        464,
+        208
+      ],
+      "id": "19a197ba-320b-40a2-b180-92325a2072e4",
+      "name": "Embeddings Ollama",
+      "credentials": {
+        "ollamaApi": {
+          "id": "sdUObMv5AnURmDiB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        208
+      ],
+      "id": "dbefa002-7c12-4d70-8c44-cb1ece5e7767",
+      "name": "Default Data Loader"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f02a9b3a-aeae-4980-8363-16d9219a91d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "77cd163b0e0d96eee01d3915a4dcec3e20bd080dd1fffc00572196a95ad3c9d3"
+  },
+  "id": "aZz4b3rGQu78wdJO",
+  "tags": []
+}

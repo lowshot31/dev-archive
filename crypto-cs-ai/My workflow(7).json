@@ -1,0 +1,956 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3728,
+        1488
+      ],
+      "id": "0dac4c6e-800e-4368-9fd6-325a3e7a1ab5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89c811de-2c8f-4735-afc2-d6c4279f635a",
+              "name": "raw_text",
+              "value": "={{ $json.chatInput }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4160,
+        1488
+      ],
+      "id": "1d5bdb1f-a06a-4cf6-869f-4ad4b138905c",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SLACK_BOT_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify($json.slackPayload) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2528,
+        1456
+      ],
+      "id": "f32f3fb5-a459-4296-8a59-a9af63962ff6",
+      "name": "Slack CS Alert"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -4400,
+        1488
+      ],
+      "id": "f7ed824a-17bb-49cb-a349-7c1faf5283e9",
+      "name": "When chat message received",
+      "webhookId": "3be684c6-1a3a-42cf-919c-381aaa3d3d65"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.raw_text || $json.masked || '';\n\n// 1. EVM 해시 (0x + 64자리 hex)\nconst evmMatch = text.match(/0x[a-fA-F0-9]{64}/);\nif (evmMatch) {\n  return [{ json: { ...$json, prefill_txid: evmMatch[0] } }];\n}\n\n// 2. Non-EVM 해시 (공백 또는 텍스트 경계로 구분된 40~88자리 영숫자)\nconst nonEvmMatch = text.match(/(?:^|\\s)([a-zA-Z0-9]{40,88})(?:\\s|$)/);\nif (nonEvmMatch) {\n  return [{ json: { ...$json, prefill_txid: nonEvmMatch[1] } }];\n}\n\n// 3. 못 찾으면 null\nreturn [{ json: { ...$json, prefill_txid: null } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3568,
+        1488
+      ],
+      "id": "8969aa5a-8c0e-4f69-8f06-c8ba741dc57d",
+      "name": "Extract Txid"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.raw_text ?? $json.chatInput ?? '';\n\n// 이메일 정규식\nlet masked = raw.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi, '[MASKED_EMAIL]');\n\n// 전화번호 정규식 고도화 (앞뒤로 알파벳이 붙어있는 해시값 내부의 숫자는 무시)\nmasked = masked.replace(/(?<![a-zA-Z0-9])(\\+?\\d{1,3}[-.\\s]?)?(\\(?\\d{2,4}\\)?[-.\\s]?)\\d{3,4}[-.\\s]?\\d{4}(?![a-zA-Z0-9])/g, '[MASKED_PHONE]');\n\nreturn [{ json: { ...$json, masked } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3952,
+        1488
+      ],
+      "id": "0c933d6b-8edf-4c3a-9e10-506d61fa1316",
+      "name": "Mask PII"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "38780654-e949-48cf-b375-218ddcdcc21b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -4432,
+        2384
+      ],
+      "id": "14c6ec57-9487-4690-a3fb-16353aa168aa",
+      "name": "Webhook",
+      "webhookId": "38780654-e949-48cf-b375-218ddcdcc21b"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\n\n// payload가 문자열로 들어오는 케이스 처리\nlet p = body.payload ?? body;\n\nif (typeof p === \"string\") {\n  p = JSON.parse(p);\n}\n\n// 그래도 payload=... 형태(문자열)면 여기로 들어올 수 있음\nif (typeof p === \"object\" && typeof p.payload === \"string\") {\n  p = JSON.parse(p.payload);\n}\n\nconst action = p.actions?.[0];\nif (!action) {\n  throw new Error(`No action found. type=${typeof p} keys=${Object.keys(p).join(\",\")}`);\n}\n\nreturn [{\n  json: {\n    action_id: action.action_id,\n    case_id: action.value,\n    user_id: p.user?.id,\n    channel_id: p.channel?.id,\n    message_ts: p.message?.ts,\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4224,
+        2384
+      ],
+      "id": "459f0ab3-da85-4401-ad62-92e020c4fabc",
+      "name": "Parse Slack Action"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "523c3506-8291-47dc-9e63-24edbd7789ef",
+                    "leftValue": "={{ $json.action_id }}",
+                    "rightValue": "case_resolve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "resolve"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6ed7ac78-9416-4d88-9b34-75df108d8109",
+                    "leftValue": "={{ $json.action_id }}",
+                    "rightValue": "case_escalate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "escalate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a1fa71d8-e6d4-4a92-a42b-31d9095d5020",
+                    "leftValue": "={{ $json.action_id }}",
+                    "rightValue": "case_assign",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "case_assign"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -3952,
+        2368
+      ],
+      "id": "7ca59296-4816-4c15-aaf7-4ce9962dc61d",
+      "name": "Escalation Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    ...$json,\n    statusText: \"RESOLVED\",\n    assigneeText: `<@${$json.user_id}>`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3728,
+        2208
+      ],
+      "id": "f54679a8-5323-44c0-8184-beb3267c63f2",
+      "name": "Resolve"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    ...$json,\n    statusText: \"IN_PROGRESS\",\n    assigneeText: `<@${$json.user_id}>`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3728,
+        2560
+      ],
+      "id": "3ed4c1bf-778a-4ff5-891f-e270a1827e43",
+      "name": "Assign"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    ...$json,\n    statusText: \"ESCALATED\",\n    assigneeText: `<@${$json.user_id}>`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3728,
+        2384
+      ],
+      "id": "650ebbc0-b336-48f9-a819-185360a45e44",
+      "name": "Escalate"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO cases (case_id, intent, coin, network, txid, onchain_status, action)\nVALUES ($1, $2, $3, $4, $5, $6, $7)\n",
+        "options": {
+          "queryReplacement": "=={{ $json.case_id || 'N/A' }},{{ $json.intent || 'other' }},{{ $json.coin || 'N/A' }},{{ $json.network || 'unknown' }},{{ $json.txid || 'N/A' }},{{ $json.onchain_status || 'unknown' }},{{ $json.action || 'manual_review' }}\n"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2512,
+        1616
+      ],
+      "id": "36ff95c7-b14e-4eb7-adcb-c2e8d8930c49",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "BrXyaMS30DeC21AE",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE cases\nSET \n    status = $1, \n    assignee_slack_user_id = $2,\n    slack_channel_id = COALESCE(slack_channel_id, $3),\n    slack_message_ts = COALESCE(slack_message_ts, $4)\nWHERE case_id = $5\nRETURNING *;\n",
+        "options": {
+          "queryReplacement": "=={{ $json.statusText || 'OPEN' }},{{ $json.user_id || 'N/A' }},{{ $json.channel_id || 'N/A' }},{{ $json.message_ts || 'N/A' }},{{ $json.case_id || 'ERROR' }}\n"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3280,
+        2384
+      ],
+      "id": "256ce17f-2a02-475e-98b4-3f75f092b0b5",
+      "name": "DB Update",
+      "credentials": {
+        "postgres": {
+          "id": "BrXyaMS30DeC21AE",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.update",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SLACK_BOT_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  channel: $json.channel_id,\n  ts: $json.message_ts,\n  text: \"case updated\",\n  blocks: [\n    { type: \"header\", text: { type: \"plain_text\", text: `${$json.case_id} | ${$json.statusText}` } },\n    { type: \"section\", text: { type: \"mrkdwn\", text: `Assignee: ${$json.assigneeText}` } }\n  ]\n}) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -3104,
+        2192
+      ],
+      "id": "ea068d7e-1340-4dc7-be81-d451d8856f68",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -4096,
+        2144
+      ],
+      "id": "aaf3713a-5765-47b5-a367-7ae2d6e4badf",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -4112,
+        2400
+      ],
+      "id": "f8922476-4539-471e-85f1-29acc0935b1b",
+      "name": "Ollama Chat Model1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "sdUObMv5AnURmDiB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ $json.masked }}",
+        "options": {
+          "systemMessage": "당신은 글로벌 톱티어 암호화폐 거래소의 1선 CS 자동화 에이전트입니다. 반드시 한국어 존댓말로 대답하세요.\n\n[TOOL USAGE RULE]\n유저가 txid(해시값)를 제공하면, 즉시 check_onchain_status 도구를 호출하여 백엔드에서 실제로 상태를 조회해야 합니다. 절대 유저에게 직접 블록 탐색기에서 확인하라고 떠넘기지 마십시오.\n\n[ANTI-HALLUCINATION RULE]\n유저가 0x로 시작하지 않는 해시를 입력했을 때, 절대로 해시 앞에 0x를 임의로 덧붙이지 마십시오. 유저가 입력한 원본 문자열을 그대로 유지하십시오.\n\n[CRITICAL INSTRUCTION]\n최종 답변 작성 시 반드시 아래 구조를 지키십시오.\n\n[THOUGHTS]\n이곳에 당신의 추론 과정을 영어로 자유롭게 쓰십시오.\n[ANSWER]\n오직 유저에게 노출될 자연스럽고 친절한 한국어 상담 답변만 작성하십시오.\n[ACTION]\n온체인 확인 불가 체인이거나 입금 성공인데 거래소 미반영이면 ESCALATE, 그 외에는 NONE\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -3408,
+        1184
+      ],
+      "id": "aed790d9-246a-4d02-8dff-79cddb44aed4",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "qwen3:8b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -3408,
+        1504
+      ],
+      "id": "30481d6b-f663-4508-a5bf-c4ea859f8028",
+      "name": "Ollama Chat Model2",
+      "credentials": {
+        "ollamaApi": {
+          "id": "sdUObMv5AnURmDiB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -3312,
+        1504
+      ],
+      "id": "56b4a054-9868-4c1b-a4f7-d4d061468bdf",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Fetch on-chain transaction receipt status for Ethereum, BSC, Polygon, Arbitrum, Optimism, and Base. When a user provides a txid, you MUST use this tool. You must pass both the network and txid separated by a comma (e.g., 'ethereum,0x123...' or 'polygon,0x123...'). If the network is not explicitly mentioned by the user, default to 'ethereum'.",
+        "jsCode": "// 1. 네트워크와 해시 분리\nconst parts = query.split(',');\nconst rawNetwork = (parts[0] || 'ethereum').toLowerCase().trim();\nlet txid = (parts[1] || query).replace(/['\"]/g, '').trim();\n\n// 2. 0x 없이 64자리 hex만 넣은 경우 자동 복구\nif (!txid.startsWith('0x') && /^[a-fA-F0-9]{64}$/.test(txid)) {\n  txid = '0x' + txid;\n}\n\n// 3. EVM 포맷 정규식 검사 (0x + 정확히 64자리 16진수)\nconst isEvmFormat = /^0x[a-fA-F0-9]{64}$/.test(txid);\n\nif (!isEvmFormat) {\n  // [INTERNAL_DIRECTIVE] LLM에게 내리는 내부 지시. 유저에게 이 문장 그대로 노출 금지.\n  return \"[INTERNAL_DIRECTIVE] Non-EVM hash detected. DO NOT show this message to user. Instead: 1) Identify network from hash (Solana=base58 88chars, BTC=64hex). 2) In [ANSWER], respond in Korean: guide user to appropriate explorer (Solscan for Solana, Blockchain.com for BTC). 3) Tell user CS team has been notified for manual processing. 4) Set [ACTION] to ESCALATE.\";\n}\n\n// 4. 네트워크 -> Chain ID 라우팅\nconst chainMap = {\n  \"ethereum\": 1,\n  \"bsc\": 56,\n  \"polygon\": 137,\n  \"optimism\": 10,\n  \"arbitrum\": 42161,\n  \"base\": 8453\n};\nconst chainId = chainMap[rawNetwork] || 1;\n\n// 5. Etherscan V2 API 호출\nconst url = `https://api.etherscan.io/v2/api?chainid=${chainId}&module=transaction&action=gettxreceiptstatus&txhash=${txid}&apikey=YOUR_ETHERSCAN_API_KEY`;\n\ntry {\n  const response = await this.helpers.request(url);\n  const data = JSON.parse(response);\n\n  if (data.status === \"1\" && data.result && data.result.status === \"1\") {\n    return `On-chain (${rawNetwork}): Confirmed. Exchange has not credited yet.`;\n  } else if (data.status === \"1\" && data.result && data.result.status === \"0\") {\n    return `On-chain (${rawNetwork}): Transaction Failed.`;\n  } else {\n    return `On-chain (${rawNetwork}): Pending or Not Found.`;\n  }\n} catch (e) {\n  return `On-chain API Error (${rawNetwork}): ` + e.message;\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        -3264,
+        1008
+      ],
+      "id": "2492afbf-84aa-461d-bba2-a4a2f2800c85",
+      "name": "check_onchain_status"
+    },
+    {
+      "parameters": {
+        "description": "입금 정책, 수수료, 지원 네트워크, 입금 소요 시간 등 암호화폐 거래소 규정에 관한 질문이 들어오면 반드시 이 도구를 사용해 FAQ 문서를 검색하세요."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        -3344,
+        1712
+      ],
+      "id": "c65ed9ba-9bf0-408c-806a-0d304c6a51d7",
+      "name": "search_faq"
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "crypto-faq-v3",
+          "mode": "list",
+          "cachedResultName": "crypto-faq-v3"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        -3104,
+        1808
+      ],
+      "id": "ac574168-c705-4199-82ee-e2526fa556f1",
+      "name": "Qdrant Vector Store1",
+      "credentials": {
+        "qdrantApi": {
+          "id": "bLM9viP4CXkrPQ0O",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "bge-m3:latest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        -3104,
+        1952
+      ],
+      "id": "07b9f96c-238c-40bb-973b-8eb42844e2d8",
+      "name": "Embeddings Ollama1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "sdUObMv5AnURmDiB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "qwen3:8b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -3296,
+        1920
+      ],
+      "id": "b9391a76-f266-4015-935e-9055244c02ef",
+      "name": "Ollama Chat Model3",
+      "credentials": {
+        "ollamaApi": {
+          "id": "sdUObMv5AnURmDiB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawText = $json.output || \"\";\n\nlet answer = rawText;\nlet action = \"NONE\";\n\ntry {\n  if (rawText.includes('[ANSWER]')) {\n    answer = rawText.split('[ANSWER]')[1].split('[ACTION]')[0].trim();\n  }\n\n  if (rawText.includes('[ACTION]')) {\n    const actionRaw = rawText.split('[ACTION]')[1].trim();\n    // 핵심 수정: ESCALATE라는 단어가 포함되어 있기만 하면 ESCALATE로 처리\n    action = actionRaw.includes('ESCALATE') ? 'ESCALATE' : 'NONE';\n  }\n} catch (e) {\n  answer = rawText;\n}\n\nreturn [{\n  json: {\n    output: answer,\n    action_type: action,\n    raw_ai_output: rawText\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3104,
+        1184
+      ],
+      "id": "fdff54f1-445c-4f0c-bcb1-13ffb0f0aaed",
+      "name": "Parse Answer"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3a1b3d63-9e0d-4573-bcdd-82667c0e621a",
+              "leftValue": "={{ $json.action_type }}",
+              "rightValue": "ESCALATE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3136,
+        1504
+      ],
+      "id": "34769c5f-df7f-4cca-ac2b-cc0eefc869a0",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agentRes = $input.first().json; // AI Agent 결과물\nconst txid = $('Extract Txid').first().json.prefill_txid || \"N/A\";\n\n// DB에 저장할 고유 케이스 번호 생성\nconst caseId = \"CS-\" + new Date().toISOString().slice(0,10).replace(/-/g,'') + \"-\" + Math.floor(Math.random()*10000);\n\n// 슬랙 Block Kit 조립 (버튼 클릭 시 Etherscan으로 바로 넘어가는 링크 기능 포함!!)\nconst blocks = [\n  {\n    type: \"header\",\n    text: { type: \"plain_text\", text: `🚨 에스컬레이션 티켓: ${caseId}` }\n  },\n  {\n    type: \"section\",\n    fields: [\n      { type: \"mrkdwn\", text: `*TxID:*\\n\\`${txid}\\`` },\n      { type: \"mrkdwn\", text: `*상태:*\\n온체인 성공 / 거래소 미반영` }\n    ]\n  },\n  {\n    type: \"section\",\n    text: { type: \"mrkdwn\", text: `*🤖 AI 상담원 리포트:*\\n${agentRes.output}` }\n  },\n  {\n    type: \"actions\",\n    elements: [\n      {\n        type: \"button\",\n        text: { type: \"plain_text\", text: \"🔍 Etherscan 조회\" },\n        url: `https://etherscan.io/tx/${txid}`, // 대표님이 원하시던 슬랙 밖 자동 스캔 링크!\n        action_id: \"btn_etherscan\"\n      },\n      {\n        type: \"button\",\n        text: { type: \"plain_text\", text: \"나에게 할당 (Assign)\" },\n        style: \"primary\",\n        value: caseId,\n        action_id: \"case_assign\"\n      }\n    ]\n  }\n];\n\nreturn [{\n  json: {\n    case_id: caseId,\n    txid: txid,\n    intent: \"deposit_delay\", // DB용 임시값\n    coin: \"ETH\",\n    network: \"ethereum\",\n    onchain_status: \"confirmed_success\",\n    action: \"manual_review\",\n    slackPayload: {\n      channel: \"C0APL681ETV\", // 대표님 예전 슬랙 채널 ID\n      text: \"새로운 CS 티켓 접수\",\n      blocks: JSON.stringify(blocks)\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2816,
+        1488
+      ],
+      "id": "9e7cdf25-c3b2-4d1d-8024-8c78c193db69",
+      "name": "Build Slack Payload"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2288,
+        1536
+      ],
+      "id": "4bd7f4bc-9647-41d8-9885-d133d0ca64b9",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const aiAnswer = $('Parse Answer').first().json.output;\nreturn [{ json: { output: aiAnswer } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2080,
+        1536
+      ],
+      "id": "d16a92ac-ae95-46c7-98b7-ac9b3fc0a84a",
+      "name": "Final Chat Output"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Extract Txid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Mask PII",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack CS Alert": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Txid": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mask PII": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse Slack Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Slack Action": {
+      "main": [
+        [
+          {
+            "node": "Escalation Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalation Switch": {
+      "main": [
+        [
+          {
+            "node": "Resolve",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve": {
+      "main": [
+        [
+          {
+            "node": "DB Update",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign": {
+      "main": [
+        [
+          {
+            "node": "DB Update",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate": {
+      "main": [
+        [
+          {
+            "node": "DB Update",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "DB Update": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_onchain_status": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_faq": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "search_faq",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "search_faq",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Parse Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Answer": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Build Slack Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Slack Payload": {
+      "main": [
+        [
+          {
+            "node": "Slack CS Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Final Chat Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b34d2a7c-eb7e-41e9-bc97-eeb82dd331cb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "77cd163b0e0d96eee01d3915a4dcec3e20bd080dd1fffc00572196a95ad3c9d3"
+  },
+  "id": "ntxkTXzBfm06teuS",
+  "tags": []
+}

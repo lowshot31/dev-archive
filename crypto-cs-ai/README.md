@@ -1,61 +1,102 @@
-# 🤖 Crypto CS AI - 전주기 API 통합 및 워크플로우 자동화 엔진
+# 🤖 Crypto CS — 거래소 CS 자동화 파이프라인
 
-**n8n 기반 멀티-에이전트 CS 분류 및 외부 온체인 API 통합 챗봇**  
-<br>2026.03 (1인 프로젝트)<br>
+> 로컬 LLM(Ollama) + Etherscan 자동 검증으로 크립토 거래소 CS 문의를 자동 분류/처리하는 n8n 워크플로우
 
-단순한 자연어 입력을 받아, 온체인 트랜잭션을 동적으로 조회하고 지원 운영팀에게 실시간 슬랙 알림을 전송하는 **End-to-End 완전 자동화 파이프라인** 모델입니다.
+## 핵심 흐름
 
-## 🎯 프로젝트 목적 및 해결 과제
-
-가상자산 거래소(예: Coinone)의 고객 문의(CS) 단계에서 발생하는 수동적인 데이터 추출 및 대조 과정을 AI 에이전트와 외부 API로 대체하여 운영 비용과 응답 지연을 획기적으로 낮춥니다.
-LLM의 환각(Hallucination)을 제어하기 위해 룰 기반 검증 레이어와 듀얼 모델을 도입했습니다.
-
-## 🚀 워크플로우 흐름 아키텍처
-
-```mermaid
-graph TD
-    A["Chat Trigger"] --> B["PII 마스킹<br>Ollama: qwen3"]
-    B --> C["구조화 데이터 추출<br>Ollama: qwen2.5-coder"]
-    C --> D{"JSON & Regex<br>Validator"}
-    D --> E{"의도(Intent) 기반<br>라우팅"}
-    E -->|"deposit_delay"| F{"EVM 여부 판별"}
-    F -->|"EVM 체인"| G["Etherscan V2 API 조회"]
-    F -->|"비-EVM 체인"| H["수동 리뷰 전환"]
-    G --> I["운영 액션 판단 Code"]
-    I --> J["CS Slack 자동 채널 발송"]
-    H --> J
-    E -->|"wrong_deposit"| K["오입금 전담 채널 알림"] --> J
+```
+사용자 채팅 → PII 마스킹 → LLM 의도 분류 → 온체인 검증 → Slack 티켓 → 자동 응답
 ```
 
-## ✨ 주요 기능 및 구현 성과
+## 기능
 
-### 1. REST API 통합을 통한 워크플로우 자동화
+### 의도 분류 (3분기)
+| Intent | 설명 | 처리 |
+|--------|------|------|
+| `deposit_delay` | 입금 지연 | EVM: Etherscan 자동 검증 / Non-EVM: 수동 triage |
+| `wrong_deposit` | 오입금 | 수동 복구 검토 에스컬레이션 |
+| `other` | 기타 문의 | CS 에이전트 수동 처리 |
 
-채팅 입력에서 추출된 `txid`, `network` 데이터를 이용해 **Etherscan V2 REST API**를 호출, 실시간 트랜잭션 상태(성공, 실패, 펜딩)를 서버리스 없이 워크플로우 단일 파이프라인에서 동적으로 조회합니다.
+### 지원 체인
+- **EVM (7개)**: Ethereum, BSC, Polygon, Arbitrum, Optimism, Base, Avalanche
+- **Non-EVM**: Bitcoin, Solana, XRP, Dogecoin, Cardano, Polkadot, Cosmos, Tron
 
-### 2. LLM 로컬 분리 배치 체계화
+### 핵심 검증 로직
+- txid 형식 자동 감지 (EVM 0x... / Base58 / Hex64)
+- coin 기반 네트워크 자동 보정 (BTC → bitcoin, SOL → solana)
+- LLM 오분류 방어 (intent 보정, txid 폴백)
+- PII 마스킹 (이메일, 전화번호)
 
-기능 특성에 맞추어 **Ollama** 에 로컬 모델 2개를 배포하여 병목과 실패율을 방어했습니다.
+## 기술 스택
 
-- **qwen3:8b**: 자연어 뉘앙스 이해, PII (개인정보) 마스킹 처리
-- **qwen2.5-coder:7b-instruct**: 데이터 구조화 (JSON Regex 추출) 전담 (Thinking 모델 제거로 파싱 에러 방어)
+| 구성요소 | 기술 |
+|----------|------|
+| 오케스트레이터 | n8n (self-hosted, Docker) |
+| LLM | Ollama + qwen2.5-coder:7b-instruct |
+| 온체인 검증 | Etherscan API v2 (멀티체인) |
+| 알림 | Slack Block Kit (Interactive Messages) |
 
-### 3. EVM / 비EVM 동적 라우팅 및 검증 절차 (Validation)
+## 설치
 
-추출된 `coin`과 `network` 필드를 이용해 동적으로 EVM / 비EVM 여부를 판별하여, 비EVM일 경우 `manual_review` 로 라우팅하여 시스템 오작동을 차단합니다.
-추가적으로 추출 후 `JSON.parse` 및 Regex (`^0x[a-f0-9]{64}$`) 룰을 활용해 AI 데이터가 완전히 검증된 상태로만 하단 프로세스로 흐르게 설계했습니다.
+### 사전 요구사항
+- Docker + Docker Compose
+- n8n (self-hosted)
+- Ollama (qwen2.5-coder:7b-instruct 모델)
+- Slack Bot Token
+- Etherscan API Key
 
-### 4. Slack WebHook 기반 운영팀 액션 알림
+### 셋업
 
-도출 결과를 기반으로 단순 조회가 아닌 "후속 처리 방향(action)", "온체인 상태(onchain_status)"등 운영팀이 직관적으로 판단할 수 있는 가공 데이터를 Slack 채널로 발행하며, 데이터 추출 완료 시점으로부터 **1초 이내(Real-time) 즉각 보고**되는 로우 레이턴시 시스템을 구축했습니다.
+1. **n8n에 워크플로우 임포트**
+   ```
+   n8n > Settings > Import from File > My workflow(1).json
+   ```
 
-## 🛠 기술 스택
+2. **환경변수 설정** (n8n credentials 또는 env)
+   ```
+   SLACK_BOT_TOKEN=xoxb-your-token
+   ETHERSCAN_API_KEY=your-key
+   SLACK_CS_CHANNEL=your-channel-id
+   SLACK_SIGNING_SECRET=your-signing-secret
+   ```
 
-- **Automation AI Tool**: n8n
-- **LLM Engine**: Ollama (qwen3, qwen2.5-coder)
-- **Database & Infra**: PostgreSQL, Docker, Docker Compose
-- **Intergration API**: Etherscan V2 API, Slack Incoming Webhook, Regex, Javascript(Node)
+3. **Ollama 모델 다운로드**
+   ```bash
+   ollama pull qwen2.5-coder:7b-instruct
+   ```
 
-## 💡 Key Learnings
+4. **Slack App 설정**
+   - Bot Token Scopes: `chat:write`, `chat:update`
+   - Interactivity: Webhook URL을 n8n webhook 경로로 설정
 
-이 파이프라인의 설계 경험은 단순한 CS 대응이 아니라, 외부 REST 통신 규격과 비즈니스 로직(라우팅, 분기, 알림)을 유기적으로 결합하여 세일즈포스나 여타의 CRM 엔진 상에 그대로 연동시킬 수 있는 **통합 자동화 (System Integration)** 의 토대가 되었습니다.
+## 아키텍처
+
+```
+Pipeline 1: CS 문의 처리
+[Chat] → [PII Mask] → [Extract Txid] → [Ollama LLM] → [Validate JSON]
+    → [Switch] → deposit_delay → [EVM?] → [Etherscan] → [Slack Alert]
+                → wrong_deposit → [Slack Alert]
+                → other → [Fallback] → [Slack Alert]
+    → [Chat Response]
+
+Pipeline 2: Slack 버튼 액션
+[Webhook] → [Parse Action] → [Switch] → Resolve/Escalate/Assign → [chat.update]
+```
+
+## 문서
+
+프로젝트 문서는 `/docs` 폴더에 정리되어 있습니다:
+
+| 문서 | 내용 |
+|------|------|
+| [아키텍처 & 데이터 흐름](docs/아키텍처-데이터-흐름.md) | Mermaid 다이어그램, 데이터 변환 흐름 |
+| [노드 인벤토리](docs/노드-인벤토리.md) | 22개 노드 상세 |
+| [검증 로직 상세](docs/검증-로직-상세.md) | 10단계 검증 파이프라인 |
+| [테스트 케이스](docs/테스트-케이스-매트릭스.md) | 32개 테스트 시나리오 |
+| [코드 리뷰](docs/코드-리뷰.md) | BUG 4, ISSUE 5, NIT 4 |
+| [보안 감사](docs/보안-감사.md) | 시크릿 관리, Webhook 인증 |
+| [백로그 & 로드맵](docs/백로그-로드맵.md) | P0-P3 액션 아이템 |
+
+## 라이선스
+
+MIT
